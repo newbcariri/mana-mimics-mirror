@@ -168,7 +168,7 @@ function ProductPage() {
               <span className="w-10 text-center font-semibold">{qty}</span>
               <button onClick={() => setQty(qty + 1)} className="w-10 h-12 flex items-center justify-center hover:bg-muted"><Plus className="w-4 h-4" /></button>
             </div>
-            <button className="flex-1 h-12 bg-success text-success-foreground rounded-md font-bold hover:bg-success/90 transition-colors">COMPRAR</button>
+            <button onClick={handleBuy} className="flex-1 h-12 bg-success text-success-foreground rounded-md font-bold hover:bg-success/90 transition-colors">COMPRAR</button>
             <button className="w-12 h-12 border border-border rounded-md flex items-center justify-center hover:bg-muted"><Share2 className="w-4 h-4" /></button>
           </div>
 
