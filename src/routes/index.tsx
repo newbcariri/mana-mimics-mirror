@@ -26,11 +26,29 @@ function Stars({ value, size = 16 }: { value: number; size?: number }) {
 }
 
 function ProductPage() {
+  const navigate = useNavigate();
   const [activeImg, setActiveImg] = useState(0);
   const [selectedColor, setSelectedColor] = useState(0);
   const [topSize, setTopSize] = useState<string | null>(null);
   const [legSize, setLegSize] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
+
+  const handleBuy = () => {
+    if (!topSize || !legSize) {
+      toast.error("Selecione o tamanho do top e da legging");
+      return;
+    }
+    const c = PRODUCT.colors[selectedColor];
+    cart.add({
+      productName: PRODUCT.name,
+      color: c.name,
+      topSize, legSize, quantity: qty,
+      unitPrice: PRODUCT.pricePix,
+      image: c.img,
+    });
+    toast.success("Adicionado ao carrinho!");
+    navigate({ to: "/carrinho" });
+  };
 
   return (
     <div className="min-h-screen bg-background">
