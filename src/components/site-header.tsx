@@ -1,7 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { User, ShoppingBag } from "lucide-react";
+import { useCart } from "@/lib/cart-store";
 
 export function SiteHeader() {
+  const items = useCart();
+  const count = items.reduce((s, i) => s + i.quantity, 0);
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border">
       {/* Top bar */}
@@ -21,15 +24,15 @@ export function SiteHeader() {
           <span className="hidden sm:block text-[9px] uppercase tracking-[0.2em] text-muted-foreground border-l border-border pl-2">Brasil<br/>Fitness Wear</span>
         </Link>
         <div className="flex items-center gap-4 ml-auto">
-          <button className="flex items-center gap-2 text-sm">
+          <Link to="/conta" className="flex items-center gap-2 text-sm hover:text-primary">
             <User className="w-5 h-5" />
             <span className="hidden sm:inline text-xs"><span className="font-semibold">Entre</span> ou <span className="font-semibold">Cadastre-se</span></span>
-          </button>
-          <button className="relative flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-4 py-2 text-xs font-semibold">
+          </Link>
+          <Link to="/carrinho" className="relative flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-4 py-2 text-xs font-semibold hover:bg-primary/90">
             <ShoppingBag className="w-4 h-4" />
             <span className="hidden sm:inline">MEU CARRINHO</span>
-            <span className="absolute -top-1 -right-1 bg-foreground text-background w-5 h-5 rounded-full text-[10px] flex items-center justify-center">0</span>
-          </button>
+            <span className="absolute -top-1 -right-1 bg-foreground text-background w-5 h-5 rounded-full text-[10px] flex items-center justify-center">{count}</span>
+          </Link>
         </div>
       </div>
     </header>
