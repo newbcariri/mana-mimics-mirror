@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      orders: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          legging_size: string
+          payment_method: string
+          product_name: string
+          quantity: number
+          shipping_address: string | null
+          shipping_cep: string
+          status: string
+          top_size: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          id?: string
+          legging_size: string
+          payment_method?: string
+          product_name: string
+          quantity?: number
+          shipping_address?: string | null
+          shipping_cep: string
+          status?: string
+          top_size: string
+          total: number
+          user_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          legging_size?: string
+          payment_method?: string
+          product_name?: string
+          quantity?: number
+          shipping_address?: string | null
+          shipping_cep?: string
+          status?: string
+          top_size?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          cep: string
+          cpf: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          cep: string
+          cpf: string
+          created_at?: string
+          email: string
+          full_name: string
+          id: string
+          phone: string
+          updated_at?: string
+        }
+        Update: {
+          cep?: string
+          cpf?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
