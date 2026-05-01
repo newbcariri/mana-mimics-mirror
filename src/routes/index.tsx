@@ -3,7 +3,9 @@ import { Star, ChevronLeft, ChevronRight, Heart, Share2, Truck, Plus, Minus, Che
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PRODUCT, REVIEWS } from "@/lib/product-data";
-import { createFileRoute } from "@tanstack/react-router";
+import { cart } from "@/lib/cart-store";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   component: ProductPage,
