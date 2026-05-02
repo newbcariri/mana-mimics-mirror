@@ -68,7 +68,7 @@ function ProductPage() {
         {/* Gallery */}
         <div className="grid grid-cols-[80px_1fr] gap-3">
           <div className="flex flex-col gap-2">
-            {PRODUCT.images.map((src, i) => (
+            {[PRODUCT.colors[selectedColor].img, ...PRODUCT.images].map((src, i) => (
               <button
                 key={i}
                 onClick={() => setActiveImg(i)}
@@ -81,9 +81,9 @@ function ProductPage() {
           <div className="relative bg-muted rounded-lg overflow-hidden aspect-[3/4]">
             <span className="absolute top-4 right-4 z-10 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-full">2 POR R$ 199,90</span>
             <button className="absolute top-4 left-4 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:text-primary"><Heart className="w-4 h-4" /></button>
-            <img src={PRODUCT.images[activeImg]} alt={PRODUCT.name} className="w-full h-full object-cover" />
-            <button onClick={() => setActiveImg((activeImg - 1 + PRODUCT.images.length) % PRODUCT.images.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronLeft className="w-5 h-5" /></button>
-            <button onClick={() => setActiveImg((activeImg + 1) % PRODUCT.images.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronRight className="w-5 h-5" /></button>
+            <img src={[PRODUCT.colors[selectedColor].img, ...PRODUCT.images][activeImg] ?? PRODUCT.colors[selectedColor].img} alt={PRODUCT.name} className="w-full h-full object-cover" />
+            <button onClick={() => setActiveImg((activeImg - 1 + (PRODUCT.images.length + 1)) % (PRODUCT.images.length + 1))} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronLeft className="w-5 h-5" /></button>
+            <button onClick={() => setActiveImg((activeImg + 1) % (PRODUCT.images.length + 1))} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronRight className="w-5 h-5" /></button>
           </div>
         </div>
 
@@ -123,7 +123,7 @@ function ProductPage() {
               {PRODUCT.colors.map((c, i) => (
                 <button
                   key={c.name}
-                  onClick={() => setSelectedColor(i)}
+                  onClick={() => { setSelectedColor(i); setActiveImg(0); }}
                   title={c.name}
                   className={`w-12 h-16 rounded-md overflow-hidden border-2 transition-all ${selectedColor === i ? "border-primary ring-2 ring-primary/30" : "border-border hover:border-foreground/30"}`}
                 >
