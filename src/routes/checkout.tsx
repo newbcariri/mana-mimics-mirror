@@ -250,11 +250,6 @@ function CheckoutPage() {
 
                 <section className="border border-border rounded-xl p-6">
                   <h2 className="font-bold mb-3">Endereço de entrega</h2>
-                  <input
-                    value={address}
-                    onChange={e => setAddress(e.target.value)}
-                <section className="border border-border rounded-xl p-6">
-                  <h2 className="font-bold mb-3">Endereço de entrega</h2>
                   {cepLoading && <p className="text-xs text-muted-foreground mb-2">Buscando endereço pelo CEP...</p>}
                   {cepData && (
                     <div className="bg-muted/50 rounded-md p-3 mb-3 text-sm">
