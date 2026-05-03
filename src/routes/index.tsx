@@ -68,26 +68,45 @@ function ProductPage() {
       {/* Product main */}
       <section className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-10">
         {/* Gallery */}
+        {(() => {
+          const media: Array<{ type: "video" | "image"; src: string; poster?: string }> = [
+            { type: "image", src: PRODUCT.colors[selectedColor].img },
+            ...PRODUCT.images.map(src => ({ type: "image" as const, src })),
+            { type: "video", src: PRODUCT_VIDEO, poster: PRODUCT.colors[selectedColor].img },
+          ];
+          const current = media[activeImg] ?? media[0];
+          return (
         <div className="grid grid-cols-[80px_1fr] gap-3">
           <div className="flex flex-col gap-2">
-            {[PRODUCT.colors[selectedColor].img, ...PRODUCT.images].map((src, i) => (
+            {media.map((m, i) => (
               <button
                 key={i}
                 onClick={() => setActiveImg(i)}
-                className={`aspect-[3/4] rounded-md overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
+                className={`relative aspect-[3/4] rounded-md overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
               >
-                <img src={src} alt="" className="w-full h-full object-cover" />
+                <img src={m.poster ?? m.src} alt="" className="w-full h-full object-cover" />
+                {m.type === "video" && (
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M8 5v14l11-7z" /></svg>
+                  </span>
+                )}
               </button>
             ))}
           </div>
           <div className="relative bg-muted rounded-lg overflow-hidden aspect-[3/4]">
             <span className="absolute top-4 right-4 z-10 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-full">2 POR R$ 199,90</span>
             <button className="absolute top-4 left-4 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:text-primary"><Heart className="w-4 h-4" /></button>
-            <img src={[PRODUCT.colors[selectedColor].img, ...PRODUCT.images][activeImg] ?? PRODUCT.colors[selectedColor].img} alt={PRODUCT.name} className="w-full h-full object-cover" />
-            <button onClick={() => setActiveImg((activeImg - 1 + (PRODUCT.images.length + 1)) % (PRODUCT.images.length + 1))} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronLeft className="w-5 h-5" /></button>
-            <button onClick={() => setActiveImg((activeImg + 1) % (PRODUCT.images.length + 1))} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronRight className="w-5 h-5" /></button>
+            {current.type === "video" ? (
+              <video src={current.src} poster={current.poster} controls autoPlay muted loop playsInline className="w-full h-full object-cover" />
+            ) : (
+              <img src={current.src} alt={PRODUCT.name} className="w-full h-full object-cover" />
+            )}
+            <button onClick={() => setActiveImg((activeImg - 1 + media.length) % media.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronLeft className="w-5 h-5" /></button>
+            <button onClick={() => setActiveImg((activeImg + 1) % media.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronRight className="w-5 h-5" /></button>
           </div>
         </div>
+          );
+        })()}
 
         {/* Info */}
         <div className="space-y-5">
