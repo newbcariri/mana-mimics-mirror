@@ -1,13 +1,54 @@
 import { Link } from "@tanstack/react-router";
-import { User, ShoppingBag, Package } from "lucide-react";
+import { User, ShoppingBag, Package, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useCart } from "@/lib/cart-store";
 import { supabase } from "@/integrations/supabase/client";
+
+// Promo deadline: 1 day and 17 hours from the moment the user first loads the site (persisted)
+function getPromoDeadline() {
+  if (typeof window === "undefined") return Date.now() + (1 * 24 + 17) * 3600 * 1000;
+  const KEY = "promo_deadline_v1";
+  const stored = window.localStorage.getItem(KEY);
+  if (stored) {
+    const n = parseInt(stored, 10);
+    if (!Number.isNaN(n) && n > Date.now()) return n;
+  }
+  const deadline = Date.now() + (1 * 24 + 17) * 3600 * 1000;
+  window.localStorage.setItem(KEY, String(deadline));
+  return deadline;
+}
+
+function useCountdown() {
+  const [deadline] = useState(() => getPromoDeadline());
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const diff = Math.max(0, deadline - now);
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+  return { days, hours, minutes, seconds };
+}
+
+function CountdownBox({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="flex flex-col items-center leading-none">
+      <span className="bg-background/15 rounded px-1.5 py-0.5 text-sm sm:text-base font-bold tabular-nums min-w-[2ch] text-center">
+        {String(value).padStart(2, "0")}
+      </span>
+      <span className="text-[8px] sm:text-[9px] uppercase tracking-wider mt-0.5 opacity-80">{label}</span>
+    </div>
+  );
+}
 
 export function SiteHeader() {
   const items = useCart();
   const count = items.reduce((s, i) => s + i.quantity, 0);
   const [authed, setAuthed] = useState<boolean | null>(null);
+  const { days, hours, minutes, seconds } = useCountdown();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
@@ -17,11 +58,19 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border">
-      <div className="bg-foreground text-background text-[11px] sm:text-xs">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-center">
-          <span><strong>FRETE GRÁTIS</strong> ACIMA DE R$199,90 PARA TODO O BRASIL</span>
-          <span className="hidden md:inline">ATÉ <strong>12x SEM JUROS</strong> NO CARTÃO</span>
-          <span className="hidden lg:inline"><strong>5% DE DESCONTO</strong> NO PIX</span>
+      <div className="bg-foreground text-background">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-3 sm:gap-4 text-center">
+          <Clock className="w-4 h-4 shrink-0 text-primary" />
+          <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wide">Promoção termina em</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <CountdownBox value={days} label="dias" />
+            <span className="font-bold opacity-60">:</span>
+            <CountdownBox value={hours} label="hrs" />
+            <span className="font-bold opacity-60">:</span>
+            <CountdownBox value={minutes} label="min" />
+            <span className="font-bold opacity-60">:</span>
+            <CountdownBox value={seconds} label="seg" />
+          </div>
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
