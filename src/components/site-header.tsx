@@ -1,13 +1,22 @@
 import { Link } from "@tanstack/react-router";
-import { User, ShoppingBag } from "lucide-react";
+import { User, ShoppingBag, Package } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/lib/cart-store";
+import { supabase } from "@/integrations/supabase/client";
 
 export function SiteHeader() {
   const items = useCart();
   const count = items.reduce((s, i) => s + i.quantity, 0);
+  const [authed, setAuthed] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setAuthed(!!session));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border">
-      {/* Top bar */}
       <div className="bg-foreground text-background text-[11px] sm:text-xs">
         <div className="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-center">
           <span><strong>FRETE GRÁTIS</strong> ACIMA DE R$199,90 PARA TODO O BRASIL</span>
@@ -15,7 +24,6 @@ export function SiteHeader() {
           <span className="hidden lg:inline"><strong>5% DE DESCONTO</strong> NO PIX</span>
         </div>
       </div>
-      {/* Main nav */}
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <div className="font-display font-extrabold text-xl sm:text-2xl tracking-tight">
@@ -24,10 +32,17 @@ export function SiteHeader() {
           <span className="hidden sm:block text-[9px] uppercase tracking-[0.2em] text-muted-foreground border-l border-border pl-2">Brasil<br/>Fitness Wear</span>
         </Link>
         <div className="flex items-center gap-4 ml-auto">
-          <Link to="/conta" className="flex items-center gap-2 text-sm hover:text-primary">
-            <User className="w-5 h-5" />
-            <span className="hidden sm:inline text-xs"><span className="font-semibold">Entre</span> ou <span className="font-semibold">Cadastre-se</span></span>
-          </Link>
+          {authed ? (
+            <Link to="/pedidos" className="flex items-center gap-2 text-sm hover:text-primary">
+              <Package className="w-5 h-5" />
+              <span className="hidden sm:inline text-xs font-semibold">Meus Pedidos</span>
+            </Link>
+          ) : (
+            <Link to="/conta" className="flex items-center gap-2 text-sm hover:text-primary">
+              <User className="w-5 h-5" />
+              <span className="hidden sm:inline text-xs"><span className="font-semibold">Entre</span> ou <span className="font-semibold">Cadastre-se</span></span>
+            </Link>
+          )}
           <Link to="/carrinho" className="relative flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-4 py-2 text-xs font-semibold hover:bg-primary/90">
             <ShoppingBag className="w-4 h-4" />
             <span className="hidden sm:inline">MEU CARRINHO</span>
