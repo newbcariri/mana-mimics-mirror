@@ -253,7 +253,33 @@ function CheckoutPage() {
                   <input
                     value={address}
                     onChange={e => setAddress(e.target.value)}
-                    placeholder="Rua, número, complemento, bairro, cidade/UF"
+                <section className="border border-border rounded-xl p-6">
+                  <h2 className="font-bold mb-3">Endereço de entrega</h2>
+                  {cepLoading && <p className="text-xs text-muted-foreground mb-2">Buscando endereço pelo CEP...</p>}
+                  {cepData && (
+                    <div className="bg-muted/50 rounded-md p-3 mb-3 text-sm">
+                      <div className="font-medium">{cepData.logradouro}</div>
+                      <div className="text-muted-foreground">{cepData.bairro} — {cepData.localidade}/{cepData.uf}</div>
+                    </div>
+                  )}
+                  <div className="grid grid-cols-3 gap-3 mb-3">
+                    <input
+                      value={number}
+                      onChange={e => setNumber(e.target.value)}
+                      placeholder="Número"
+                      className="h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary"
+                    />
+                    <input
+                      value={complement}
+                      onChange={e => setComplement(e.target.value)}
+                      placeholder="Complemento (opcional)"
+                      className="col-span-2 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary"
+                    />
+                  </div>
+                  <input
+                    value={address}
+                    onChange={e => setAddress(e.target.value)}
+                    placeholder="Endereço completo"
                     className="w-full h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary"
                   />
                   <p className="text-xs text-muted-foreground mt-2">Entrega para o CEP <strong>{profile?.cep}</strong></p>
