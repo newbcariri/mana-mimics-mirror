@@ -25,6 +25,8 @@ function Stars({ value, size = 16 }: { value: number; size?: number }) {
   );
 }
 
+const PRODUCT_VIDEO = "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6044/conjunto-basico-poliamida-marrom-escuro.mp4";
+
 function ProductPage() {
   const navigate = useNavigate();
   const [activeImg, setActiveImg] = useState(0);
