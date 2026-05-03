@@ -40,6 +40,10 @@ function CheckoutPage() {
   const [profile, setProfile] = useState<any>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [address, setAddress] = useState("");
+  const [cepData, setCepData] = useState<{ logradouro?: string; bairro?: string; localidade?: string; uf?: string } | null>(null);
+  const [cepLoading, setCepLoading] = useState(false);
+  const [number, setNumber] = useState("");
+  const [complement, setComplement] = useState("");
   const [payment, setPayment] = useState<"pix" | "cartao">("pix");
   const [checking, setChecking] = useState(true);
   const [placing, setPlacing] = useState(false);
@@ -67,6 +71,37 @@ function CheckoutPage() {
   }, []);
 
   const update = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
+
+  const lookupCep = async (rawCep: string) => {
+    const cep = onlyDigits(rawCep);
+    if (cep.length !== 8) return;
+    setCepLoading(true);
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await res.json();
+      if (data.erro) {
+        toast.error("CEP não encontrado");
+        setCepData(null);
+        return;
+      }
+      setCepData(data);
+      setAddress(`${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`);
+    } catch {
+      toast.error("Erro ao buscar CEP");
+    } finally {
+      setCepLoading(false);
+    }
+  };
+
+  // Auto-lookup when authed profile loads
+  useEffect(() => {
+    if (profile?.cep && !cepData) lookupCep(profile.cep);
+  }, [profile]);
+
+  // Auto-lookup signup CEP when 8 digits typed
+  useEffect(() => {
+    if (onlyDigits(form.cep).length === 8) lookupCep(form.cep);
+  }, [form.cep]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,7 +158,7 @@ function CheckoutPage() {
         total: i.unitPrice * i.quantity,
         payment_method: payment,
         shipping_cep: profile.cep,
-        shipping_address: address || null,
+        shipping_address: [address, number && `nº ${number}`, complement].filter(Boolean).join(", ") || null,
       }));
       const { error } = await supabase.from("orders").insert(inserts);
       if (error) throw error;
@@ -183,6 +218,12 @@ function CheckoutPage() {
                       <Field placeholder="CPF" value={form.cpf} onChange={v => update("cpf", v)} />
                       <Field placeholder="Telefone (com DDD)" value={form.phone} onChange={v => update("phone", v)} />
                       <Field placeholder="CEP de entrega" value={form.cep} onChange={v => update("cep", v)} />
+                      {cepLoading && <p className="text-xs text-muted-foreground">Buscando endereço...</p>}
+                      {cepData && (
+                        <p className="text-xs text-success">
+                          ✓ {cepData.logradouro}, {cepData.bairro} — {cepData.localidade}/{cepData.uf}
+                        </p>
+                      )}
                     </>
                   )}
                   <Field icon={Lock} type="password" placeholder="Senha" value={form.password} onChange={v => update("password", v)} />
@@ -209,10 +250,31 @@ function CheckoutPage() {
 
                 <section className="border border-border rounded-xl p-6">
                   <h2 className="font-bold mb-3">Endereço de entrega</h2>
+                  {cepLoading && <p className="text-xs text-muted-foreground mb-2">Buscando endereço pelo CEP...</p>}
+                  {cepData && (
+                    <div className="bg-muted/50 rounded-md p-3 mb-3 text-sm">
+                      <div className="font-medium">{cepData.logradouro}</div>
+                      <div className="text-muted-foreground">{cepData.bairro} — {cepData.localidade}/{cepData.uf}</div>
+                    </div>
+                  )}
+                  <div className="grid grid-cols-3 gap-3 mb-3">
+                    <input
+                      value={number}
+                      onChange={e => setNumber(e.target.value)}
+                      placeholder="Número"
+                      className="h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary"
+                    />
+                    <input
+                      value={complement}
+                      onChange={e => setComplement(e.target.value)}
+                      placeholder="Complemento (opcional)"
+                      className="col-span-2 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary"
+                    />
+                  </div>
                   <input
                     value={address}
                     onChange={e => setAddress(e.target.value)}
-                    placeholder="Rua, número, complemento, bairro, cidade/UF"
+                    placeholder="Endereço completo"
                     className="w-full h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary"
                   />
                   <p className="text-xs text-muted-foreground mt-2">Entrega para o CEP <strong>{profile?.cep}</strong></p>
