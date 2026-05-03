@@ -158,7 +158,7 @@ function CheckoutPage() {
         total: i.unitPrice * i.quantity,
         payment_method: payment,
         shipping_cep: profile.cep,
-        shipping_address: address || null,
+        shipping_address: [address, number && `nº ${number}`, complement].filter(Boolean).join(", ") || null,
       }));
       const { error } = await supabase.from("orders").insert(inserts);
       if (error) throw error;
