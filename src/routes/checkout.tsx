@@ -218,6 +218,12 @@ function CheckoutPage() {
                       <Field placeholder="CPF" value={form.cpf} onChange={v => update("cpf", v)} />
                       <Field placeholder="Telefone (com DDD)" value={form.phone} onChange={v => update("phone", v)} />
                       <Field placeholder="CEP de entrega" value={form.cep} onChange={v => update("cep", v)} />
+                      {cepLoading && <p className="text-xs text-muted-foreground">Buscando endereço...</p>}
+                      {cepData && (
+                        <p className="text-xs text-success">
+                          ✓ {cepData.logradouro}, {cepData.bairro} — {cepData.localidade}/{cepData.uf}
+                        </p>
+                      )}
                     </>
                   )}
                   <Field icon={Lock} type="password" placeholder="Senha" value={form.password} onChange={v => update("password", v)} />
