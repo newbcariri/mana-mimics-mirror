@@ -40,6 +40,10 @@ function CheckoutPage() {
   const [profile, setProfile] = useState<any>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [address, setAddress] = useState("");
+  const [cepData, setCepData] = useState<{ logradouro?: string; bairro?: string; localidade?: string; uf?: string } | null>(null);
+  const [cepLoading, setCepLoading] = useState(false);
+  const [number, setNumber] = useState("");
+  const [complement, setComplement] = useState("");
   const [payment, setPayment] = useState<"pix" | "cartao">("pix");
   const [checking, setChecking] = useState(true);
   const [placing, setPlacing] = useState(false);
