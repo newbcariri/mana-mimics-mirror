@@ -72,6 +72,37 @@ function CheckoutPage() {
 
   const update = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
 
+  const lookupCep = async (rawCep: string) => {
+    const cep = onlyDigits(rawCep);
+    if (cep.length !== 8) return;
+    setCepLoading(true);
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await res.json();
+      if (data.erro) {
+        toast.error("CEP não encontrado");
+        setCepData(null);
+        return;
+      }
+      setCepData(data);
+      setAddress(`${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`);
+    } catch {
+      toast.error("Erro ao buscar CEP");
+    } finally {
+      setCepLoading(false);
+    }
+  };
+
+  // Auto-lookup when authed profile loads
+  useEffect(() => {
+    if (profile?.cep && !cepData) lookupCep(profile.cep);
+  }, [profile]);
+
+  // Auto-lookup signup CEP when 8 digits typed
+  useEffect(() => {
+    if (onlyDigits(form.cep).length === 8) lookupCep(form.cep);
+  }, [form.cep]);
+
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthLoading(true);
