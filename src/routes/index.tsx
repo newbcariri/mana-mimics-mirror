@@ -94,7 +94,7 @@ function ProductPage() {
             ))}
           </div>
           <div className="relative bg-muted rounded-lg overflow-hidden aspect-[3/4]">
-            <span className="absolute top-4 right-4 z-10 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-full">2 POR R$ 199,90</span>
+            <span className="absolute top-4 right-4 z-10 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded-full">ESTÁ ACABANDO!</span>
             <button className="absolute top-4 left-4 z-10 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:text-primary"><Heart className="w-4 h-4" /></button>
             {current.type === "video" ? (
               <video src={current.src} poster={current.poster} controls autoPlay muted loop playsInline className="w-full h-full object-cover" />
