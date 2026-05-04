@@ -69,10 +69,12 @@ function ProductPage() {
       <section className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-10">
         {/* Gallery */}
         {(() => {
+          const color = PRODUCT.colors[selectedColor];
+          const gallery = (color as any).gallery as string[] | undefined;
+          const imgs = gallery && gallery.length ? gallery : [color.img];
           const media: Array<{ type: "video" | "image"; src: string; poster?: string }> = [
-            { type: "image", src: PRODUCT.colors[selectedColor].img },
-            ...PRODUCT.images.map(src => ({ type: "image" as const, src })),
-            { type: "video", src: PRODUCT_VIDEO, poster: PRODUCT.colors[selectedColor].img },
+            ...imgs.map(src => ({ type: "image" as const, src })),
+            { type: "video", src: PRODUCT_VIDEO, poster: color.img },
           ];
           const current = media[activeImg] ?? media[0];
           return (

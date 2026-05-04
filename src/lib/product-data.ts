@@ -87,7 +87,7 @@ export const PRODUCT = {
   specs: [
     ["Composição", "84% Poliamida / 16% Elastano"],
     ["Tamanho da Modelo", "Veste P na legging e M no top"],
-    ["Cor", "Marrom"],
+    ["Cor", "Marrom Escuro"],
     ["Coleção", "Essential"],
     ["Material", "Poliamida"],
     ["Bojo", "Sem Bojo"],
