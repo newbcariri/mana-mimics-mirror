@@ -10,22 +10,72 @@ export const PRODUCT = {
   comboPrice: 99.95,
   cashback: 5.99,
   images: [
-    "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6042/conjunto-basico-poliamida-marrom-claro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
     "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/5903/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-    "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6044/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
   ],
   colors: [
-    { name: "Marrom", hex: "#8b5a3c", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6042/conjunto-basico-poliamida-marrom-claro.jpg?ims=fit-in/400x533/filters:fill(white)", current: true },
-    { name: "Vermelho", hex: "#E63946", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6034/conjunto-basico-poliamida-vermelho.jpg?ims=fit-in/400x533/filters:fill(white)" },
-    { name: "Preto", hex: "#1a1a1a", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6029/conjunto-basico-poliamida-preto.jpg?ims=fit-in/400x533/filters:fill(white)" },
-    { name: "Verde Claro", hex: "#b8c9a8", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6035/conjunto-basico-poliamida-verde-claro.jpg?ims=fit-in/400x533/filters:fill(white)" },
-    { name: "Marinho", hex: "#1f2a44", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6051/conjunto-basico-poliamida-azul-marinho.jpg?ims=fit-in/400x533/filters:fill(white)" },
-    { name: "Roxo", hex: "#5b1d3a", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6056/conjunto-basico-poliamida-roxo.jpg?ims=fit-in/400x533/filters:fill(white)" },
-    { name: "Off White", hex: "#ece5d8", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6050/conjunto-basico-poliamida-off-white.jpg?ims=fit-in/400x533/filters:fill(white)" },
-    { name: "Marrom Escuro", hex: "#4d3527", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/5903/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/400x533/filters:fill(white)" },
-    { name: "Rosa", hex: "#e83e8c", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6127/conjunto-basico-poliamida-rosa.jpg?ims=fit-in/400x533/filters:fill(white)" },
-    { name: "Azul Claro", hex: "#a8c8e0", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6134/conjunto-basico-poliamida-azul-claro.jpg?ims=fit-in/400x533/filters:fill(white)" },
-    { name: "Cinza", hex: "#8a8a8a", img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6131/conjunto-basico-poliamida-cinza.jpg?ims=fit-in/400x533/filters:fill(white)" },
+    {
+      name: "Marrom Escuro", hex: "#4d3527",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/5903/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/400x533/filters:fill(white)",
+      current: true,
+      gallery: [
+        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/5903/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
+        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6044/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
+      ],
+    },
+    {
+      name: "Marrom", hex: "#8b5a3c",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6042/conjunto-basico-poliamida-marrom-claro.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6042/conjunto-basico-poliamida-marrom-claro.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+    },
+    {
+      name: "Vermelho", hex: "#E63946",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6034/conjunto-basico-poliamida-vermelho.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: [
+        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6034/conjunto-basico-poliamida-vermelho.jpg?ims=fit-in/1500x2000/filters:fill(white)",
+        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6031/conjunto-basico-poliamida-vermelho.jpg?ims=fit-in/1500x2000/filters:fill(white)",
+        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6033/conjunto-basico-poliamida-vermelho.jpg?ims=fit-in/1500x2000/filters:fill(white)",
+      ],
+    },
+    {
+      name: "Preto", hex: "#1a1a1a",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6029/conjunto-basico-poliamida-preto.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6029/conjunto-basico-poliamida-preto.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+    },
+    {
+      name: "Verde Claro", hex: "#b8c9a8",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6035/conjunto-basico-poliamida-verde-claro.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6035/conjunto-basico-poliamida-verde-claro.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+    },
+    {
+      name: "Marinho", hex: "#1f2a44",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6051/conjunto-basico-poliamida-azul-marinho.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6051/conjunto-basico-poliamida-azul-marinho.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+    },
+    {
+      name: "Roxo", hex: "#5b1d3a",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6056/conjunto-basico-poliamida-roxo.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6056/conjunto-basico-poliamida-roxo.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+    },
+    {
+      name: "Off White", hex: "#ece5d8",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6050/conjunto-basico-poliamida-off-white.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6050/conjunto-basico-poliamida-off-white.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+    },
+    {
+      name: "Rosa", hex: "#e83e8c",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6127/conjunto-basico-poliamida-rosa.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6127/conjunto-basico-poliamida-rosa.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+    },
+    {
+      name: "Azul Claro", hex: "#a8c8e0",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6134/conjunto-basico-poliamida-azul-claro.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6134/conjunto-basico-poliamida-azul-claro.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+    },
+    {
+      name: "Cinza", hex: "#8a8a8a",
+      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6131/conjunto-basico-poliamida-cinza.jpg?ims=fit-in/400x533/filters:fill(white)",
+      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6131/conjunto-basico-poliamida-cinza.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+    },
   ],
   sizes: ["P", "M", "G", "GG"],
   features: [
@@ -37,7 +87,7 @@ export const PRODUCT = {
   specs: [
     ["Composição", "84% Poliamida / 16% Elastano"],
     ["Tamanho da Modelo", "Veste P na legging e M no top"],
-    ["Cor", "Marrom"],
+    ["Cor", "Marrom Escuro"],
     ["Coleção", "Essential"],
     ["Material", "Poliamida"],
     ["Bojo", "Sem Bojo"],
