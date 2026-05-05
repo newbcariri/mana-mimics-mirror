@@ -130,7 +130,7 @@ function AdminPage() {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           <StatCard icon={<ShoppingBag className="w-5 h-5" />} label="Pedidos" value={stats.total.toString()} />
-          <StatCard icon={<Package className="w-5 h-5" />} label="Pendentes" value={stats.pending.toString()} />
+          <StatCard icon={<Package className="w-5 h-5" />} label="Aguardando pagamento" value={stats.pending.toString()} />
           <StatCard icon={<Users className="w-5 h-5" />} label="Clientes" value={stats.customers.toString()} />
           <StatCard icon={<ShoppingBag className="w-5 h-5" />} label="Receita" value={brl(stats.revenue)} />
         </div>
