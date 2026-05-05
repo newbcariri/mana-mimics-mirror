@@ -14,7 +14,8 @@ const brl = (v: number) =>
   Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 const STATUS_OPTIONS = [
-  { value: "pedido_efetuado", label: "Pedido efetuado", color: "bg-blue-100 text-blue-800" },
+  { value: "aguardando_pagamento", label: "Aguardando pagamento", color: "bg-orange-100 text-orange-800" },
+  { value: "pago", label: "Pago", color: "bg-emerald-100 text-emerald-800" },
   { value: "em_separacao", label: "Em separação", color: "bg-yellow-100 text-yellow-800" },
   { value: "enviado", label: "Enviado", color: "bg-purple-100 text-purple-800" },
   { value: "entregue", label: "Entregue", color: "bg-green-100 text-green-800" },
