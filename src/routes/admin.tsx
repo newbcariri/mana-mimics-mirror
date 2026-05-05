@@ -205,6 +205,14 @@ function AdminPage() {
                         </div>
                         <div className="text-right">
                           <div className="text-xl font-bold text-primary mb-2">{brl(o.total)}</div>
+                          {o.status === "aguardando_pagamento" && (
+                            <button
+                              onClick={() => updateStatus(o.id, "pago")}
+                              className="block w-full mb-2 bg-emerald-600 text-white text-xs font-bold uppercase tracking-wide px-3 py-2 rounded hover:bg-emerald-700"
+                            >
+                              Confirmar pagamento
+                            </button>
+                          )}
                           <div className="relative inline-block">
                             <select
                               value={STATUS_OPTIONS.find(s => s.value === o.status) ? o.status : "aguardando_pagamento"}
