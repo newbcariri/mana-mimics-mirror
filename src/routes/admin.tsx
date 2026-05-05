@@ -14,7 +14,8 @@ const brl = (v: number) =>
   Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 const STATUS_OPTIONS = [
-  { value: "pedido_efetuado", label: "Pedido efetuado", color: "bg-blue-100 text-blue-800" },
+  { value: "aguardando_pagamento", label: "Aguardando pagamento", color: "bg-orange-100 text-orange-800" },
+  { value: "pago", label: "Pago", color: "bg-emerald-100 text-emerald-800" },
   { value: "em_separacao", label: "Em separação", color: "bg-yellow-100 text-yellow-800" },
   { value: "enviado", label: "Enviado", color: "bg-purple-100 text-purple-800" },
   { value: "entregue", label: "Entregue", color: "bg-green-100 text-green-800" },
@@ -87,9 +88,11 @@ function AdminPage() {
 
   const stats = {
     total: orders.length,
-    revenue: orders.reduce((s, o) => s + Number(o.total), 0),
+    revenue: orders
+      .filter((o) => ["pago", "em_separacao", "enviado", "entregue"].includes(o.status))
+      .reduce((s, o) => s + Number(o.total), 0),
     customers: customers.length,
-    pending: orders.filter((o) => o.status !== "entregue").length,
+    pending: orders.filter((o) => o.status === "aguardando_pagamento").length,
   };
 
   if (loading) {
@@ -127,7 +130,7 @@ function AdminPage() {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           <StatCard icon={<ShoppingBag className="w-5 h-5" />} label="Pedidos" value={stats.total.toString()} />
-          <StatCard icon={<Package className="w-5 h-5" />} label="Pendentes" value={stats.pending.toString()} />
+          <StatCard icon={<Package className="w-5 h-5" />} label="Aguardando pagamento" value={stats.pending.toString()} />
           <StatCard icon={<Users className="w-5 h-5" />} label="Clientes" value={stats.customers.toString()} />
           <StatCard icon={<ShoppingBag className="w-5 h-5" />} label="Receita" value={brl(stats.revenue)} />
         </div>
@@ -204,9 +207,17 @@ function AdminPage() {
                         </div>
                         <div className="text-right">
                           <div className="text-xl font-bold text-primary mb-2">{brl(o.total)}</div>
+                          {o.status === "aguardando_pagamento" && (
+                            <button
+                              onClick={() => updateStatus(o.id, "pago")}
+                              className="block w-full mb-2 bg-emerald-600 text-white text-xs font-bold uppercase tracking-wide px-3 py-2 rounded hover:bg-emerald-700"
+                            >
+                              Confirmar pagamento
+                            </button>
+                          )}
                           <div className="relative inline-block">
                             <select
-                              value={STATUS_OPTIONS.find(s => s.value === o.status) ? o.status : "pedido_efetuado"}
+                              value={STATUS_OPTIONS.find(s => s.value === o.status) ? o.status : "aguardando_pagamento"}
                               onChange={(e) => updateStatus(o.id, e.target.value)}
                               className="appearance-none bg-background border border-border rounded-md pl-3 pr-8 py-2 text-sm font-medium cursor-pointer hover:border-primary"
                             >

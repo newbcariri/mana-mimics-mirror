@@ -15,6 +15,7 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PixOrderIdRouteImport } from './routes/pix.$orderId'
 
 const PedidosRoute = PedidosRouteImport.update({
   id: '/pedidos',
@@ -46,6 +47,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PixOrderIdRoute = PixOrderIdRouteImport.update({
+  id: '/pix/$orderId',
+  path: '/pix/$orderId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/conta': typeof ContaRoute
   '/pedidos': typeof PedidosRoute
+  '/pix/$orderId': typeof PixOrderIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/conta': typeof ContaRoute
   '/pedidos': typeof PedidosRoute
+  '/pix/$orderId': typeof PixOrderIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +79,27 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/conta': typeof ContaRoute
   '/pedidos': typeof PedidosRoute
+  '/pix/$orderId': typeof PixOrderIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/carrinho' | '/checkout' | '/conta' | '/pedidos'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/carrinho'
+    | '/checkout'
+    | '/conta'
+    | '/pedidos'
+    | '/pix/$orderId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/carrinho' | '/checkout' | '/conta' | '/pedidos'
+  to:
+    | '/'
+    | '/admin'
+    | '/carrinho'
+    | '/checkout'
+    | '/conta'
+    | '/pedidos'
+    | '/pix/$orderId'
   id:
     | '__root__'
     | '/'
@@ -85,6 +108,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/conta'
     | '/pedidos'
+    | '/pix/$orderId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +118,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ContaRoute: typeof ContaRoute
   PedidosRoute: typeof PedidosRoute
+  PixOrderIdRoute: typeof PixOrderIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -140,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pix/$orderId': {
+      id: '/pix/$orderId'
+      path: '/pix/$orderId'
+      fullPath: '/pix/$orderId'
+      preLoaderRoute: typeof PixOrderIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -150,16 +182,8 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ContaRoute: ContaRoute,
   PedidosRoute: PedidosRoute,
+  PixOrderIdRoute: PixOrderIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
