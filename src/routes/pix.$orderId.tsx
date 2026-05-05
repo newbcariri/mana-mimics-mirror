@@ -50,16 +50,15 @@ function PixPage() {
       const sumTotal = orders.reduce((s, x) => s + Number(x.total), 0);
       setOrder(o);
       setTotal(sumTotal);
-      const txid = orderId.replace(/-/g, "").slice(0, 25);
       const p = generatePixPayload({
         key: PIX_KEY,
         name: MERCHANT_NAME,
         city: MERCHANT_CITY,
         amount: sumTotal,
-        txid,
+        txid: "***",
       });
       setPayload(p);
-      const url = await QRCode.toDataURL(p, { width: 320, margin: 1 });
+      const url = await QRCode.toDataURL(p, { width: 320, margin: 1, errorCorrectionLevel: "M" });
       setQrUrl(url);
       setLoading(false);
     })();
@@ -135,7 +134,6 @@ function PixPage() {
             <Row label="Nome" value={BENEFICIARIO} />
             <Row label="CNPJ" value={CNPJ} />
             <Row label="Banco" value={BANCO} />
-            <Row label="Chave PIX" value={PIX_KEY} />
           </div>
 
           <div className="mt-6 bg-muted/50 rounded-md p-4 text-xs text-muted-foreground space-y-1">
