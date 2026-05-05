@@ -88,9 +88,11 @@ function AdminPage() {
 
   const stats = {
     total: orders.length,
-    revenue: orders.reduce((s, o) => s + Number(o.total), 0),
+    revenue: orders
+      .filter((o) => ["pago", "em_separacao", "enviado", "entregue"].includes(o.status))
+      .reduce((s, o) => s + Number(o.total), 0),
     customers: customers.length,
-    pending: orders.filter((o) => o.status !== "entregue").length,
+    pending: orders.filter((o) => o.status === "aguardando_pagamento").length,
   };
 
   if (loading) {
