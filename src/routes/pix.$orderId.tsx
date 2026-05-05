@@ -17,7 +17,7 @@ const PIX_KEY = "c1b24169-a0c4-4d3b-908a-02fa61c3e117";
 const BENEFICIARIO = "61.900.733 PATRICIA RAFAELA DO O";
 const CNPJ = "61.900.733/0001-77";
 const BANCO = "ASAAS INSTITUIÇÃO DE PAGAMENTOS S.A.";
-const MERCHANT_NAME = "PATRICIA RAFAELA DO O";
+const MERCHANT_NAME = "61900733 PATRICIA RAFAELA";
 const MERCHANT_CITY = "BRASILIA";
 
 const brl = (v: number) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -50,16 +50,15 @@ function PixPage() {
       const sumTotal = orders.reduce((s, x) => s + Number(x.total), 0);
       setOrder(o);
       setTotal(sumTotal);
-      const txid = orderId.replace(/-/g, "").slice(0, 25);
       const p = generatePixPayload({
         key: PIX_KEY,
         name: MERCHANT_NAME,
         city: MERCHANT_CITY,
         amount: sumTotal,
-        txid,
+        txid: "***",
       });
       setPayload(p);
-      const url = await QRCode.toDataURL(p, { width: 320, margin: 1 });
+      const url = await QRCode.toDataURL(p, { width: 320, margin: 1, errorCorrectionLevel: "M" });
       setQrUrl(url);
       setLoading(false);
     })();
@@ -135,7 +134,6 @@ function PixPage() {
             <Row label="Nome" value={BENEFICIARIO} />
             <Row label="CNPJ" value={CNPJ} />
             <Row label="Banco" value={BANCO} />
-            <Row label="Chave PIX" value={PIX_KEY} />
           </div>
 
           <div className="mt-6 bg-muted/50 rounded-md p-4 text-xs text-muted-foreground space-y-1">
