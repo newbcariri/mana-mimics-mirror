@@ -160,11 +160,15 @@ function CheckoutPage() {
         shipping_cep: profile.cep,
         shipping_address: [address, number && `nº ${number}`, complement].filter(Boolean).join(", ") || null,
       }));
-      const { error } = await supabase.from("orders").insert(inserts);
+      const { data: inserted, error } = await supabase.from("orders").insert(inserts).select("id");
       if (error) throw error;
       cart.clear();
       toast.success("Pedido realizado com sucesso!");
-      navigate({ to: "/pedidos" });
+      if (payment === "pix" && inserted && inserted[0]) {
+        navigate({ to: "/pix/$orderId", params: { orderId: inserted[0].id } });
+      } else {
+        navigate({ to: "/pedidos" });
+      }
     } catch (err: any) {
       toast.error(err.message || "Erro ao finalizar pedido");
     } finally {
