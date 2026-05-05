@@ -80,6 +80,15 @@ function OrdersPage() {
                       {o.status.replace(/_/g, " ")}
                     </span>
                     <div className="text-xs text-muted-foreground mt-1">via {o.payment_method.toUpperCase()}</div>
+                    {o.status === "aguardando_pagamento" && o.payment_method === "pix" && (
+                      <Link
+                        to="/pix/$orderId"
+                        params={{ orderId: o.id }}
+                        className="inline-block mt-2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded hover:bg-primary/90"
+                      >
+                        Pagar com PIX
+                      </Link>
+                    )}
                   </div>
                 </div>
               </article>
