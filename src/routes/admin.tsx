@@ -207,7 +207,7 @@ function AdminPage() {
                           <div className="text-xl font-bold text-primary mb-2">{brl(o.total)}</div>
                           <div className="relative inline-block">
                             <select
-                              value={STATUS_OPTIONS.find(s => s.value === o.status) ? o.status : "pedido_efetuado"}
+                              value={STATUS_OPTIONS.find(s => s.value === o.status) ? o.status : "aguardando_pagamento"}
                               onChange={(e) => updateStatus(o.id, e.target.value)}
                               className="appearance-none bg-background border border-border rounded-md pl-3 pr-8 py-2 text-sm font-medium cursor-pointer hover:border-primary"
                             >
