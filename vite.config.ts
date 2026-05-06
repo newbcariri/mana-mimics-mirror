@@ -12,16 +12,15 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 // Inside the Lovable sandbox / preview, neither flag is set, so the default
 // Cloudflare preset is used as before.
 const isVercel = !!process.env.VERCEL;
+const isBuild = process.argv.includes("build") || (process.env.npm_lifecycle_event ?? "").includes("build");
 
 export default defineConfig({
   cloudflare: isVercel ? false : undefined,
   tanstackStart: isVercel ? { target: "vercel" } : undefined,
   vite: {
-    resolve: {
-      noExternal: true,
-    },
+    resolve: isBuild ? { noExternal: true } : undefined,
     ssr: {
-      noExternal: true,
+      noExternal: isBuild ? true : ["h3-v2", "rou3", "srvx"],
     },
   },
 });
