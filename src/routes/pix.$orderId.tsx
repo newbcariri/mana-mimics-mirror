@@ -26,6 +26,8 @@ function PixPage() {
   const [error, setError] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
   const [remaining, setRemaining] = useState<string>("30:00");
+  const [expired, setExpired] = useState(false);
+  const [regenerating, setRegenerating] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -42,7 +44,19 @@ function PixPage() {
         setTotal(res.value);
         setPayload(res.payload);
         setQrUrl(`data:image/png;base64,${res.qrCodeBase64}`);
-        const exp = res.expirationDate ? new Date(res.expirationDate).getTime() : Date.now() + 30 * 60 * 1000;
+        const FALLBACK_MS = 30 * 60 * 1000;
+        const MAX_MS = 24 * 60 * 60 * 1000; // cap em 24h
+        let exp = Date.now() + FALLBACK_MS;
+        if (res.expirationDate) {
+          // Aceita "YYYY-MM-DD HH:mm:ss" (Asaas) e ISO. Normaliza para ISO.
+          const raw = String(res.expirationDate).trim();
+          const iso = raw.includes("T") ? raw : raw.replace(" ", "T");
+          const parsed = new Date(iso).getTime();
+          if (Number.isFinite(parsed)) {
+            const diff = parsed - Date.now();
+            if (diff > 0 && diff <= MAX_MS) exp = parsed;
+          }
+        }
         setExpiresAt(exp);
       } catch (e: any) {
         setError(e.message || "Erro ao gerar cobrança PIX");
@@ -58,9 +72,17 @@ function PixPage() {
     if (!expiresAt) return;
     const tick = () => {
       const diff = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
-      const m = String(Math.floor(diff / 60)).padStart(2, "0");
-      const s = String(diff % 60).padStart(2, "0");
-      setRemaining(`${m}:${s}`);
+      if (diff <= 0) {
+        setExpired(true);
+        setRemaining("00:00");
+        return;
+      }
+      setExpired(false);
+      const h = Math.floor(diff / 3600);
+      const m = Math.floor((diff % 3600) / 60);
+      const s = diff % 60;
+      const pad = (n: number) => String(n).padStart(2, "0");
+      setRemaining(h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`);
     };
     tick();
     const t = setInterval(tick, 1000);
@@ -82,10 +104,35 @@ function PixPage() {
   }, [orderId, navigate]);
 
   const copy = async () => {
+    if (expired) return;
     await navigator.clipboard.writeText(payload);
     setCopied(true);
     toast.success("Código PIX copiado");
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const regenerate = async () => {
+    setRegenerating(true);
+    try {
+      const res = await postPaymentApi<{
+        qrCodeBase64: string;
+        payload: string;
+        value: number;
+        expirationDate?: string;
+        paymentId: string;
+      }>("pix", { orderId, regenerate: true });
+      setPayload(res.payload);
+      setQrUrl(`data:image/png;base64,${res.qrCodeBase64}`);
+      const parsed = res.expirationDate ? new Date(String(res.expirationDate).replace(" ", "T")).getTime() : NaN;
+      const exp = Number.isFinite(parsed) && parsed - Date.now() > 0 ? parsed : Date.now() + 30 * 60 * 1000;
+      setExpiresAt(exp);
+      setExpired(false);
+      toast.success("Novo código PIX gerado");
+    } catch (e: any) {
+      toast.error(e.message || "Erro ao gerar novo PIX");
+    } finally {
+      setRegenerating(false);
+    }
   };
 
   if (loading) {
@@ -124,10 +171,16 @@ function PixPage() {
         </div>
 
         {/* Timer */}
-        <div className="bg-primary/5 border border-primary/20 rounded-lg px-4 py-3 mb-5 flex items-center justify-center gap-2 text-sm">
-          <Clock className="w-4 h-4 text-primary" />
-          <span className="text-muted-foreground">Este código expira em</span>
-          <span className="font-mono font-bold tabular-nums text-primary text-base">{remaining}</span>
+        <div className={`${expired ? "bg-destructive/10 border-destructive/30" : "bg-primary/5 border-primary/20"} border rounded-lg px-4 py-3 mb-5 flex items-center justify-center gap-2 text-sm`}>
+          <Clock className={`w-4 h-4 ${expired ? "text-destructive" : "text-primary"}`} />
+          {expired ? (
+            <span className="font-bold text-destructive">Código PIX expirado</span>
+          ) : (
+            <>
+              <span className="text-muted-foreground">Este código expira em</span>
+              <span className="font-mono font-bold tabular-nums text-primary text-base">{remaining}</span>
+            </>
+          )}
         </div>
 
         <div className="border border-border rounded-xl p-6 bg-card shadow-sm">
@@ -136,19 +189,30 @@ function PixPage() {
             <div className="text-4xl font-bold text-primary mt-1">{brl(total)}</div>
           </div>
 
-          <div className="flex justify-center my-6">
+          <div className={`flex justify-center my-6 ${expired ? "opacity-40" : ""}`}>
             <div className="p-5 bg-white rounded-xl border-2 border-pix/30 shadow-md">
               {qrUrl && <img src={qrUrl} alt="QR Code PIX" className="w-72 h-72" />}
             </div>
           </div>
 
-          <button
-            onClick={copy}
-            className="w-full h-13 py-3.5 bg-pix text-white rounded-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition text-base shadow-md"
-          >
-            {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-            {copied ? "Código copiado!" : "Copiar código PIX"}
-          </button>
+          {expired ? (
+            <button
+              onClick={regenerate}
+              disabled={regenerating}
+              className="w-full h-13 py-3.5 bg-primary text-primary-foreground rounded-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition text-base shadow-md disabled:opacity-60"
+            >
+              {regenerating ? "Gerando novo PIX..." : "Gerar novo PIX"}
+            </button>
+          ) : (
+            <button
+              onClick={copy}
+              disabled={expired}
+              className="w-full h-13 py-3.5 bg-pix text-white rounded-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition text-base shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+              {copied ? "Código copiado!" : "Copiar código PIX"}
+            </button>
+          )}
 
           <details className="mt-3">
             <summary className="text-xs text-muted-foreground cursor-pointer text-center hover:text-foreground">Ver código copia-e-cola</summary>
