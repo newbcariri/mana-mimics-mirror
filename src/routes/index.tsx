@@ -167,29 +167,43 @@ function ProductPage() {
           </div>
 
           {/* Sizes */}
-          <div className="grid grid-cols-2 gap-5">
-            <div>
-              <div className="text-sm font-semibold mb-2">Top:</div>
-              <div className="flex gap-2">
-                {PRODUCT.sizes.map(s => (
-                  <button
-                    key={s}
-                    onClick={() => setTopSize(s)}
-                    className={`w-12 h-12 rounded-md border text-sm font-semibold transition-all ${topSize === s ? "bg-foreground text-background border-foreground" : "border-border hover:border-foreground"}`}
-                  >{s}</button>
-                ))}
+          <div className="border-2 border-dashed border-border rounded-lg p-4 bg-muted/30">
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-sm font-bold uppercase tracking-wide">
+                Selecione o tamanho <span className="text-primary">*</span>
               </div>
+              <a href="#tabela-medidas" className="text-xs font-semibold text-primary underline underline-offset-2 hover:opacity-80">
+                Tabela de medidas
+              </a>
             </div>
-            <div>
-              <div className="text-sm font-semibold mb-2">Legging:</div>
-              <div className="flex gap-2">
-                {PRODUCT.sizes.map(s => (
-                  <button
-                    key={s}
-                    onClick={() => setLegSize(s)}
-                    className={`w-12 h-12 rounded-md border text-sm font-semibold transition-all ${legSize === s ? "bg-foreground text-background border-foreground" : "border-border hover:border-foreground"}`}
-                  >{s}</button>
-                ))}
+            <div className="grid grid-cols-2 gap-5">
+              <div>
+                <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Tamanho do Top</div>
+                <div className="flex gap-2 flex-wrap">
+                  {PRODUCT.sizes.map(s => (
+                    <button
+                      key={s}
+                      onClick={() => setTopSize(s)}
+                      aria-label={`Tamanho do top ${s}`}
+                      className={`w-12 h-12 rounded-md border text-sm font-semibold transition-all ${topSize === s ? "bg-foreground text-background border-foreground" : "border-border bg-background hover:border-foreground"}`}
+                    >{s}</button>
+                  ))}
+                </div>
+                {topSize && <div className="text-[11px] text-muted-foreground mt-1.5">Selecionado: <span className="font-semibold text-foreground">{topSize}</span></div>}
+              </div>
+              <div>
+                <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Tamanho da Legging</div>
+                <div className="flex gap-2 flex-wrap">
+                  {PRODUCT.sizes.map(s => (
+                    <button
+                      key={s}
+                      onClick={() => setLegSize(s)}
+                      aria-label={`Tamanho da legging ${s}`}
+                      className={`w-12 h-12 rounded-md border text-sm font-semibold transition-all ${legSize === s ? "bg-foreground text-background border-foreground" : "border-border bg-background hover:border-foreground"}`}
+                    >{s}</button>
+                  ))}
+                </div>
+                {legSize && <div className="text-[11px] text-muted-foreground mt-1.5">Selecionado: <span className="font-semibold text-foreground">{legSize}</span></div>}
               </div>
             </div>
           </div>
@@ -295,7 +309,7 @@ function ProductPage() {
       </section>
 
       {/* Size chart */}
-      <section className="max-w-7xl mx-auto px-4 mt-20">
+      <section id="tabela-medidas" className="max-w-7xl mx-auto px-4 mt-20 scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Tabela de Medidas</h2>
         <div className="overflow-x-auto rounded-xl border border-border">
           <table className="w-full text-sm">
