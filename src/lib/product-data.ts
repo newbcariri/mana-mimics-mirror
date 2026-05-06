@@ -1,5 +1,5 @@
 export const PRODUCT = {
-  name: "Conjunto Básico em Poliamida",
+  name: "Conjunto Fitness Premium em Poliamida",
   brand: "FlexFit Brasil",
   rating: 4.9,
   reviewCount: 740,
