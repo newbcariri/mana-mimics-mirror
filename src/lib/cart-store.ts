@@ -61,11 +61,12 @@ export const cart = {
   clear() { items = []; persist(); },
 };
 
+const EMPTY: CartItem[] = [];
 export function useCart() {
-  const snapshot = useSyncExternalStore(cart.subscribe, cart.getSnapshot, () => [] as CartItem[]);
+  const snapshot = useSyncExternalStore(cart.subscribe, cart.getSnapshot, () => EMPTY);
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
-  return hydrated ? snapshot : [];
+  return hydrated ? snapshot : EMPTY;
 }
 
 export function cartTotal(items: CartItem[]) {
