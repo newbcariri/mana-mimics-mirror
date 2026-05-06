@@ -89,7 +89,13 @@ function ProductPage() {
                 onClick={() => setActiveImg(i)}
                 className={`relative aspect-[3/4] rounded-md overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
               >
-                <img src={m.poster ?? m.src} alt="" className="w-full h-full object-cover" />
+                <img
+                  src={m.poster ?? m.src}
+                  alt=""
+                  loading="lazy"
+                  className="w-full h-full object-cover bg-muted"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = PRODUCT.images[0]; }}
+                />
                 {m.type === "video" && (
                   <span className="absolute inset-0 flex items-center justify-center bg-black/30">
                     <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M8 5v14l11-7z" /></svg>
