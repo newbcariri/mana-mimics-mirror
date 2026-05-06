@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       orders: {
         Row: {
+          asaas_payment_id: string | null
           color: string
           created_at: string
           id: string
@@ -31,6 +32,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          asaas_payment_id?: string | null
           color: string
           created_at?: string
           id?: string
@@ -46,6 +48,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          asaas_payment_id?: string | null
           color?: string
           created_at?: string
           id?: string
