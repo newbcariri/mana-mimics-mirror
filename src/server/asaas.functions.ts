@@ -123,3 +123,140 @@ export const createPixCharge = createServerFn({ method: "POST" })
       paymentId: payment.id as string,
     };
   });
+
+export const getOrderSummary = createServerFn({ method: "POST" })
+  .middleware([attachAuthHeader, requireSupabaseAuth])
+  .inputValidator((data: { orderId: string }) => data)
+  .handler(async ({ data, context }) => {
+    const { userId } = context;
+    const { data: order, error } = await supabaseAdmin
+      .from("orders").select("*").eq("id", data.orderId).single();
+    if (error || !order) throw new Error("Pedido não encontrado");
+    if (order.user_id !== userId) throw new Error("Não autorizado");
+
+    const ts = new Date(order.created_at).getTime();
+    const { data: siblings } = await supabaseAdmin
+      .from("orders")
+      .select("id, total, created_at, status, asaas_payment_id")
+      .eq("user_id", userId)
+      .gte("created_at", new Date(ts - 5000).toISOString())
+      .lte("created_at", new Date(ts + 5000).toISOString());
+
+    const group = siblings && siblings.length > 0 ? siblings : [order];
+    const totalValue = group.reduce((s, x) => s + Number(x.total), 0);
+    return {
+      total: totalValue,
+      status: order.status as string,
+      hasCharge: !!order.asaas_payment_id,
+    };
+  });
+
+export const createCardCharge = createServerFn({ method: "POST" })
+  .middleware([attachAuthHeader, requireSupabaseAuth])
+  .inputValidator((data: {
+    orderId: string;
+    installmentCount: number;
+    remoteIp: string;
+    card: {
+      holderName: string;
+      number: string;
+      expiryMonth: string;
+      expiryYear: string;
+      ccv: string;
+    };
+    holder: {
+      name: string;
+      email: string;
+      cpfCnpj: string;
+      postalCode: string;
+      addressNumber: string;
+      phone: string;
+    };
+  }) => data)
+  .handler(async ({ data, context }) => {
+    const { userId } = context;
+
+    const { data: order, error: oErr } = await supabaseAdmin
+      .from("orders").select("*").eq("id", data.orderId).single();
+    if (oErr || !order) throw new Error("Pedido não encontrado");
+    if (order.user_id !== userId) throw new Error("Não autorizado");
+
+    const ts = new Date(order.created_at).getTime();
+    const { data: siblings } = await supabaseAdmin
+      .from("orders")
+      .select("id, total, asaas_payment_id, created_at")
+      .eq("user_id", userId)
+      .gte("created_at", new Date(ts - 5000).toISOString())
+      .lte("created_at", new Date(ts + 5000).toISOString());
+
+    const group = siblings && siblings.length > 0 ? siblings : [order];
+    const totalValue = group.reduce((s, x) => s + Number(x.total), 0);
+
+    const { data: profile, error: pErr } = await supabaseAdmin
+      .from("profiles").select("full_name, email, cpf, phone")
+      .eq("id", userId).single();
+    if (pErr || !profile) throw new Error("Perfil não encontrado");
+
+    const customerId = await getOrCreateCustomer(profile as any);
+    const dueDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+    const installmentCount = Math.max(1, Math.min(12, Math.floor(data.installmentCount || 1)));
+
+    const body: any = {
+      customer: customerId,
+      billingType: "CREDIT_CARD",
+      dueDate,
+      description: `Pedido ${order.id.slice(0, 8).toUpperCase()}`,
+      externalReference: order.id,
+      remoteIp: data.remoteIp,
+      creditCard: {
+        holderName: data.card.holderName,
+        number: data.card.number.replace(/\s/g, ""),
+        expiryMonth: data.card.expiryMonth,
+        expiryYear: data.card.expiryYear.length === 2 ? `20${data.card.expiryYear}` : data.card.expiryYear,
+        ccv: data.card.ccv,
+      },
+      creditCardHolderInfo: {
+        name: data.holder.name,
+        email: data.holder.email,
+        cpfCnpj: data.holder.cpfCnpj.replace(/\D/g, ""),
+        postalCode: data.holder.postalCode.replace(/\D/g, ""),
+        addressNumber: data.holder.addressNumber || "0",
+        phone: data.holder.phone.replace(/\D/g, ""),
+      },
+    };
+
+    if (installmentCount > 1) {
+      body.installmentCount = installmentCount;
+      body.totalValue = Number(totalValue.toFixed(2));
+    } else {
+      body.value = Number(totalValue.toFixed(2));
+    }
+
+    const payment = await asaas("/payments", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+
+    const paymentId = payment.id as string;
+    const status = payment.status as string;
+
+    // Confirmed/received → mark all sibling orders paid
+    const ids = group.map((g) => g.id);
+    const isPaid = status === "CONFIRMED" || status === "RECEIVED";
+    await supabaseAdmin
+      .from("orders")
+      .update({
+        asaas_payment_id: paymentId,
+        ...(isPaid ? { status: "pago" } : {}),
+      })
+      .in("id", ids);
+
+    return {
+      paymentId,
+      status,
+      paid: isPaid,
+      installmentCount,
+      value: totalValue,
+    };
+  });
