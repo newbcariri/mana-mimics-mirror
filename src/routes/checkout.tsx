@@ -392,11 +392,14 @@ function CheckoutPage() {
                   </div>
 
                   {payment === "pix" ? (
-                    <div className="bg-pix/5 border border-pix/20 rounded-lg p-4 text-sm">
-                      <div className="font-semibold mb-1 text-foreground flex items-center gap-2">
-                        <ShieldCheck className="w-4 h-4 text-success" /> Pagamento instantâneo e seguro
+                    <div className="space-y-3">
+                      <div className="bg-pix/5 border border-pix/20 rounded-lg p-4 text-sm">
+                        <div className="font-semibold mb-1 text-foreground flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-success" /> Pagamento instantâneo e seguro
+                        </div>
+                        <p className="text-muted-foreground text-xs">5% de desconto · aprovação imediata. O QR Code será gerado na próxima etapa.</p>
                       </div>
-                      <p className="text-muted-foreground text-xs">5% de desconto · aprovação imediata. O QR Code será gerado na próxima etapa.</p>
+                      <PixBanksTrust compact />
                     </div>
                   ) : (
                     <div className="space-y-3">
