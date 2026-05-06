@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Star, ChevronLeft, ChevronRight, Heart, Share2, Truck, Plus, Minus, Check, ShieldCheck, Award, Droplets, Zap } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Heart, Share2, Truck, Plus, Minus, Check, ShieldCheck, Award, Droplets, Zap, X } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PRODUCT, REVIEWS } from "@/lib/product-data";
@@ -34,6 +34,9 @@ function ProductPage() {
   const [topSize, setTopSize] = useState<string | null>(null);
   const [legSize, setLegSize] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+
+  const initials = (name: string) => name.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
 
   const handleBuy = () => {
     if (!topSize || !legSize) {
@@ -86,7 +89,13 @@ function ProductPage() {
                 onClick={() => setActiveImg(i)}
                 className={`relative aspect-[3/4] rounded-md overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
               >
-                <img src={m.poster ?? m.src} alt="" className="w-full h-full object-cover" />
+                <img
+                  src={m.poster ?? m.src}
+                  alt=""
+                  loading="lazy"
+                  className="w-full h-full object-cover bg-muted"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = PRODUCT.images[0]; }}
+                />
                 {m.type === "video" && (
                   <span className="absolute inset-0 flex items-center justify-center bg-black/30">
                     <svg viewBox="0 0 24 24" className="w-6 h-6 fill-white"><path d="M8 5v14l11-7z" /></svg>
@@ -122,7 +131,8 @@ function ProductPage() {
 
           {/* Price */}
           <div className="bg-muted/50 rounded-xl p-5 space-y-2">
-            <div className="flex items-baseline gap-3">
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <span className="text-sm text-muted-foreground line-through">{formatBRL(PRODUCT.priceOriginal)}</span>
               <span className="text-3xl md:text-4xl font-bold text-primary">{formatBRL(PRODUCT.pricePix)}</span>
               <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded">-{PRODUCT.pixDiscount}%</span>
             </div>
@@ -341,7 +351,9 @@ function ProductPage() {
               {REVIEWS.map(r => (
                 <article key={r.name} className="border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
                   <div className="flex items-start gap-3 mb-3">
-                    <img src={r.photo} alt={r.name} className="w-12 h-12 rounded-full object-cover" />
+                    <div className="w-12 h-12 rounded-full bg-primary/15 text-primary flex items-center justify-center font-bold text-sm shrink-0">
+                      {initials(r.name)}
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold">{r.name}</div>
                       <div className="flex items-center gap-2">
@@ -353,13 +365,43 @@ function ProductPage() {
                   </div>
                   <h4 className="font-semibold text-sm mb-1">{r.title}</h4>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-3">{r.text}</p>
-                  <img src={r.photo} alt="" className="w-20 h-20 rounded-md object-cover" />
+                  {r.photo && (
+                    <button
+                      type="button"
+                      onClick={() => setLightbox(r.photo!)}
+                      className="block rounded-md overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <img
+                        src={r.photo}
+                        alt={`Foto enviada por ${r.name}`}
+                        loading="lazy"
+                        className="w-20 h-20 object-cover hover:opacity-90 transition-opacity cursor-zoom-in"
+                      />
+                    </button>
+                  )}
                 </article>
               ))}
             </div>
           </div>
         </div>
       </section>
+
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            onClick={() => setLightbox(null)}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+            aria-label="Fechar"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <img src={lightbox} alt="Foto da avaliação" className="max-w-full max-h-full rounded-lg shadow-2xl" />
+        </div>
+      )}
+
 
       <SiteFooter />
     </div>

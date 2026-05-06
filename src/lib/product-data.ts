@@ -3,10 +3,11 @@ export const PRODUCT = {
   brand: "FlexFit Brasil",
   rating: 4.9,
   reviewCount: 740,
+  priceOriginal: 119.90,
   pricePix: 56.95,
   priceCard: 59.95,
   installments: { count: 11, value: 5.45 },
-  pixDiscount: 5,
+  pixDiscount: 50,
   comboPrice: 99.95,
   cashback: 5.99,
   images: [
@@ -110,7 +111,6 @@ export const REVIEWS = [
   { name: "Mariana S.", rating: 5, date: "25/04/2026", title: "Apaixonada!", text: "Tecido encorpado, não marca nada e a cor é linda mesmo. Já comprei outras 3 cores!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/04/25/b28b37f0b026adb35924b248a0225ff7.jpg?ims=fit-in/600x600" },
   { name: "Juliana R.", rating: 5, date: "25/04/2026", title: "Vale cada centavo", text: "Compressão perfeita pra musculação. Não escorrega e seca super rápido. Recomendo!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/04/25/3cd9c7cf428ab986a66dfb4beb7ac318.jpg?ims=fit-in/600x600" },
   { name: "Camila P.", rating: 5, date: "16/04/2026", title: "Melhor conjunto fitness", text: "Vibrante, costuras impecáveis. Veste muito bem o tamanho M.", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/04/16/a797b45eef3a6d7a1f084250e977b477.jpg?ims=fit-in/600x600" },
-  { name: "Beatriz L.", rating: 5, date: "16/04/2026", title: "Zero transparência mesmo", text: "Já testei agachando na frente do espelho. Aprovadíssimo!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/04/16/b3700225335e9dd0d7557284911471e7.jpg?ims=fit-in/600x600" },
   { name: "Renata M.", rating: 5, date: "08/04/2026", title: "Muito bom", text: "Adorei o caimento, o tecido é maravilhoso e veste super bem.", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/04/08/4ca5312f2c80551a648ad40eae043d60.jpg?ims=fit-in/600x600" },
   { name: "Patrícia D.", rating: 5, date: "31/03/2026", title: "Top demais!", text: "Treino há 5 anos e esse é de longe o melhor conjunto que já tive.", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/03/31/0fb222210fdca673101971dc476ce5dd.jpg?ims=fit-in/600x600" },
   { name: "Larissa F.", rating: 5, date: "26/03/2026", title: "Amei!", text: "Chegou rapidinho, qualidade impecável. Já é meu segundo pedido.", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/03/26/cf814f909c0cf4c8a748805828ee09f6.jpg?ims=fit-in/600x600" },
@@ -119,4 +119,9 @@ export const REVIEWS = [
   { name: "Vanessa O.", rating: 5, date: "05/10/2025", title: "Qualidade top", text: "Comprei o preto e amei tanto que pedi mais 2 cores. Vale muito a pena!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2025/10/05/ac6f5c6fc7889ee726ef41895a8b6a8c.jpg?ims=fit-in/600x600" },
   { name: "Tatiane B.", rating: 5, date: "05/10/2025", title: "Conjunto perfeito", text: "Muito confortável, uso pra treinar e pro dia a dia. Super indico!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2025/10/05/5ffa8a57ba20e46f73fef0e872ac5281.jpg?ims=fit-in/600x600" },
   { name: "Gabriela N.", rating: 5, date: "13/08/2025", title: "Surpreendente", text: "Não esperava uma qualidade tão boa pelo preço. Já é meu favorito!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2025/08/13/aaf23142a33375d69a4f30094e9e1f77.jpg?ims=fit-in/600x600" },
+  { name: "Bianca R.", rating: 5, date: "02/05/2026", title: "Recomendo muito", text: "Comprei meio receosa pelo preço, mas a qualidade me surpreendeu. Tecido firme, costura impecável e veste super bem." },
+  { name: "Sabrina M.", rating: 5, date: "28/04/2026", title: "Vale o investimento", text: "Já lavei várias vezes e continua igual ao primeiro dia. Não desbota e não desfia. Excelente custo-benefício!" },
+  { name: "Eduarda C.", rating: 5, date: "20/04/2026", title: "Confortável demais", text: "Uso até pra dormir de tão confortável. A modelagem valoriza muito o corpo, fiquei apaixonada." },
+  { name: "Helena S.", rating: 5, date: "12/04/2026", title: "Atendimento e produto top", text: "Entrega rápida, embalagem caprichada e o produto é de altíssima qualidade. Já indiquei pra todas as amigas." },
 ];
+

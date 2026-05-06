@@ -19,9 +19,14 @@ function getPromoDeadline() {
 }
 
 function useCountdown() {
-  const [deadline] = useState(() => getPromoDeadline());
-  const [now, setNow] = useState(() => Date.now());
+  const [mounted, setMounted] = useState(false);
+  const [deadline, setDeadline] = useState(0);
+  const [now, setNow] = useState(0);
   useEffect(() => {
+    const d = getPromoDeadline();
+    setDeadline(d);
+    setNow(Date.now());
+    setMounted(true);
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
@@ -30,7 +35,7 @@ function useCountdown() {
   const hours = Math.floor((diff % 86400000) / 3600000);
   const minutes = Math.floor((diff % 3600000) / 60000);
   const seconds = Math.floor((diff % 60000) / 1000);
-  return { days, hours, minutes, seconds };
+  return { days, hours, minutes, seconds, mounted };
 }
 
 function CountdownBox({ value, label }: { value: number; label: string }) {
@@ -48,7 +53,7 @@ export function SiteHeader() {
   const items = useCart();
   const count = items.reduce((s, i) => s + i.quantity, 0);
   const [authed, setAuthed] = useState<boolean | null>(null);
-  const { days, hours, minutes, seconds } = useCountdown();
+  const { days, hours, minutes, seconds, mounted } = useCountdown();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
@@ -62,14 +67,18 @@ export function SiteHeader() {
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-3 sm:gap-4 text-center">
           <Clock className="w-4 h-4 shrink-0 text-primary" />
           <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wide">Promoção termina em</span>
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <CountdownBox value={days} label="dias" />
-            <span className="font-bold opacity-60">:</span>
-            <CountdownBox value={hours} label="hrs" />
-            <span className="font-bold opacity-60">:</span>
-            <CountdownBox value={minutes} label="min" />
-            <span className="font-bold opacity-60">:</span>
-            <CountdownBox value={seconds} label="seg" />
+          <div className="flex items-center gap-1.5 sm:gap-2" suppressHydrationWarning>
+            {mounted ? (
+              <>
+                <CountdownBox value={days} label="dias" />
+                <span className="font-bold opacity-60">:</span>
+                <CountdownBox value={hours} label="hrs" />
+                <span className="font-bold opacity-60">:</span>
+                <CountdownBox value={minutes} label="min" />
+                <span className="font-bold opacity-60">:</span>
+                <CountdownBox value={seconds} label="seg" />
+              </>
+            ) : null}
           </div>
         </div>
       </div>
