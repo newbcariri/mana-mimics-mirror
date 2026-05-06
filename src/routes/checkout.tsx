@@ -164,8 +164,12 @@ function CheckoutPage() {
       if (error) throw error;
       cart.clear();
       toast.success("Pedido realizado com sucesso!");
-      if (payment === "pix" && inserted && inserted[0]) {
-        navigate({ to: "/pix/$orderId", params: { orderId: inserted[0].id } });
+      if (inserted && inserted[0]) {
+        if (payment === "pix") {
+          navigate({ to: "/pix/$orderId", params: { orderId: inserted[0].id } });
+        } else {
+          navigate({ to: "/cartao/$orderId", params: { orderId: inserted[0].id } });
+        }
       } else {
         navigate({ to: "/pedidos" });
       }
