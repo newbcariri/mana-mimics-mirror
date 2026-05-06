@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { attachAuthHeader } from "./auth-client-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const ASAAS_BASE = "https://api.asaas.com/v3";
@@ -42,7 +43,7 @@ async function getOrCreateCustomer(profile: { full_name: string; email: string; 
 }
 
 export const createPixCharge = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
+  .middleware([attachAuthHeader, requireSupabaseAuth])
   .inputValidator((data: { orderId: string }) => data)
   .handler(async ({ data, context }) => {
     const { userId } = context;
