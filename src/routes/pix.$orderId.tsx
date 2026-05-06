@@ -104,10 +104,35 @@ function PixPage() {
   }, [orderId, navigate]);
 
   const copy = async () => {
+    if (expired) return;
     await navigator.clipboard.writeText(payload);
     setCopied(true);
     toast.success("Código PIX copiado");
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const regenerate = async () => {
+    setRegenerating(true);
+    try {
+      const res = await postPaymentApi<{
+        qrCodeBase64: string;
+        payload: string;
+        value: number;
+        expirationDate?: string;
+        paymentId: string;
+      }>("pix", { orderId, regenerate: true });
+      setPayload(res.payload);
+      setQrUrl(`data:image/png;base64,${res.qrCodeBase64}`);
+      const parsed = res.expirationDate ? new Date(String(res.expirationDate).replace(" ", "T")).getTime() : NaN;
+      const exp = Number.isFinite(parsed) && parsed - Date.now() > 0 ? parsed : Date.now() + 30 * 60 * 1000;
+      setExpiresAt(exp);
+      setExpired(false);
+      toast.success("Novo código PIX gerado");
+    } catch (e: any) {
+      toast.error(e.message || "Erro ao gerar novo PIX");
+    } finally {
+      setRegenerating(false);
+    }
   };
 
   if (loading) {
