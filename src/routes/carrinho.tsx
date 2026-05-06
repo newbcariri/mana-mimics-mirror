@@ -90,7 +90,7 @@ function CartPage() {
                     Falta apenas <strong>1 unidade</strong> para liberar o desconto e o frete grátis.
                   </p>
                   <button
-                    onClick={() => cart.setQty(items[0].id, items[0].quantity + 1)}
+                    onClick={() => setColorPickerOpen(true)}
                     className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-full px-4 py-2 text-xs font-bold hover:bg-primary/90"
                   >
                     <Plus className="w-3.5 h-3.5" /> ADICIONAR +1 E ECONOMIZAR
