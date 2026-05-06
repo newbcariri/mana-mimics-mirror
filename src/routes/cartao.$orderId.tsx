@@ -101,7 +101,7 @@ function CardPage() {
       });
       if (res.paid) {
         toast.success("Pagamento aprovado!");
-        navigate({ to: "/pedidos" });
+        navigate({ to: "/pagamento-confirmado/$orderId", params: { orderId } });
       } else {
         toast.success("Pagamento em análise");
         navigate({ to: "/pedidos" });
