@@ -121,8 +121,25 @@ async function getProfile(userId: string) {
 }
 
 async function handleOrderSummary(data: any, userId: string) {
-  const { order, totalValue } = await getOrderGroup(data.orderId, userId);
-  return { total: totalValue, status: order.status as string, hasCharge: !!order.asaas_payment_id };
+  const supabaseAdmin = createSupabaseAdmin();
+  const { order, group, totalValue } = await getOrderGroup(data.orderId, userId);
+  let status = order.status as string;
+
+  // Fallback: if still pending and we have an Asaas payment, check Asaas directly
+  if (status === "aguardando_pagamento" && order.asaas_payment_id) {
+    try {
+      const payment = await asaas(`/payments/${order.asaas_payment_id}`);
+      const paid = payment?.status === "CONFIRMED" || payment?.status === "RECEIVED" || payment?.status === "RECEIVED_IN_CASH";
+      if (paid) {
+        await supabaseAdmin.from("orders").update({ status: "pago" }).in("id", group.map((g) => g.id));
+        status = "pago";
+      }
+    } catch (e) {
+      console.error("order-summary asaas check failed", e);
+    }
+  }
+
+  return { total: totalValue, status, hasCharge: !!order.asaas_payment_id };
 }
 
 async function handlePix(data: any, userId: string) {
