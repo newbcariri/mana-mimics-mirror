@@ -18,6 +18,7 @@ const COMBO_PAIR_PRICE = 109.0; // 2 unidades por R$ 109,00
 function CartPage() {
   const items = useCart();
   const navigate = useNavigate();
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
   const subtotalRaw = cartTotal(items);
   const totalQty = items.reduce((s, i) => s + i.quantity, 0);
 
