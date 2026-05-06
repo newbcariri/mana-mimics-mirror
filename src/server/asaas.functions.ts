@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { attachAuthHeader } from "./auth-client-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const ASAAS_BASE = "https://api.asaas.com/v3";
