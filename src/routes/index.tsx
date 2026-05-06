@@ -125,7 +125,8 @@ function ProductPage() {
 
           {/* Price */}
           <div className="bg-muted/50 rounded-xl p-5 space-y-2">
-            <div className="flex items-baseline gap-3">
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <span className="text-sm text-muted-foreground line-through">{formatBRL(PRODUCT.priceOriginal)}</span>
               <span className="text-3xl md:text-4xl font-bold text-primary">{formatBRL(PRODUCT.pricePix)}</span>
               <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded">-{PRODUCT.pixDiscount}%</span>
             </div>
