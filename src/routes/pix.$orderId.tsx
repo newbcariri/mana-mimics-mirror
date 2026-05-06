@@ -52,7 +52,7 @@ function PixPage() {
       const { data } = await supabase.from("orders").select("status").eq("id", orderId).single();
       if (data && data.status !== "aguardando_pagamento") {
         toast.success("Pagamento confirmado!");
-        navigate({ to: "/pedidos" });
+        navigate({ to: "/pagamento-confirmado/$orderId", params: { orderId } });
       }
     }, 5000);
     return () => clearInterval(t);
