@@ -3,10 +3,11 @@ export const PRODUCT = {
   brand: "FlexFit Brasil",
   rating: 4.9,
   reviewCount: 740,
+  priceOriginal: 119.90,
   pricePix: 56.95,
   priceCard: 59.95,
   installments: { count: 11, value: 5.45 },
-  pixDiscount: 5,
+  pixDiscount: 50,
   comboPrice: 99.95,
   cashback: 5.99,
   images: [
