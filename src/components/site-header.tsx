@@ -67,14 +67,18 @@ export function SiteHeader() {
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-3 sm:gap-4 text-center">
           <Clock className="w-4 h-4 shrink-0 text-primary" />
           <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wide">Promoção termina em</span>
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <CountdownBox value={days} label="dias" />
-            <span className="font-bold opacity-60">:</span>
-            <CountdownBox value={hours} label="hrs" />
-            <span className="font-bold opacity-60">:</span>
-            <CountdownBox value={minutes} label="min" />
-            <span className="font-bold opacity-60">:</span>
-            <CountdownBox value={seconds} label="seg" />
+          <div className="flex items-center gap-1.5 sm:gap-2" suppressHydrationWarning>
+            {mounted ? (
+              <>
+                <CountdownBox value={days} label="dias" />
+                <span className="font-bold opacity-60">:</span>
+                <CountdownBox value={hours} label="hrs" />
+                <span className="font-bold opacity-60">:</span>
+                <CountdownBox value={minutes} label="min" />
+                <span className="font-bold opacity-60">:</span>
+                <CountdownBox value={seconds} label="seg" />
+              </>
+            ) : null}
           </div>
         </div>
       </div>
