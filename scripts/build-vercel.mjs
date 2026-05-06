@@ -34,7 +34,7 @@ await esbuild({
   bundle: true,
   format: "esm",
   platform: "node",
-  target: "node20",
+  target: "node22",
   logLevel: "warning",
   banner: {
     js: "import { createRequire as __vercelCR } from 'module'; const require = __vercelCR(import.meta.url);",
@@ -96,7 +96,7 @@ writeFileSync(
   resolve(fnDir, ".vc-config.json"),
   JSON.stringify(
     {
-      runtime: "nodejs20.x",
+      runtime: "nodejs22.x",
       handler: "index.mjs",
       launcherType: "Nodejs",
       shouldAddHelpers: false,
