@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Database } from "@/integrations/supabase/types";
 
 const ASAAS_BASE = "https://api.asaas.com/v3";
@@ -15,6 +14,12 @@ function getServerEnv(name: string) {
   const value = process.env[name];
   if (!value) throw new Error(`${name} não configurada`);
   return value;
+}
+
+function createSupabaseAdmin() {
+  return createClient<Database>(getServerEnv("SUPABASE_URL"), getServerEnv("SUPABASE_SERVICE_ROLE_KEY"), {
+    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+  });
 }
 
 async function requireUserId(request: Request) {
@@ -72,6 +77,7 @@ async function getOrCreateCustomer(profile: { full_name: string; email: string; 
 }
 
 async function getOrderGroup(orderId: string, userId: string) {
+  const supabaseAdmin = createSupabaseAdmin();
   const { data: order, error } = await supabaseAdmin
     .from("orders")
     .select("*")
@@ -94,6 +100,7 @@ async function getOrderGroup(orderId: string, userId: string) {
 }
 
 async function getProfile(userId: string) {
+  const supabaseAdmin = createSupabaseAdmin();
   const { data: profile, error } = await supabaseAdmin
     .from("profiles")
     .select("full_name, email, cpf, phone, cep")
@@ -109,6 +116,7 @@ async function handleOrderSummary(data: any, userId: string) {
 }
 
 async function handlePix(data: any, userId: string) {
+  const supabaseAdmin = createSupabaseAdmin();
   const { order, group, totalValue } = await getOrderGroup(data.orderId, userId);
   if (order.asaas_payment_id) {
     const qr = await asaas(`/payments/${order.asaas_payment_id}/pixQrCode`);
@@ -147,6 +155,7 @@ async function handlePix(data: any, userId: string) {
 }
 
 async function handleCard(data: any, userId: string) {
+  const supabaseAdmin = createSupabaseAdmin();
   const { order, group, totalValue } = await getOrderGroup(data.orderId, userId);
   const profile = await getProfile(userId);
   const customerId = await getOrCreateCustomer(profile);
