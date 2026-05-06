@@ -171,10 +171,16 @@ function PixPage() {
         </div>
 
         {/* Timer */}
-        <div className="bg-primary/5 border border-primary/20 rounded-lg px-4 py-3 mb-5 flex items-center justify-center gap-2 text-sm">
-          <Clock className="w-4 h-4 text-primary" />
-          <span className="text-muted-foreground">Este código expira em</span>
-          <span className="font-mono font-bold tabular-nums text-primary text-base">{remaining}</span>
+        <div className={`${expired ? "bg-destructive/10 border-destructive/30" : "bg-primary/5 border-primary/20"} border rounded-lg px-4 py-3 mb-5 flex items-center justify-center gap-2 text-sm`}>
+          <Clock className={`w-4 h-4 ${expired ? "text-destructive" : "text-primary"}`} />
+          {expired ? (
+            <span className="font-bold text-destructive">Código PIX expirado</span>
+          ) : (
+            <>
+              <span className="text-muted-foreground">Este código expira em</span>
+              <span className="font-mono font-bold tabular-nums text-primary text-base">{remaining}</span>
+            </>
+          )}
         </div>
 
         <div className="border border-border rounded-xl p-6 bg-card shadow-sm">
@@ -183,19 +189,30 @@ function PixPage() {
             <div className="text-4xl font-bold text-primary mt-1">{brl(total)}</div>
           </div>
 
-          <div className="flex justify-center my-6">
+          <div className={`flex justify-center my-6 ${expired ? "opacity-40" : ""}`}>
             <div className="p-5 bg-white rounded-xl border-2 border-pix/30 shadow-md">
               {qrUrl && <img src={qrUrl} alt="QR Code PIX" className="w-72 h-72" />}
             </div>
           </div>
 
-          <button
-            onClick={copy}
-            className="w-full h-13 py-3.5 bg-pix text-white rounded-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition text-base shadow-md"
-          >
-            {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-            {copied ? "Código copiado!" : "Copiar código PIX"}
-          </button>
+          {expired ? (
+            <button
+              onClick={regenerate}
+              disabled={regenerating}
+              className="w-full h-13 py-3.5 bg-primary text-primary-foreground rounded-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition text-base shadow-md disabled:opacity-60"
+            >
+              {regenerating ? "Gerando novo PIX..." : "Gerar novo PIX"}
+            </button>
+          ) : (
+            <button
+              onClick={copy}
+              disabled={expired}
+              className="w-full h-13 py-3.5 bg-pix text-white rounded-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition text-base shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+              {copied ? "Código copiado!" : "Copiar código PIX"}
+            </button>
+          )}
 
           <details className="mt-3">
             <summary className="text-xs text-muted-foreground cursor-pointer text-center hover:text-foreground">Ver código copia-e-cola</summary>
