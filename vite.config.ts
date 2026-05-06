@@ -17,6 +17,9 @@ export default defineConfig({
   cloudflare: isVercel ? false : undefined,
   tanstackStart: isVercel ? { target: "vercel" } : undefined,
   vite: {
+    resolve: {
+      noExternal: true,
+    },
     ssr: {
       noExternal: true,
     },
