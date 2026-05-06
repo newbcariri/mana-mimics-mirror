@@ -4,9 +4,9 @@ Este projeto é desenvolvido no Lovable (TanStack Start) e pode ser hospedado na
 
 ## Como funciona
 
-- `vite.config.ts` detecta `process.env.VERCEL` e troca o preset de build de Cloudflare Workers para Vercel automaticamente.
-- Todas as `createServerFn` viram funções serverless da Vercel — nenhuma rota precisa ser reescrita.
-- Lovable Cloud (Supabase) continua sendo o backend de banco/auth/storage. Funciona normalmente de qualquer host.
+- A Vercel hospeda apenas o frontend.
+- O checkout chama o backend publicado do Lovable em `https://mana-mimics-mirror.lovable.app`.
+- Os secrets de pagamento e banco ficam somente no Lovable Cloud; não cadastre `SUPABASE_SERVICE_ROLE_KEY` na Vercel.
 
 ## Passo a passo
 
@@ -24,19 +24,13 @@ Em **Vercel → Project Settings → Environment Variables**, adicione (escopos:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
 - `VITE_SUPABASE_PROJECT_ID`
+- `VITE_API_BASE_URL` = `https://mana-mimics-mirror.lovable.app`
 
-**Servidor (secrets):**
-- `SUPABASE_URL`
-- `SUPABASE_PUBLISHABLE_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `ASAAS_API_KEY`
-- `ASAAS_WEBHOOK_TOKEN`
-
-> Os valores estão no painel do Lovable Cloud (Supabase). O `.env` do Lovable não vai junto com o GitHub — precisa cadastrar manualmente.
+> Não configure secrets de servidor na Vercel. O backend usado pelo checkout é o Lovable.
 
 ### 4. Atualizar webhook do Asaas
-Após o primeiro deploy, troque a URL no painel do Asaas para:
-`https://<seu-projeto>.vercel.app/api/public/asaas-webhook`
+Use esta URL no Asaas:
+`https://mana-mimics-mirror.lovable.app/api/public/asaas-webhook`
 
 ### 5. Deploys automáticos
 Cada push no GitHub (vindo do Lovable ou direto) dispara redeploy.
