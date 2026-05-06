@@ -141,7 +141,14 @@ function ProductPage() {
             <span className="text-muted-foreground">•</span>
             <a href="#avaliacoes" className="text-primary hover:underline">Faça uma avaliação</a>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{PRODUCT.name}</h1>
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight">{PRODUCT.name}</h1>
+          <p className="text-base text-muted-foreground -mt-2">Compressão alta · Zero transparência · Seca rápido. <strong className="text-foreground">Veste como uma segunda pele.</strong></p>
+
+          {/* Stock urgency */}
+          <div className="flex flex-wrap gap-2 text-xs">
+            <span className="inline-flex items-center gap-1 bg-destructive/10 text-destructive font-semibold px-2.5 py-1 rounded-full">⚠️ Estoque limitado</span>
+            <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-700 dark:text-yellow-500 font-semibold px-2.5 py-1 rounded-full">⏰ Promoção por tempo limitado</span>
+          </div>
 
           {/* Price */}
           <div className="bg-muted/50 rounded-xl p-5 space-y-2">
