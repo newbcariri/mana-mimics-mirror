@@ -1,72 +1,53 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import QRCode from "qrcode";
 import { toast } from "sonner";
 import { Copy, CheckCircle2, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
-import { generatePixPayload } from "@/lib/pix";
+import { createPixCharge } from "@/server/asaas.functions";
 
 export const Route = createFileRoute("/pix/$orderId")({
   component: PixPage,
   head: () => ({ meta: [{ title: "Pagamento PIX — FlexFit Brasil" }] }),
 });
 
-const PIX_KEY = "c1b24169-a0c4-4d3b-908a-02fa61c3e117";
 const BENEFICIARIO = "61.900.733 PATRICIA RAFAELA DO O";
 const CNPJ = "61.900.733/0001-77";
 const BANCO = "ASAAS INSTITUIÇÃO DE PAGAMENTOS S.A.";
-const MERCHANT_NAME = "61900733 PATRICIA RAFAELA";
-const MERCHANT_CITY = "BRASILIA";
 
 const brl = (v: number) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 function PixPage() {
   const { orderId } = Route.useParams();
   const navigate = useNavigate();
-  const [order, setOrder] = useState<any>(null);
   const [total, setTotal] = useState(0);
   const [payload, setPayload] = useState("");
   const [qrUrl, setQrUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate({ to: "/conta" }); return; }
-      // Fetch all orders sharing this checkout (same user, same created_at minute)
-      const { data: o } = await supabase.from("orders").select("*").eq("id", orderId).single();
-      if (!o) { toast.error("Pedido não encontrado"); navigate({ to: "/pedidos" }); return; }
-      // Group: orders created in same checkout (within 5s)
-      const { data: group } = await supabase
-        .from("orders")
-        .select("*")
-        .eq("user_id", o.user_id)
-        .gte("created_at", new Date(new Date(o.created_at).getTime() - 5000).toISOString())
-        .lte("created_at", new Date(new Date(o.created_at).getTime() + 5000).toISOString());
-      const orders = group || [o];
-      const sumTotal = orders.reduce((s, x) => s + Number(x.total), 0);
-      setOrder(o);
-      setTotal(sumTotal);
-      const p = generatePixPayload({
-        key: PIX_KEY,
-        name: MERCHANT_NAME,
-        city: MERCHANT_CITY,
-        amount: sumTotal,
-        txid: "***",
-      });
-      setPayload(p);
-      const url = await QRCode.toDataURL(p, { width: 320, margin: 1, errorCorrectionLevel: "M" });
-      setQrUrl(url);
-      setLoading(false);
+      try {
+        const res = await createPixCharge({ data: { orderId } });
+        setTotal(res.value);
+        setPayload(res.payload);
+        setQrUrl(`data:image/png;base64,${res.qrCodeBase64}`);
+      } catch (e: any) {
+        setError(e.message || "Erro ao gerar cobrança PIX");
+        toast.error(e.message || "Erro ao gerar cobrança PIX");
+      } finally {
+        setLoading(false);
+      }
     })();
   }, [orderId, navigate]);
 
-  // Poll status
+  // Poll status (webhook updates)
   useEffect(() => {
-    if (!order) return;
     const t = setInterval(async () => {
       const { data } = await supabase.from("orders").select("status").eq("id", orderId).single();
       if (data && data.status !== "aguardando_pagamento") {
@@ -75,7 +56,7 @@ function PixPage() {
       }
     }, 5000);
     return () => clearInterval(t);
-  }, [order, orderId, navigate]);
+  }, [orderId, navigate]);
 
   const copy = async () => {
     await navigator.clipboard.writeText(payload);
@@ -88,7 +69,19 @@ function PixPage() {
     return (
       <div className="min-h-screen bg-background">
         <SiteHeader />
-        <div className="text-center py-20 text-muted-foreground">Gerando QR Code...</div>
+        <div className="text-center py-20 text-muted-foreground">Gerando cobrança PIX...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background">
+        <SiteHeader />
+        <div className="max-w-md mx-auto py-20 text-center px-4">
+          <p className="text-destructive font-semibold mb-4">{error}</p>
+          <Link to="/pedidos" className="text-sm text-primary underline">Voltar aos pedidos</Link>
+        </div>
       </div>
     );
   }
