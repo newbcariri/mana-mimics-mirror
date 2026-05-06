@@ -20,6 +20,9 @@ import { Route as PagamentoConfirmadoOrderIdRouteImport } from './routes/pagamen
 import { Route as CartaoOrderIdRouteImport } from './routes/cartao.$orderId'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as ApiPublicRevealKeyRouteImport } from './routes/api/public/reveal-key'
+import { Route as ApiPublicPixRouteImport } from './routes/api/public/pix'
+import { Route as ApiPublicOrderSummaryRouteImport } from './routes/api/public/order-summary'
+import { Route as ApiPublicCardRouteImport } from './routes/api/public/card'
 import { Route as ApiPublicAsaasWebhookRouteImport } from './routes/api/public/asaas-webhook'
 
 const PedidosRoute = PedidosRouteImport.update({
@@ -78,6 +81,21 @@ const ApiPublicRevealKeyRoute = ApiPublicRevealKeyRouteImport.update({
   path: '/api/public/reveal-key',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPixRoute = ApiPublicPixRouteImport.update({
+  id: '/api/public/pix',
+  path: '/api/public/pix',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicOrderSummaryRoute = ApiPublicOrderSummaryRouteImport.update({
+  id: '/api/public/order-summary',
+  path: '/api/public/order-summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicCardRoute = ApiPublicCardRouteImport.update({
+  id: '/api/public/card',
+  path: '/api/public/card',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicAsaasWebhookRoute = ApiPublicAsaasWebhookRouteImport.update({
   id: '/api/public/asaas-webhook',
   path: '/api/public/asaas-webhook',
@@ -96,6 +114,9 @@ export interface FileRoutesByFullPath {
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
   '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
+  '/api/public/card': typeof ApiPublicCardRoute
+  '/api/public/order-summary': typeof ApiPublicOrderSummaryRoute
+  '/api/public/pix': typeof ApiPublicPixRoute
   '/api/public/reveal-key': typeof ApiPublicRevealKeyRoute
 }
 export interface FileRoutesByTo {
@@ -110,6 +131,9 @@ export interface FileRoutesByTo {
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
   '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
+  '/api/public/card': typeof ApiPublicCardRoute
+  '/api/public/order-summary': typeof ApiPublicOrderSummaryRoute
+  '/api/public/pix': typeof ApiPublicPixRoute
   '/api/public/reveal-key': typeof ApiPublicRevealKeyRoute
 }
 export interface FileRoutesById {
@@ -125,6 +149,9 @@ export interface FileRoutesById {
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
   '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
+  '/api/public/card': typeof ApiPublicCardRoute
+  '/api/public/order-summary': typeof ApiPublicOrderSummaryRoute
+  '/api/public/pix': typeof ApiPublicPixRoute
   '/api/public/reveal-key': typeof ApiPublicRevealKeyRoute
 }
 export interface FileRouteTypes {
@@ -141,6 +168,9 @@ export interface FileRouteTypes {
     | '/pagamento-confirmado/$orderId'
     | '/pix/$orderId'
     | '/api/public/asaas-webhook'
+    | '/api/public/card'
+    | '/api/public/order-summary'
+    | '/api/public/pix'
     | '/api/public/reveal-key'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -155,6 +185,9 @@ export interface FileRouteTypes {
     | '/pagamento-confirmado/$orderId'
     | '/pix/$orderId'
     | '/api/public/asaas-webhook'
+    | '/api/public/card'
+    | '/api/public/order-summary'
+    | '/api/public/pix'
     | '/api/public/reveal-key'
   id:
     | '__root__'
@@ -169,6 +202,9 @@ export interface FileRouteTypes {
     | '/pagamento-confirmado/$orderId'
     | '/pix/$orderId'
     | '/api/public/asaas-webhook'
+    | '/api/public/card'
+    | '/api/public/order-summary'
+    | '/api/public/pix'
     | '/api/public/reveal-key'
   fileRoutesById: FileRoutesById
 }
@@ -184,6 +220,9 @@ export interface RootRouteChildren {
   PagamentoConfirmadoOrderIdRoute: typeof PagamentoConfirmadoOrderIdRoute
   PixOrderIdRoute: typeof PixOrderIdRoute
   ApiPublicAsaasWebhookRoute: typeof ApiPublicAsaasWebhookRoute
+  ApiPublicCardRoute: typeof ApiPublicCardRoute
+  ApiPublicOrderSummaryRoute: typeof ApiPublicOrderSummaryRoute
+  ApiPublicPixRoute: typeof ApiPublicPixRoute
   ApiPublicRevealKeyRoute: typeof ApiPublicRevealKeyRoute
 }
 
@@ -266,6 +305,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRevealKeyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/pix': {
+      id: '/api/public/pix'
+      path: '/api/public/pix'
+      fullPath: '/api/public/pix'
+      preLoaderRoute: typeof ApiPublicPixRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/order-summary': {
+      id: '/api/public/order-summary'
+      path: '/api/public/order-summary'
+      fullPath: '/api/public/order-summary'
+      preLoaderRoute: typeof ApiPublicOrderSummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/card': {
+      id: '/api/public/card'
+      path: '/api/public/card'
+      fullPath: '/api/public/card'
+      preLoaderRoute: typeof ApiPublicCardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/asaas-webhook': {
       id: '/api/public/asaas-webhook'
       path: '/api/public/asaas-webhook'
@@ -288,8 +348,20 @@ const rootRouteChildren: RootRouteChildren = {
   PagamentoConfirmadoOrderIdRoute: PagamentoConfirmadoOrderIdRoute,
   PixOrderIdRoute: PixOrderIdRoute,
   ApiPublicAsaasWebhookRoute: ApiPublicAsaasWebhookRoute,
+  ApiPublicCardRoute: ApiPublicCardRoute,
+  ApiPublicOrderSummaryRoute: ApiPublicOrderSummaryRoute,
+  ApiPublicPixRoute: ApiPublicPixRoute,
   ApiPublicRevealKeyRoute: ApiPublicRevealKeyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
