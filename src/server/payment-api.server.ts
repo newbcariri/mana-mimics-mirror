@@ -56,6 +56,7 @@ async function asaas(path: string, init: RequestInit = {}) {
     headers: {
       "Content-Type": "application/json",
       access_token: getServerEnv("ASAAS_API_KEY"),
+      "User-Agent": "LojaFlexFit/1.0 (+https://lojaflexfit.store)",
       ...(init.headers || {}),
     },
   });
