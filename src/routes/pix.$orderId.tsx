@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Copy, CheckCircle2, Clock, ShieldCheck, Lock, Zap } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { PixBanksTrust } from "@/components/pix-banks-trust";
 import { supabase } from "@/integrations/supabase/client";
 import { postPaymentApi } from "@/lib/payment-api";
 
