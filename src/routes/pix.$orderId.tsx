@@ -44,7 +44,19 @@ function PixPage() {
         setTotal(res.value);
         setPayload(res.payload);
         setQrUrl(`data:image/png;base64,${res.qrCodeBase64}`);
-        const exp = res.expirationDate ? new Date(res.expirationDate).getTime() : Date.now() + 30 * 60 * 1000;
+        const FALLBACK_MS = 30 * 60 * 1000;
+        const MAX_MS = 24 * 60 * 60 * 1000; // cap em 24h
+        let exp = Date.now() + FALLBACK_MS;
+        if (res.expirationDate) {
+          // Aceita "YYYY-MM-DD HH:mm:ss" (Asaas) e ISO. Normaliza para ISO.
+          const raw = String(res.expirationDate).trim();
+          const iso = raw.includes("T") ? raw : raw.replace(" ", "T");
+          const parsed = new Date(iso).getTime();
+          if (Number.isFinite(parsed)) {
+            const diff = parsed - Date.now();
+            if (diff > 0 && diff <= MAX_MS) exp = parsed;
+          }
+        }
         setExpiresAt(exp);
       } catch (e: any) {
         setError(e.message || "Erro ao gerar cobrança PIX");
@@ -60,9 +72,17 @@ function PixPage() {
     if (!expiresAt) return;
     const tick = () => {
       const diff = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
-      const m = String(Math.floor(diff / 60)).padStart(2, "0");
-      const s = String(diff % 60).padStart(2, "0");
-      setRemaining(`${m}:${s}`);
+      if (diff <= 0) {
+        setExpired(true);
+        setRemaining("00:00");
+        return;
+      }
+      setExpired(false);
+      const h = Math.floor(diff / 3600);
+      const m = Math.floor((diff % 3600) / 60);
+      const s = diff % 60;
+      const pad = (n: number) => String(n).padStart(2, "0");
+      setRemaining(h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`);
     };
     tick();
     const t = setInterval(tick, 1000);
