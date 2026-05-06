@@ -401,10 +401,7 @@ function ProductPage() {
           <img src={lightbox} alt="Foto da avaliação" className="max-w-full max-h-full rounded-lg shadow-2xl" />
         </div>
       )}
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       <SiteFooter />
     </div>
