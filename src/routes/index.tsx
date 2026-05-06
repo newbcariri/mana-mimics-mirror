@@ -56,11 +56,25 @@ function ProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 lg:pb-0">
+      {/* Urgency banner - mobile focus */}
+      <div className="bg-primary text-primary-foreground text-center text-xs sm:text-sm font-semibold py-2 px-4">
+        ⏰ Promoção por tempo limitado · ⚠️ Estoque limitado · 🚚 Frete grátis acima de R$199
+      </div>
+
       <SiteHeader />
 
-      {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 py-4 text-xs text-muted-foreground">
+      {/* Social proof bar */}
+      <div className="bg-muted/40 border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-2 text-xs sm:text-sm">
+          <span className="text-yellow-500">⭐⭐⭐⭐⭐</span>
+          <span className="font-semibold">4.8/5</span>
+          <span className="text-muted-foreground">· +3.000 clientes satisfeitos</span>
+        </div>
+      </div>
+
+      {/* Breadcrumb - hide on mobile to reduce distraction */}
+      <div className="hidden sm:block max-w-7xl mx-auto px-4 py-4 text-xs text-muted-foreground">
         <a href="#" className="hover:text-primary">Home</a>
         <span className="mx-2">›</span>
         <a href="#" className="hover:text-primary">Conjuntos</a>
