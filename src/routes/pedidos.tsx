@@ -23,7 +23,7 @@ function OrdersPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate({ to: "/conta" }); return; }
       const [{ data: o }, { data: p }] = await Promise.all([
-        supabase.from("orders").select("*").order("created_at", { ascending: false }),
+        supabase.from("orders").select("*").eq("user_id", session.user.id).order("created_at", { ascending: false }),
         supabase.from("profiles").select("*").eq("id", session.user.id).single(),
       ]);
       setOrders(o || []);
