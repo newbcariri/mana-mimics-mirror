@@ -52,13 +52,17 @@ function PixPage() {
     })();
   }, [orderId, navigate]);
 
-  // Poll status (webhook updates)
+  // Poll status (webhook + Asaas fallback no servidor)
   useEffect(() => {
     const t = setInterval(async () => {
-      const { data } = await supabase.from("orders").select("status").eq("id", orderId).single();
-      if (data && data.status !== "aguardando_pagamento") {
-        toast.success("Pagamento confirmado!");
-        navigate({ to: "/pagamento-confirmado/$orderId", params: { orderId } });
+      try {
+        const res = await postPaymentApi<{ status: string }>("order-summary", { orderId });
+        if (res.status && res.status !== "aguardando_pagamento") {
+          toast.success("Pagamento confirmado!");
+          navigate({ to: "/pagamento-confirmado/$orderId", params: { orderId } });
+        }
+      } catch {
+        // ignora erros transitórios
       }
     }, 5000);
     return () => clearInterval(t);
