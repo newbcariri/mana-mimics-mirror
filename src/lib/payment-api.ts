@@ -3,8 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 export async function postPaymentApi<T>(action: "pix" | "card" | "order-summary", body: unknown): Promise<T> {
   const { data: { session } } = await supabase.auth.getSession();
 
-  const API_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined) || "https://mana-mimics-mirror.lovable.app";
-  const response = await fetch(`${API_BASE}/api/${action}`, {
+  const API_BASE = ((import.meta.env.VITE_API_BASE_URL as string | undefined) || "https://mana-mimics-mirror.lovable.app").replace(/\/$/, "");
+  const response = await fetch(`${API_BASE}/api/public/${action}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
