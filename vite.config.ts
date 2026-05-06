@@ -18,7 +18,7 @@ export default defineConfig({
   tanstackStart: isVercel ? { target: "vercel" } : undefined,
   vite: {
     ssr: {
-      noExternal: ["h3-v2", "rou3", "srvx"],
+      noExternal: true,
     },
   },
 });
