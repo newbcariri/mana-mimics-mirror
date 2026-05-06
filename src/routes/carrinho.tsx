@@ -1,8 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Gift, Truck, Sparkles } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Gift, Truck, Sparkles, X, Check } from "lucide-react";
+import { useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
+import { PRODUCT } from "@/lib/product-data";
 
 export const Route = createFileRoute("/carrinho")({
   component: CartPage,
