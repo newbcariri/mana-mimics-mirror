@@ -432,6 +432,20 @@ function ProductPage() {
 
 
       <SiteFooter />
+
+      {/* Sticky mobile buy bar */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-background/95 backdrop-blur border-t border-border px-3 py-2.5 flex items-center gap-3 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+        <div className="flex-1 min-w-0">
+          <div className="text-[10px] text-muted-foreground line-through leading-none">{formatBRL(PRODUCT.priceOriginal)}</div>
+          <div className="text-base font-bold text-primary leading-tight">{formatBRL(PRODUCT.pricePix)}<span className="text-[10px] font-normal text-muted-foreground ml-1">no PIX</span></div>
+        </div>
+        <button
+          onClick={handleBuy}
+          className="flex-1 h-12 bg-success text-success-foreground rounded-md font-bold text-sm hover:bg-success/90 transition-colors shadow-md"
+        >
+          COMPRAR AGORA 🔒
+        </button>
+      </div>
     </div>
   );
 }
