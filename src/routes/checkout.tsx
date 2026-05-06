@@ -156,14 +156,23 @@ function CheckoutPage() {
     if (!userId || !profile) return;
     setPlacing(true);
     try {
-      const inserts = items.map(i => ({
+      // Distribute combo-promo total proportionally across each line
+      const rawLineTotals = items.map(i => i.unitPrice * i.quantity);
+      const rawSum = rawLineTotals.reduce((s, v) => s + v, 0) || 1;
+      const promoTotal = subtotal; // already accounts for 2-unit promo (R$109/par)
+      const lineTotals = rawLineTotals.map(v => Math.round((v / rawSum) * promoTotal * 100) / 100);
+      // adjust last line to fix rounding drift
+      const drift = Math.round((promoTotal - lineTotals.reduce((s, v) => s + v, 0)) * 100) / 100;
+      if (lineTotals.length > 0) lineTotals[lineTotals.length - 1] = Math.round((lineTotals[lineTotals.length - 1] + drift) * 100) / 100;
+
+      const inserts = items.map((i, idx) => ({
         user_id: userId,
         product_name: i.productName,
         color: i.color,
         top_size: i.topSize,
         legging_size: i.legSize,
         quantity: i.quantity,
-        total: i.unitPrice * i.quantity,
+        total: lineTotals[idx],
         payment_method: payment,
         shipping_cep: profile.cep,
         shipping_address: [address, number && `nº ${number}`, complement].filter(Boolean).join(", ") || null,
