@@ -5,7 +5,7 @@ import { Lock, CreditCard, ShieldCheck } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
-import { createCardCharge, getOrderSummary } from "@/server/asaas.functions";
+import { postPaymentApi } from "@/lib/payment-api";
 
 export const Route = createFileRoute("/cartao/$orderId")({
   component: CardPage,
@@ -46,7 +46,7 @@ function CardPage() {
       if (!session) { navigate({ to: "/conta" }); return; }
       try {
         const [summary, prof] = await Promise.all([
-          getOrderSummary({ data: { orderId } }),
+          postPaymentApi<{ total: number; status: string; hasCharge: boolean }>("order-summary", { orderId }),
           supabase.from("profiles").select("*").eq("id", session.user.id).single(),
         ]);
         if (summary.status === "pago") {
@@ -77,26 +77,24 @@ function CardPage() {
 
     setSubmitting(true);
     try {
-      const res = await createCardCharge({
-        data: {
-          orderId,
-          installmentCount: installments,
-          remoteIp: "0.0.0.0",
-          card: {
-            holderName: holderName.trim(),
-            number: digits,
-            expiryMonth: expDigits.slice(0, 2),
-            expiryYear: expDigits.slice(2),
-            ccv,
-          },
-          holder: {
-            name: profile.full_name,
-            email: profile.email,
-            cpfCnpj: profile.cpf,
-            postalCode: profile.cep,
-            addressNumber: addressNumber.trim(),
-            phone: profile.phone,
-          },
+      const res = await postPaymentApi<{ paid: boolean }>("card", {
+        orderId,
+        installmentCount: installments,
+        remoteIp: "0.0.0.0",
+        card: {
+          holderName: holderName.trim(),
+          number: digits,
+          expiryMonth: expDigits.slice(0, 2),
+          expiryYear: expDigits.slice(2),
+          ccv,
+        },
+        holder: {
+          name: profile.full_name,
+          email: profile.email,
+          cpfCnpj: profile.cpf,
+          postalCode: profile.cep,
+          addressNumber: addressNumber.trim(),
+          phone: profile.phone,
         },
       });
       if (res.paid) {
