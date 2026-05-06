@@ -56,11 +56,25 @@ function ProductPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 lg:pb-0">
+      {/* Urgency banner - mobile focus */}
+      <div className="bg-primary text-primary-foreground text-center text-xs sm:text-sm font-semibold py-2 px-4">
+        ⏰ Promoção por tempo limitado · ⚠️ Estoque limitado · 🚚 Frete grátis acima de R$199
+      </div>
+
       <SiteHeader />
 
-      {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 py-4 text-xs text-muted-foreground">
+      {/* Social proof bar */}
+      <div className="bg-muted/40 border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-2 text-xs sm:text-sm">
+          <span className="text-yellow-500">⭐⭐⭐⭐⭐</span>
+          <span className="font-semibold">4.8/5</span>
+          <span className="text-muted-foreground">· +3.000 clientes satisfeitos</span>
+        </div>
+      </div>
+
+      {/* Breadcrumb - hide on mobile to reduce distraction */}
+      <div className="hidden sm:block max-w-7xl mx-auto px-4 py-4 text-xs text-muted-foreground">
         <a href="#" className="hover:text-primary">Home</a>
         <span className="mx-2">›</span>
         <a href="#" className="hover:text-primary">Conjuntos</a>
@@ -127,7 +141,14 @@ function ProductPage() {
             <span className="text-muted-foreground">•</span>
             <a href="#avaliacoes" className="text-primary hover:underline">Faça uma avaliação</a>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{PRODUCT.name}</h1>
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight">{PRODUCT.name}</h1>
+          <p className="text-base text-muted-foreground -mt-2">Compressão alta · Zero transparência · Seca rápido. <strong className="text-foreground">Veste como uma segunda pele.</strong></p>
+
+          {/* Stock urgency */}
+          <div className="flex flex-wrap gap-2 text-xs">
+            <span className="inline-flex items-center gap-1 bg-destructive/10 text-destructive font-semibold px-2.5 py-1 rounded-full">⚠️ Estoque limitado</span>
+            <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-700 dark:text-yellow-500 font-semibold px-2.5 py-1 rounded-full">⏰ Promoção por tempo limitado</span>
+          </div>
 
           {/* Price */}
           <div className="bg-muted/50 rounded-xl p-5 space-y-2">
@@ -418,6 +439,20 @@ function ProductPage() {
 
 
       <SiteFooter />
+
+      {/* Sticky mobile buy bar */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-background/95 backdrop-blur border-t border-border px-3 py-2.5 flex items-center gap-3 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+        <div className="flex-1 min-w-0">
+          <div className="text-[10px] text-muted-foreground line-through leading-none">{formatBRL(PRODUCT.priceOriginal)}</div>
+          <div className="text-base font-bold text-primary leading-tight">{formatBRL(PRODUCT.pricePix)}<span className="text-[10px] font-normal text-muted-foreground ml-1">no PIX</span></div>
+        </div>
+        <button
+          onClick={handleBuy}
+          className="flex-1 h-12 bg-success text-success-foreground rounded-md font-bold text-sm hover:bg-success/90 transition-colors shadow-md"
+        >
+          COMPRAR AGORA 🔒
+        </button>
+      </div>
     </div>
   );
 }
