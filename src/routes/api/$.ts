@@ -212,6 +212,7 @@ async function handleCard(data: any, userId: string) {
 export const Route = createFileRoute("/api/$")({
   server: {
     handlers: {
+      OPTIONS: async () => new Response(null, { status: 204, headers: CORS_HEADERS }),
       POST: async ({ request, params }) => {
         try {
           const action = params._splat;
