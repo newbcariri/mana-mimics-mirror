@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Copy, CheckCircle2, Clock, ShieldCheck, Lock, Zap } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { PixBanksTrust } from "@/components/pix-banks-trust";
 import { supabase } from "@/integrations/supabase/client";
 import { postPaymentApi } from "@/lib/payment-api";
 
@@ -160,7 +161,11 @@ function PixPage() {
             <p><strong className="text-foreground">2.</strong> Escolha pagar com PIX (QR Code ou copia-e-cola)</p>
             <p><strong className="text-foreground">3.</strong> Escaneie ou cole o código acima</p>
             <p><strong className="text-foreground">4.</strong> Confirme — esta página atualiza automaticamente ✓</p>
-          </div>
+        </div>
+
+        <div className="mt-5">
+          <PixBanksTrust />
+        </div>
 
           <div className="mt-5 grid grid-cols-3 gap-2 text-center">
             <div className="flex flex-col items-center gap-1 text-[11px] text-muted-foreground">
