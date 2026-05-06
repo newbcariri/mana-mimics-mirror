@@ -26,6 +26,8 @@ function PixPage() {
   const [error, setError] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
   const [remaining, setRemaining] = useState<string>("30:00");
+  const [expired, setExpired] = useState(false);
+  const [regenerating, setRegenerating] = useState(false);
 
   useEffect(() => {
     (async () => {
