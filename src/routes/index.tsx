@@ -309,7 +309,7 @@ function ProductPage() {
       </section>
 
       {/* Size chart */}
-      <section className="max-w-7xl mx-auto px-4 mt-20">
+      <section id="tabela-medidas" className="max-w-7xl mx-auto px-4 mt-20 scroll-mt-24">
         <h2 className="text-2xl font-bold mb-6">Tabela de Medidas</h2>
         <div className="overflow-x-auto rounded-xl border border-border">
           <table className="w-full text-sm">
