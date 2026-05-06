@@ -16,4 +16,9 @@ const isVercel = !!process.env.VERCEL;
 export default defineConfig({
   cloudflare: isVercel ? false : undefined,
   tanstackStart: isVercel ? { target: "vercel" } : undefined,
+  vite: {
+    resolve: {
+      noExternal: ["h3-v2"],
+    },
+  },
 });
