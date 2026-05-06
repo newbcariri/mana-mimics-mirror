@@ -257,10 +257,26 @@ function CheckoutPage() {
         </div>
       </div>
 
+      {/* Social proof bar */}
+      <div className="bg-muted/40 border-b border-border">
+        <div className="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[11px] sm:text-xs">
+          <span className="flex items-center gap-1 font-semibold">
+            <span className="flex">
+              {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}
+            </span>
+            <span className="ml-1">4.8/5</span>
+            <span className="text-muted-foreground font-normal">(2.143 avaliações)</span>
+          </span>
+          <span className="flex items-center gap-1 text-muted-foreground"><Package className="w-3.5 h-3.5 text-success" /> <strong className="text-foreground">+3.000</strong> pedidos entregues</span>
+          <span className="flex items-center gap-1 text-muted-foreground"><Truck className="w-3.5 h-3.5 text-success" /> Frete grátis acima de R$ 199</span>
+          <span className="flex items-center gap-1 text-muted-foreground"><ShieldCheck className="w-3.5 h-3.5 text-success" /> Compra 100% segura</span>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 py-6 lg:py-10">
         <h1 className="text-2xl lg:text-3xl font-bold mb-1">Finalizar compra</h1>
         <p className="text-xs lg:text-sm text-muted-foreground mb-6 flex items-center gap-2">
-          <Lock className="w-4 h-4 text-success" /> Ambiente 100% seguro · SSL · Dados criptografados
+          <Lock className="w-4 h-4 text-success" /> Pagamento protegido · SSL 256-bit · Dados criptografados
         </p>
 
         <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8">
@@ -306,7 +322,6 @@ function CheckoutPage() {
                   <div className="grid sm:grid-cols-2 gap-3 text-sm">
                     <Info label="Nome" value={profile?.full_name} />
                     <Info label="E-mail" value={profile?.email} />
-                    <Info label="CPF" value={profile?.cpf ? maskCPF(profile.cpf) : ""} />
                     <Info label="Telefone" value={profile?.phone ? maskPhone(profile.phone) : ""} />
                     <Info label="CEP" value={profile?.cep ? maskCEP(profile.cep) : ""} />
                   </div>
