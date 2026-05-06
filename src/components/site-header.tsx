@@ -19,9 +19,14 @@ function getPromoDeadline() {
 }
 
 function useCountdown() {
-  const [deadline] = useState(() => getPromoDeadline());
-  const [now, setNow] = useState(() => Date.now());
+  const [mounted, setMounted] = useState(false);
+  const [deadline, setDeadline] = useState(0);
+  const [now, setNow] = useState(0);
   useEffect(() => {
+    const d = getPromoDeadline();
+    setDeadline(d);
+    setNow(Date.now());
+    setMounted(true);
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
@@ -30,7 +35,7 @@ function useCountdown() {
   const hours = Math.floor((diff % 86400000) / 3600000);
   const minutes = Math.floor((diff % 3600000) / 60000);
   const seconds = Math.floor((diff % 60000) / 1000);
-  return { days, hours, minutes, seconds };
+  return { days, hours, minutes, seconds, mounted };
 }
 
 function CountdownBox({ value, label }: { value: number; label: string }) {
