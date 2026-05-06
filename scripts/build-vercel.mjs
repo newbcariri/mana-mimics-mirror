@@ -34,7 +34,7 @@ await esbuild({
   bundle: true,
   format: "esm",
   platform: "node",
-  target: "node20",
+  target: "node22",
   logLevel: "warning",
   banner: {
     js: "import { createRequire as __vercelCR } from 'module'; const require = __vercelCR(import.meta.url);",
