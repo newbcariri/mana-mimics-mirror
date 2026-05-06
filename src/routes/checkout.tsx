@@ -280,7 +280,6 @@ function CheckoutPage() {
                   <Field icon={Mail} type="email" placeholder="E-mail" value={form.email} onChange={v => update("email", v)} valid={/.+@.+\..+/.test(form.email)} />
                   {authMode === "signup" && (
                     <>
-                      <Field placeholder="CPF" value={form.cpf} onChange={v => update("cpf", v)} valid={onlyDigits(form.cpf).length === 11} />
                       <Field placeholder="Telefone (com DDD)" value={form.phone} onChange={v => update("phone", v)} valid={onlyDigits(form.phone).length >= 10} />
                       <Field placeholder="CEP de entrega" value={form.cep} onChange={v => update("cep", v)} valid={onlyDigits(form.cep).length === 8} />
                       {cepLoading && <p className="text-xs text-muted-foreground">Buscando endereço...</p>}
