@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, Clock, BadgeCheck, CreditCard } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, Clock, BadgeCheck, CreditCard, Star, Truck, Package } from "lucide-react";
 import { maskCPF, maskPhone, maskCEP, onlyDigits } from "@/lib/checkout-utils";
 
 export const Route = createFileRoute("/checkout")({
@@ -19,7 +19,6 @@ const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", curren
 const signupSchema = z.object({
   full_name: z.string().trim().min(3, "Informe seu nome completo").max(100),
   email: z.string().trim().email("E-mail inválido").max(255),
-  cpf: z.string().refine(v => onlyDigits(v).length === 11, "CPF deve ter 11 dígitos"),
   phone: z.string().refine(v => onlyDigits(v).length >= 10, "Telefone inválido"),
   cep: z.string().refine(v => onlyDigits(v).length === 8, "CEP deve ter 8 dígitos"),
   password: z.string().min(8, "A senha deve ter ao menos 8 caracteres").max(72),
@@ -100,7 +99,8 @@ function CheckoutPage() {
   // auth form
   const [authMode, setAuthMode] = useState<"login" | "signup">("signup");
   const [authLoading, setAuthLoading] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "", cpf: "", phone: "", cep: "", password: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", phone: "", cep: "", password: "" });
+  const [cpfFinal, setCpfFinal] = useState("");
 
   const loadSession = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -159,7 +159,7 @@ function CheckoutPage() {
             id: auth.user.id,
             full_name: data.full_name,
             email: data.email,
-            cpf: onlyDigits(data.cpf),
+            cpf: "",
             phone: onlyDigits(data.phone),
             cep: onlyDigits(data.cep),
           });
@@ -186,8 +186,16 @@ function CheckoutPage() {
     if (items.length === 0) { toast.error("Carrinho vazio"); return; }
     if (!userId || !profile) return;
     if (!number.trim()) { toast.error("Informe o número do endereço"); return; }
+    const needsCpf = !profile.cpf || onlyDigits(profile.cpf).length !== 11;
+    if (needsCpf && onlyDigits(cpfFinal).length !== 11) {
+      toast.error("Informe seu CPF para finalizar (necessário para nota fiscal)");
+      return;
+    }
     setPlacing(true);
     try {
+      if (needsCpf) {
+        await supabase.from("profiles").update({ cpf: onlyDigits(cpfFinal) }).eq("id", userId);
+      }
       const rawLineTotals = items.map(i => i.unitPrice * i.quantity);
       const rawSum = rawLineTotals.reduce((s, v) => s + v, 0) || 1;
       // Apply combo + coupon + pix discount proportionally
