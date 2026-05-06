@@ -155,6 +155,60 @@ function CartPage() {
         </div>
       </div>
       <SiteFooter />
+
+      {colorPickerOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={() => setColorPickerOpen(false)}>
+          <div className="bg-background w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-4 border-b border-border">
+              <div>
+                <h3 className="font-bold text-lg">Escolha uma cor diferente</h3>
+                <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                  <Gift className="w-3 h-3 text-primary" /> Aplica o combo 2 por {brl(COMBO_PAIR_PRICE)} + Frete Grátis
+                </p>
+              </div>
+              <button onClick={() => setColorPickerOpen(false)} className="w-9 h-9 rounded-full hover:bg-muted flex items-center justify-center">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto p-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {PRODUCT.colors.map((c) => {
+                const baseItem = items[0];
+                const topSize = baseItem?.topSize ?? "M";
+                const legSize = baseItem?.legSize ?? "M";
+                return (
+                  <button
+                    key={c.name}
+                    onClick={() => {
+                      cart.add({
+                        productName: PRODUCT.name,
+                        color: c.name,
+                        topSize,
+                        legSize,
+                        quantity: 1,
+                        unitPrice: PRODUCT.pricePix,
+                        image: c.img,
+                      });
+                      setColorPickerOpen(false);
+                    }}
+                    className="group flex flex-col items-center gap-2 border border-border rounded-xl p-2 hover:border-primary hover:shadow-md transition-all"
+                  >
+                    <div className="w-full aspect-[3/4] rounded-md overflow-hidden bg-muted">
+                      <img src={c.img} alt={c.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-3.5 h-3.5 rounded-full border border-border" style={{ background: c.hex }} />
+                      <span className="text-xs font-semibold">{c.name}</span>
+                    </div>
+                    <span className="text-[10px] text-primary font-bold inline-flex items-center gap-1">
+                      <Check className="w-3 h-3" /> Adicionar com promo
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
