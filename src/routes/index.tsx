@@ -34,6 +34,9 @@ function ProductPage() {
   const [topSize, setTopSize] = useState<string | null>(null);
   const [legSize, setLegSize] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
+  const [lightbox, setLightbox] = useState<string | null>(null);
+
+  const initials = (name: string) => name.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
 
   const handleBuy = () => {
     if (!topSize || !legSize) {
