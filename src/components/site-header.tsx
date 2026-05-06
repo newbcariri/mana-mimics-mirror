@@ -53,7 +53,7 @@ export function SiteHeader() {
   const items = useCart();
   const count = items.reduce((s, i) => s + i.quantity, 0);
   const [authed, setAuthed] = useState<boolean | null>(null);
-  const { days, hours, minutes, seconds } = useCountdown();
+  const { days, hours, minutes, seconds, mounted } = useCountdown();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => setAuthed(!!data.session));
