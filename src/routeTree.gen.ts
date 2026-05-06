@@ -19,6 +19,7 @@ import { Route as PixOrderIdRouteImport } from './routes/pix.$orderId'
 import { Route as PagamentoConfirmadoOrderIdRouteImport } from './routes/pagamento-confirmado.$orderId'
 import { Route as CartaoOrderIdRouteImport } from './routes/cartao.$orderId'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
+import { Route as ApiPublicRevealKeyRouteImport } from './routes/api/public/reveal-key'
 import { Route as ApiPublicAsaasWebhookRouteImport } from './routes/api/public/asaas-webhook'
 
 const PedidosRoute = PedidosRouteImport.update({
@@ -72,6 +73,11 @@ const ApiSplatRoute = ApiSplatRouteImport.update({
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicRevealKeyRoute = ApiPublicRevealKeyRouteImport.update({
+  id: '/api/public/reveal-key',
+  path: '/api/public/reveal-key',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicAsaasWebhookRoute = ApiPublicAsaasWebhookRouteImport.update({
   id: '/api/public/asaas-webhook',
   path: '/api/public/asaas-webhook',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
   '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
+  '/api/public/reveal-key': typeof ApiPublicRevealKeyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
   '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
+  '/api/public/reveal-key': typeof ApiPublicRevealKeyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
   '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
+  '/api/public/reveal-key': typeof ApiPublicRevealKeyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/pagamento-confirmado/$orderId'
     | '/pix/$orderId'
     | '/api/public/asaas-webhook'
+    | '/api/public/reveal-key'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/pagamento-confirmado/$orderId'
     | '/pix/$orderId'
     | '/api/public/asaas-webhook'
+    | '/api/public/reveal-key'
   id:
     | '__root__'
     | '/'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/pagamento-confirmado/$orderId'
     | '/pix/$orderId'
     | '/api/public/asaas-webhook'
+    | '/api/public/reveal-key'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -172,6 +184,7 @@ export interface RootRouteChildren {
   PagamentoConfirmadoOrderIdRoute: typeof PagamentoConfirmadoOrderIdRoute
   PixOrderIdRoute: typeof PixOrderIdRoute
   ApiPublicAsaasWebhookRoute: typeof ApiPublicAsaasWebhookRoute
+  ApiPublicRevealKeyRoute: typeof ApiPublicRevealKeyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -246,6 +259,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/reveal-key': {
+      id: '/api/public/reveal-key'
+      path: '/api/public/reveal-key'
+      fullPath: '/api/public/reveal-key'
+      preLoaderRoute: typeof ApiPublicRevealKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/asaas-webhook': {
       id: '/api/public/asaas-webhook'
       path: '/api/public/asaas-webhook'
@@ -268,6 +288,7 @@ const rootRouteChildren: RootRouteChildren = {
   PagamentoConfirmadoOrderIdRoute: PagamentoConfirmadoOrderIdRoute,
   PixOrderIdRoute: PixOrderIdRoute,
   ApiPublicAsaasWebhookRoute: ApiPublicAsaasWebhookRoute,
+  ApiPublicRevealKeyRoute: ApiPublicRevealKeyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
