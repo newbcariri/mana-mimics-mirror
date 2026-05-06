@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/site-header";
+import { PixBanksTrust } from "@/components/pix-banks-trust";
 import { SiteFooter } from "@/components/site-footer";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { supabase } from "@/integrations/supabase/client";
