@@ -1,8 +1,10 @@
 // Pós-build: monta o Vercel Build Output API v3 a partir do output do
-// TanStack Start (dist/client + dist/server). Vercel Edge Function envolve
-// o handler `fetch` exportado pelo server entry.
+// TanStack Start (dist/client + dist/server). Empacota o server entry com
+// esbuild para que dependências externas (h3-v2, @tanstack/*) sejam embutidas
+// no bundle servido pela função Node da Vercel.
 import { cpSync, mkdirSync, rmSync, writeFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { build as esbuild } from "esbuild";
 
 const root = process.cwd();
 const outDir = resolve(root, ".vercel/output");
@@ -20,21 +22,32 @@ if (!existsSync(clientDir)) {
 }
 cpSync(clientDir, staticDir, { recursive: true });
 
-// Bundle SSR vai dentro da função
-const serverDir = resolve(root, "dist/server");
-if (!existsSync(serverDir)) {
-  throw new Error("dist/server não existe — rode `vite build` antes.");
+// Bundle SSR
+const serverEntry = resolve(root, "dist/server/server.js");
+if (!existsSync(serverEntry)) {
+  throw new Error("dist/server/server.js não existe — rode `vite build` antes.");
 }
-cpSync(serverDir, fnDir, { recursive: true });
 
-// Entry da Edge Function: re-exporta o handler default (objeto com .fetch)
+await esbuild({
+  entryPoints: [serverEntry],
+  outfile: resolve(fnDir, "server.mjs"),
+  bundle: true,
+  format: "esm",
+  platform: "node",
+  target: "node20",
+  logLevel: "warning",
+  banner: {
+    js: "import { createRequire as __vercelCR } from 'module'; const require = __vercelCR(import.meta.url);",
+  },
+});
+
 // Launcher Node.js da Vercel: recebe (req, res) Node clássicos. Convertemos
 // para Web Request, chamamos o handler `fetch` do TanStack Start e devolvemos
 // a Response como stream Node.
 writeFileSync(
   resolve(fnDir, "index.mjs"),
   `import { Readable } from "node:stream";
-import server from "./server.js";
+import server from "./server.mjs";
 
 export default async function handler(req, res) {
   try {
