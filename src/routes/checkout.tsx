@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, Clock, BadgeCheck, CreditCard } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, Clock, BadgeCheck, CreditCard, Star, Truck, Package } from "lucide-react";
 import { maskCPF, maskPhone, maskCEP, onlyDigits } from "@/lib/checkout-utils";
 
 export const Route = createFileRoute("/checkout")({
@@ -19,7 +19,6 @@ const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", curren
 const signupSchema = z.object({
   full_name: z.string().trim().min(3, "Informe seu nome completo").max(100),
   email: z.string().trim().email("E-mail inválido").max(255),
-  cpf: z.string().refine(v => onlyDigits(v).length === 11, "CPF deve ter 11 dígitos"),
   phone: z.string().refine(v => onlyDigits(v).length >= 10, "Telefone inválido"),
   cep: z.string().refine(v => onlyDigits(v).length === 8, "CEP deve ter 8 dígitos"),
   password: z.string().min(8, "A senha deve ter ao menos 8 caracteres").max(72),
@@ -100,7 +99,8 @@ function CheckoutPage() {
   // auth form
   const [authMode, setAuthMode] = useState<"login" | "signup">("signup");
   const [authLoading, setAuthLoading] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "", cpf: "", phone: "", cep: "", password: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", phone: "", cep: "", password: "" });
+  const [cpfFinal, setCpfFinal] = useState("");
 
   const loadSession = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -159,7 +159,7 @@ function CheckoutPage() {
             id: auth.user.id,
             full_name: data.full_name,
             email: data.email,
-            cpf: onlyDigits(data.cpf),
+            cpf: "",
             phone: onlyDigits(data.phone),
             cep: onlyDigits(data.cep),
           });
@@ -186,8 +186,16 @@ function CheckoutPage() {
     if (items.length === 0) { toast.error("Carrinho vazio"); return; }
     if (!userId || !profile) return;
     if (!number.trim()) { toast.error("Informe o número do endereço"); return; }
+    const needsCpf = !profile.cpf || onlyDigits(profile.cpf).length !== 11;
+    if (needsCpf && onlyDigits(cpfFinal).length !== 11) {
+      toast.error("Informe seu CPF para finalizar (necessário para nota fiscal)");
+      return;
+    }
     setPlacing(true);
     try {
+      if (needsCpf) {
+        await supabase.from("profiles").update({ cpf: onlyDigits(cpfFinal) }).eq("id", userId);
+      }
       const rawLineTotals = items.map(i => i.unitPrice * i.quantity);
       const rawSum = rawLineTotals.reduce((s, v) => s + v, 0) || 1;
       // Apply combo + coupon + pix discount proportionally
@@ -249,10 +257,26 @@ function CheckoutPage() {
         </div>
       </div>
 
+      {/* Social proof bar */}
+      <div className="bg-muted/40 border-b border-border">
+        <div className="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[11px] sm:text-xs">
+          <span className="flex items-center gap-1 font-semibold">
+            <span className="flex">
+              {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}
+            </span>
+            <span className="ml-1">4.8/5</span>
+            <span className="text-muted-foreground font-normal">(2.143 avaliações)</span>
+          </span>
+          <span className="flex items-center gap-1 text-muted-foreground"><Package className="w-3.5 h-3.5 text-success" /> <strong className="text-foreground">+3.000</strong> pedidos entregues</span>
+          <span className="flex items-center gap-1 text-muted-foreground"><Truck className="w-3.5 h-3.5 text-success" /> Frete grátis acima de R$ 199</span>
+          <span className="flex items-center gap-1 text-muted-foreground"><ShieldCheck className="w-3.5 h-3.5 text-success" /> Compra 100% segura</span>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 py-6 lg:py-10">
         <h1 className="text-2xl lg:text-3xl font-bold mb-1">Finalizar compra</h1>
         <p className="text-xs lg:text-sm text-muted-foreground mb-6 flex items-center gap-2">
-          <Lock className="w-4 h-4 text-success" /> Ambiente 100% seguro · SSL · Dados criptografados
+          <Lock className="w-4 h-4 text-success" /> Pagamento protegido · SSL 256-bit · Dados criptografados
         </p>
 
         <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8">
@@ -272,7 +296,6 @@ function CheckoutPage() {
                   <Field icon={Mail} type="email" placeholder="E-mail" value={form.email} onChange={v => update("email", v)} valid={/.+@.+\..+/.test(form.email)} />
                   {authMode === "signup" && (
                     <>
-                      <Field placeholder="CPF" value={form.cpf} onChange={v => update("cpf", v)} valid={onlyDigits(form.cpf).length === 11} />
                       <Field placeholder="Telefone (com DDD)" value={form.phone} onChange={v => update("phone", v)} valid={onlyDigits(form.phone).length >= 10} />
                       <Field placeholder="CEP de entrega" value={form.cep} onChange={v => update("cep", v)} valid={onlyDigits(form.cep).length === 8} />
                       {cepLoading && <p className="text-xs text-muted-foreground">Buscando endereço...</p>}
@@ -299,7 +322,6 @@ function CheckoutPage() {
                   <div className="grid sm:grid-cols-2 gap-3 text-sm">
                     <Info label="Nome" value={profile?.full_name} />
                     <Info label="E-mail" value={profile?.email} />
-                    <Info label="CPF" value={profile?.cpf ? maskCPF(profile.cpf) : ""} />
                     <Info label="Telefone" value={profile?.phone ? maskPhone(profile.phone) : ""} />
                     <Info label="CEP" value={profile?.cep ? maskCEP(profile.cep) : ""} />
                   </div>
@@ -321,6 +343,21 @@ function CheckoutPage() {
                     <input value={number} onChange={e => setNumber(e.target.value)} placeholder="Número" className="h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                     <input value={complement} onChange={e => setComplement(e.target.value)} placeholder="Complemento (opcional)" className="col-span-2 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                   </div>
+                  {(!profile?.cpf || onlyDigits(profile.cpf).length !== 11) && (
+                    <div className="mt-3">
+                      <label className="text-xs font-semibold text-muted-foreground">CPF (necessário para emissão da nota fiscal)</label>
+                      <div className="relative mt-1">
+                        <input
+                          value={cpfFinal}
+                          onChange={e => setCpfFinal(maskCPF(e.target.value))}
+                          placeholder="000.000.000-00"
+                          inputMode="numeric"
+                          className={`w-full h-12 px-4 pr-10 border rounded-md text-sm outline-none focus:ring-2 focus:ring-primary/20 transition ${onlyDigits(cpfFinal).length === 11 ? "border-success" : "border-border focus:border-primary"}`}
+                        />
+                        {onlyDigits(cpfFinal).length === 11 && <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-success" />}
+                      </div>
+                    </div>
+                  )}
                 </section>
 
                 <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
