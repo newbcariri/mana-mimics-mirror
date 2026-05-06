@@ -351,7 +351,9 @@ function ProductPage() {
               {REVIEWS.map(r => (
                 <article key={r.name} className="border border-border rounded-xl p-5 hover:shadow-lg transition-shadow">
                   <div className="flex items-start gap-3 mb-3">
-                    <img src={r.photo} alt={r.name} className="w-12 h-12 rounded-full object-cover" />
+                    <div className="w-12 h-12 rounded-full bg-primary/15 text-primary flex items-center justify-center font-bold text-sm shrink-0">
+                      {initials(r.name)}
+                    </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold">{r.name}</div>
                       <div className="flex items-center gap-2">
@@ -363,9 +365,42 @@ function ProductPage() {
                   </div>
                   <h4 className="font-semibold text-sm mb-1">{r.title}</h4>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-3">{r.text}</p>
-                  <img src={r.photo} alt="" className="w-20 h-20 rounded-md object-cover" />
+                  {r.photo && (
+                    <button
+                      type="button"
+                      onClick={() => setLightbox(r.photo!)}
+                      className="block rounded-md overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <img
+                        src={r.photo}
+                        alt={`Foto enviada por ${r.name}`}
+                        loading="lazy"
+                        className="w-20 h-20 object-cover hover:opacity-90 transition-opacity cursor-zoom-in"
+                      />
+                    </button>
+                  )}
                 </article>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 animate-in fade-in"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            onClick={() => setLightbox(null)}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+            aria-label="Fechar"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <img src={lightbox} alt="Foto da avaliação" className="max-w-full max-h-full rounded-lg shadow-2xl" />
+        </div>
+      )}
             </div>
           </div>
         </div>
