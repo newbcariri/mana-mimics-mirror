@@ -5,7 +5,7 @@ import { Copy, CheckCircle2, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
-import { createPixCharge } from "@/server/asaas.functions";
+import { postPaymentApi } from "@/lib/payment-api";
 
 export const Route = createFileRoute("/pix/$orderId")({
   component: PixPage,
@@ -33,7 +33,13 @@ function PixPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate({ to: "/conta" }); return; }
       try {
-        const res = await createPixCharge({ data: { orderId } });
+        const res = await postPaymentApi<{
+          qrCodeBase64: string;
+          payload: string;
+          value: number;
+          expirationDate?: string;
+          paymentId: string;
+        }>("pix", { orderId });
         setTotal(res.value);
         setPayload(res.payload);
         setQrUrl(`data:image/png;base64,${res.qrCodeBase64}`);

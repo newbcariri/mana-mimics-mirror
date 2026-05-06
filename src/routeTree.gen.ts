@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PixOrderIdRouteImport } from './routes/pix.$orderId'
 import { Route as PagamentoConfirmadoOrderIdRouteImport } from './routes/pagamento-confirmado.$orderId'
 import { Route as CartaoOrderIdRouteImport } from './routes/cartao.$orderId'
+import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as ApiPublicAsaasWebhookRouteImport } from './routes/api/public/asaas-webhook'
 
 const PedidosRoute = PedidosRouteImport.update({
@@ -66,6 +67,11 @@ const CartaoOrderIdRoute = CartaoOrderIdRouteImport.update({
   path: '/cartao/$orderId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSplatRoute = ApiSplatRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicAsaasWebhookRoute = ApiPublicAsaasWebhookRouteImport.update({
   id: '/api/public/asaas-webhook',
   path: '/api/public/asaas-webhook',
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/conta': typeof ContaRoute
   '/pedidos': typeof PedidosRoute
+  '/api/$': typeof ApiSplatRoute
   '/cartao/$orderId': typeof CartaoOrderIdRoute
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/conta': typeof ContaRoute
   '/pedidos': typeof PedidosRoute
+  '/api/$': typeof ApiSplatRoute
   '/cartao/$orderId': typeof CartaoOrderIdRoute
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/conta': typeof ContaRoute
   '/pedidos': typeof PedidosRoute
+  '/api/$': typeof ApiSplatRoute
   '/cartao/$orderId': typeof CartaoOrderIdRoute
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/conta'
     | '/pedidos'
+    | '/api/$'
     | '/cartao/$orderId'
     | '/pagamento-confirmado/$orderId'
     | '/pix/$orderId'
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/conta'
     | '/pedidos'
+    | '/api/$'
     | '/cartao/$orderId'
     | '/pagamento-confirmado/$orderId'
     | '/pix/$orderId'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/conta'
     | '/pedidos'
+    | '/api/$'
     | '/cartao/$orderId'
     | '/pagamento-confirmado/$orderId'
     | '/pix/$orderId'
@@ -155,6 +167,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   ContaRoute: typeof ContaRoute
   PedidosRoute: typeof PedidosRoute
+  ApiSplatRoute: typeof ApiSplatRoute
   CartaoOrderIdRoute: typeof CartaoOrderIdRoute
   PagamentoConfirmadoOrderIdRoute: typeof PagamentoConfirmadoOrderIdRoute
   PixOrderIdRoute: typeof PixOrderIdRoute
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CartaoOrderIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/$': {
+      id: '/api/$'
+      path: '/api/$'
+      fullPath: '/api/$'
+      preLoaderRoute: typeof ApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/asaas-webhook': {
       id: '/api/public/asaas-webhook'
       path: '/api/public/asaas-webhook'
@@ -243,6 +263,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   ContaRoute: ContaRoute,
   PedidosRoute: PedidosRoute,
+  ApiSplatRoute: ApiSplatRoute,
   CartaoOrderIdRoute: CartaoOrderIdRoute,
   PagamentoConfirmadoOrderIdRoute: PagamentoConfirmadoOrderIdRoute,
   PixOrderIdRoute: PixOrderIdRoute,

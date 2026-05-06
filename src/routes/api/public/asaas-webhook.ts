@@ -1,5 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
+
+function createSupabaseAdmin() {
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) throw new Error("Backend não configurado");
+  return createClient<Database>(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+  });
+}
 
 export const Route = createFileRoute("/api/public/asaas-webhook")({
   server: {
@@ -33,6 +43,8 @@ export const Route = createFileRoute("/api/public/asaas-webhook")({
           "PAYMENT_CONFIRMED",
           "PAYMENT_RECEIVED_IN_CASH",
         ]);
+
+        const supabaseAdmin = createSupabaseAdmin();
 
         if (paidEvents.has(event)) {
           const { error } = await supabaseAdmin
