@@ -33,8 +33,16 @@ const loginSchema = z.object({
 function CheckoutPage() {
   const navigate = useNavigate();
   const items = useCart();
-  const subtotal = cartTotal(items);
-  const shipping = subtotal >= 199.9 ? 0 : 19.9;
+  const subtotalRaw = cartTotal(items);
+  const totalQty = items.reduce((s, i) => s + i.quantity, 0);
+  const _unitPrices: number[] = [];
+  items.forEach(i => { for (let k = 0; k < i.quantity; k++) _unitPrices.push(i.unitPrice); });
+  _unitPrices.sort((a, b) => b - a);
+  const _pairs = Math.floor(_unitPrices.length / 2);
+  const _leftover = _unitPrices.slice(_pairs * 2).reduce((s, v) => s + v, 0);
+  const subtotal = _pairs > 0 ? _pairs * 109 + _leftover : subtotalRaw;
+  const comboActive = totalQty >= 2;
+  const shipping = comboActive ? 0 : subtotalRaw >= 199.9 ? 0 : 19.9;
   const total = subtotal + shipping;
 
   const [profile, setProfile] = useState<any>(null);
