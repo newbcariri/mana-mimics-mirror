@@ -38,6 +38,9 @@ function loadPixel() {
   })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
   /* eslint-enable */
 
+  // Desabilita eventos automáticos do Pixel (clicks em botões viram "Subscribe", etc).
+  // Precisa ser chamado ANTES do init para ter efeito.
+  window.fbq("set", "autoConfig", false, PIXEL_ID);
   window.fbq("init", PIXEL_ID);
   if (import.meta.env.DEV) {
     console.log("[Meta Pixel] loaded with ID:", PIXEL_ID);
