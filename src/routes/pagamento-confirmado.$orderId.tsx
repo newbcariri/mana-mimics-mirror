@@ -23,36 +23,90 @@ function SuccessPage() {
   const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
-    (async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { navigate({ to: "/conta" }); return; }
+    let cancelled = false;
+    const MAX_RETRIES = 5;
+    const RETRY_DELAY = 1500;
 
-      const { data: order } = await supabase
-        .from("orders").select("*").eq("id", orderId).single();
-      if (!order) { setLoading(false); return; }
+    const load = async (attempt = 0): Promise<void> => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) { if (!cancelled) navigate({ to: "/conta" }); return; }
 
-      const ts = new Date(order.created_at).getTime();
-      const { data: siblings } = await supabase
-        .from("orders")
-        .select("*")
-        .eq("user_id", session.user.id)
-        .gte("created_at", new Date(ts - 5000).toISOString())
-        .lte("created_at", new Date(ts + 5000).toISOString());
+        const { data: order, error: orderErr } = await supabase
+          .from("orders").select("*").eq("id", orderId).maybeSingle();
 
-      const { data: prof } = await supabase
-        .from("profiles").select("*").eq("id", session.user.id).single();
+        if (cancelled) return;
 
-      setOrders(siblings && siblings.length > 0 ? siblings : [order]);
-      setProfile(prof);
-      setLoading(false);
-    })();
+        if (orderErr || !order) {
+          if (attempt < MAX_RETRIES) {
+            setTimeout(() => { if (!cancelled) load(attempt + 1); }, RETRY_DELAY);
+            return;
+          }
+          setLoading(false);
+          return;
+        }
+
+        const ts = new Date(order.created_at).getTime();
+        const { data: siblings } = await supabase
+          .from("orders")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .gte("created_at", new Date(ts - 5000).toISOString())
+          .lte("created_at", new Date(ts + 5000).toISOString());
+
+        const { data: prof } = await supabase
+          .from("profiles").select("*").eq("id", session.user.id).maybeSingle();
+
+        if (cancelled) return;
+        setOrders(siblings && siblings.length > 0 ? siblings : [order]);
+        setProfile(prof);
+        setLoading(false);
+      } catch (err) {
+        console.error("[pagamento-confirmado] load failed", err);
+        if (attempt < MAX_RETRIES) {
+          setTimeout(() => { if (!cancelled) load(attempt + 1); }, RETRY_DELAY);
+        } else if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    load();
+    return () => { cancelled = true; };
   }, [orderId, navigate]);
+
+  // Purchase — dispara automaticamente após carregamento bem-sucedido,
+  // apenas UMA vez por pedido (dedupe persistido em localStorage).
+  const main = orders[0];
+  const total = orders.reduce((s, o) => s + Number(o.total), 0);
+  useEffect(() => {
+    if (!main) return;
+    const contentIds = Array.from(new Set(orders.map(o => o.product_name)));
+    const eventID = `purchase_${main.id}`;
+    try {
+      fbqTrack(
+        "Purchase",
+        {
+          content_name: contentIds.join(", "),
+          content_type: "product",
+          content_ids: contentIds,
+          currency: "BRL",
+          value: Number(total.toFixed(2)),
+          num_items: orders.reduce((s, o) => s + Number(o.quantity || 1), 0),
+          order_id: main.id,
+        },
+        { dedupeKey: `purchase:${main.id}`, persist: true, eventID },
+      );
+    } catch (e) {
+      console.error("[fbq] Purchase failed", e);
+    }
+  }, [main?.id, total]);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
         <SiteHeader />
-        <div className="text-center py-20 text-muted-foreground">Carregando...</div>
+        <div className="text-center py-20 text-muted-foreground">Confirmando seu pagamento...</div>
       </div>
     );
   }
@@ -62,38 +116,21 @@ function SuccessPage() {
       <div className="min-h-screen bg-background">
         <SiteHeader />
         <div className="max-w-md mx-auto py-20 text-center px-4">
-          <p className="text-destructive font-semibold mb-4">Pedido não encontrado</p>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-success/10 mb-4">
+            <CheckCircle2 className="w-10 h-10 text-success" />
+          </div>
+          <h1 className="text-xl font-bold mb-2">Pagamento recebido!</h1>
+          <p className="text-sm text-muted-foreground mb-6">
+            Estamos finalizando os detalhes do seu pedido. Você pode acompanhá-lo em "Meus pedidos".
+          </p>
           <Link to="/pedidos" className="text-sm text-primary underline">Ver meus pedidos</Link>
         </div>
       </div>
     );
   }
 
-  const total = orders.reduce((s, o) => s + Number(o.total), 0);
-  const main = orders[0];
   const orderNumber = main.id.slice(0, 8).toUpperCase();
   const paymentMethod = main.payment_method === "pix" ? "PIX" : "Cartão de crédito";
-
-  // Purchase — dispara automaticamente ao abrir a página de compra aprovada,
-  // apenas UMA vez por pedido (dedupe persistido em localStorage).
-  useEffect(() => {
-    if (!main) return;
-    const contentIds = Array.from(new Set(orders.map(o => o.product_name)));
-    const eventID = `purchase_${main.id}`;
-    fbqTrack(
-      "Purchase",
-      {
-        content_name: contentIds.join(", "),
-        content_type: "product",
-        content_ids: contentIds,
-        currency: "BRL",
-        value: Number(total.toFixed(2)),
-        num_items: orders.reduce((s, o) => s + Number(o.quantity || 1), 0),
-        order_id: main.id,
-      },
-      { dedupeKey: `purchase:${main.id}`, persist: true, eventID },
-    );
-  }, [main?.id, total]);
 
   // Estimated delivery: +7 to +12 business days
   const today = new Date();
