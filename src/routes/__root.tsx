@@ -59,4 +59,4 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function RootComponent() { return (<><Outlet /><Toaster position="top-center" richColors /></>); }
+function RootComponent() { return (<><MetaPixel /><Outlet /><Toaster position="top-center" richColors /></>); }
