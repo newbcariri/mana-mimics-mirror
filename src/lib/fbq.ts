@@ -6,7 +6,6 @@ type FbqEvent =
   | "ViewContent"
   | "AddToCart"
   | "InitiateCheckout"
-  | "AddPaymentInfo"
   | "Purchase";
 
 const SESSION_KEY = "flexfit_fbq_sent";
