@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Heart, Share2, Truck, Plus, Minus, Check, ShieldCheck, Award, Droplets, Zap, X } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -6,6 +6,7 @@ import { PRODUCT, REVIEWS } from "@/lib/product-data";
 import { cart } from "@/lib/cart-store";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { fbqTrack } from "@/lib/fbq";
 
 export const Route = createFileRoute("/")({
   component: ProductPage,
@@ -38,6 +39,20 @@ function ProductPage() {
 
   const initials = (name: string) => name.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
 
+  // ViewContent — somente uma vez por sessão por produto
+  useEffect(() => {
+    fbqTrack(
+      "ViewContent",
+      {
+        content_name: PRODUCT.name,
+        content_type: "product",
+        currency: "BRL",
+        value: PRODUCT.pricePix,
+      },
+      `viewcontent:${PRODUCT.name}`,
+    );
+  }, []);
+
   const handleBuy = () => {
     if (!topSize || !legSize) {
       toast.error("Selecione o tamanho do top e da legging");
@@ -50,6 +65,12 @@ function ProductPage() {
       topSize, legSize, quantity: qty,
       unitPrice: PRODUCT.pricePix,
       image: c.img,
+    });
+    fbqTrack("AddToCart", {
+      content_name: PRODUCT.name,
+      content_type: "product",
+      currency: "BRL",
+      value: PRODUCT.pricePix * qty,
     });
     toast.success("Adicionado ao carrinho!");
     navigate({ to: "/carrinho" });

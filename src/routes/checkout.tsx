@@ -9,6 +9,7 @@ import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, Clock, BadgeCheck, CreditCard, Star, Truck, Package } from "lucide-react";
 import { maskCPF, maskPhone, maskCEP, onlyDigits } from "@/lib/checkout-utils";
+import { fbqTrack } from "@/lib/fbq";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
@@ -117,6 +118,41 @@ function CheckoutPage() {
   };
 
   useEffect(() => { loadSession(); }, []);
+
+  // InitiateCheckout — uma vez por sessão quando o carrinho não está vazio
+  useEffect(() => {
+    if (items.length === 0) return;
+    const productNames = items.map(i => i.productName).join(", ");
+    fbqTrack(
+      "InitiateCheckout",
+      {
+        content_name: productNames,
+        content_type: "product",
+        currency: "BRL",
+        value: subtotalRaw,
+        num_items: totalQty,
+      },
+      "initiatecheckout",
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items.length]);
+
+  // AddPaymentInfo — uma vez por método selecionado nesta sessão
+  useEffect(() => {
+    if (items.length === 0) return;
+    fbqTrack(
+      "AddPaymentInfo",
+      {
+        content_name: items.map(i => i.productName).join(", "),
+        content_type: "product",
+        currency: "BRL",
+        value: total,
+        payment_method: payment,
+      },
+      `addpaymentinfo:${payment}`,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [payment]);
 
   const update = (k: string, v: string) => {
     let val = v;

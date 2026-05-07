@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
+import { fbqTrack } from "@/lib/fbq";
 
 export const Route = createFileRoute("/pagamento-confirmado/$orderId")({
   component: SuccessPage,
@@ -72,6 +73,23 @@ function SuccessPage() {
   const main = orders[0];
   const orderNumber = main.id.slice(0, 8).toUpperCase();
   const paymentMethod = main.payment_method === "pix" ? "PIX" : "Cartão de crédito";
+
+  // Purchase — somente em pagamento confirmado, deduplicado por orderId
+  useEffect(() => {
+    if (!main || main.status !== "pago") return;
+    fbqTrack(
+      "Purchase",
+      {
+        content_name: orders.map(o => o.product_name).join(", "),
+        content_type: "product",
+        currency: "BRL",
+        value: total,
+        num_items: orders.reduce((s, o) => s + Number(o.quantity || 1), 0),
+        order_id: main.id,
+      },
+      `purchase:${main.id}`,
+    );
+  }, [main?.id, main?.status, total]);
 
   // Estimated delivery: +7 to +12 business days
   const today = new Date();
