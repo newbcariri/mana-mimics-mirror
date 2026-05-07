@@ -74,10 +74,10 @@ function SuccessPage() {
   const orderNumber = main.id.slice(0, 8).toUpperCase();
   const paymentMethod = main.payment_method === "pix" ? "PIX" : "Cartão de crédito";
 
-  // Purchase — somente em pagamento CONFIRMADO ("pago"), deduplicado por orderId
-  // (persistido em localStorage para sobreviver a refresh / nova aba).
+  // Purchase — dispara automaticamente ao abrir a página de compra aprovada,
+  // apenas UMA vez por pedido (dedupe persistido em localStorage).
   useEffect(() => {
-    if (!main || main.status !== "pago") return;
+    if (!main) return;
     const contentIds = Array.from(new Set(orders.map(o => o.product_name)));
     const eventID = `purchase_${main.id}`;
     fbqTrack(
@@ -93,7 +93,7 @@ function SuccessPage() {
       },
       { dedupeKey: `purchase:${main.id}`, persist: true, eventID },
     );
-  }, [main?.id, main?.status, total]);
+  }, [main?.id, total]);
 
   // Estimated delivery: +7 to +12 business days
   const today = new Date();
