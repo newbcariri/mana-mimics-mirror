@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useRouter } from "@tanstack/react-router";
 
 const PIXEL_ID = "1902524127096818";
@@ -7,12 +7,16 @@ declare global {
   interface Window {
     fbq?: any;
     _fbq?: any;
+    __metaPixelLoaded?: boolean;
+    __metaPixelLastPath?: string | null;
+    __metaPixelUnsub?: () => void;
   }
 }
 
 function loadPixel() {
   if (typeof window === "undefined") return;
-  if (window.fbq) return;
+  if (window.__metaPixelLoaded) return;
+  window.__metaPixelLoaded = true;
 
   /* eslint-disable */
   // @ts-ignore - Meta Pixel base code
@@ -40,31 +44,29 @@ function loadPixel() {
   }
 }
 
+function trackPageView(path: string) {
+  if (typeof window === "undefined") return;
+  if (window.__metaPixelLastPath === path) return;
+  window.__metaPixelLastPath = path;
+  window.fbq?.("track", "PageView");
+  if (import.meta.env.DEV) {
+    console.log("[Meta Pixel] PageView:", path);
+  }
+}
+
 export function MetaPixel() {
   const router = useRouter();
-  const lastPath = useRef<string | null>(null);
 
   useEffect(() => {
     loadPixel();
-
-    const trackPageView = (path: string) => {
-      if (lastPath.current === path) return;
-      lastPath.current = path;
-      window.fbq?.("track", "PageView");
-      if (import.meta.env.DEV) {
-        console.log("[Meta Pixel] PageView:", path);
-      }
-    };
-
     trackPageView(window.location.pathname);
 
+    // Garante uma única subscrição global mesmo com StrictMode/remounts.
+    if (window.__metaPixelUnsub) return;
     const unsub = router.subscribe("onResolved", ({ toLocation }) => {
       trackPageView(toLocation.pathname);
     });
-
-    return () => {
-      unsub();
-    };
+    window.__metaPixelUnsub = unsub;
   }, [router]);
 
   return (
