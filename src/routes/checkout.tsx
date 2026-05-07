@@ -218,10 +218,12 @@ function CheckoutPage() {
       }
       const rawLineTotals = items.map(i => i.unitPrice * i.quantity);
       const rawSum = rawLineTotals.reduce((s, v) => s + v, 0) || 1;
-      // Apply combo + coupon + pix discount proportionally
-      const finalGoodsTotal = subtotal - couponDiscount - pixDiscount;
-      const lineTotals = rawLineTotals.map(v => Math.round((v / rawSum) * finalGoodsTotal * 100) / 100);
-      const drift = Math.round((finalGoodsTotal - lineTotals.reduce((s, v) => s + v, 0)) * 100) / 100;
+      // Distribui o TOTAL FINAL (subtotal - cupom - pix + frete) proporcionalmente
+      // entre as linhas, garantindo que a soma dos orders.total no banco seja
+      // exatamente igual ao "Total" exibido na UI e ao valor cobrado no PIX.
+      const finalOrderTotal = total;
+      const lineTotals = rawLineTotals.map(v => Math.round((v / rawSum) * finalOrderTotal * 100) / 100);
+      const drift = Math.round((finalOrderTotal - lineTotals.reduce((s, v) => s + v, 0)) * 100) / 100;
       if (lineTotals.length > 0) lineTotals[lineTotals.length - 1] = Math.round((lineTotals[lineTotals.length - 1] + drift) * 100) / 100;
 
       const inserts = items.map((i, idx) => ({
