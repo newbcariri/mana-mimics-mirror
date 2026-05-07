@@ -26,6 +26,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "facebook-domain-verification", content: "mddjhghutdw3grx0vmakeky01xhtc9" },
       { title: "FlexFit Brasil - Conjunto Básico Poliamida Vermelho" },
       { name: "description", content: "Conjunto fitness em poliamida vermelho com proteção UV 50+, alta compressão e tecnologia Dry. R$ 113,91 no PIX." },
       { name: "author", content: "FlexFit Brasil" },
