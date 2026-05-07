@@ -119,6 +119,41 @@ function CheckoutPage() {
 
   useEffect(() => { loadSession(); }, []);
 
+  // InitiateCheckout — uma vez por sessão quando o carrinho não está vazio
+  useEffect(() => {
+    if (items.length === 0) return;
+    const productNames = items.map(i => i.productName).join(", ");
+    fbqTrack(
+      "InitiateCheckout",
+      {
+        content_name: productNames,
+        content_type: "product",
+        currency: "BRL",
+        value: subtotalRaw,
+        num_items: totalQty,
+      },
+      "initiatecheckout",
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items.length]);
+
+  // AddPaymentInfo — uma vez por método selecionado nesta sessão
+  useEffect(() => {
+    if (items.length === 0) return;
+    fbqTrack(
+      "AddPaymentInfo",
+      {
+        content_name: items.map(i => i.productName).join(", "),
+        content_type: "product",
+        currency: "BRL",
+        value: total,
+        payment_method: payment,
+      },
+      `addpaymentinfo:${payment}`,
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [payment]);
+
   const update = (k: string, v: string) => {
     let val = v;
     if (k === "cpf") val = maskCPF(v);
