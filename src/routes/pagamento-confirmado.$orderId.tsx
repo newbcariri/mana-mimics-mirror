@@ -74,20 +74,24 @@ function SuccessPage() {
   const orderNumber = main.id.slice(0, 8).toUpperCase();
   const paymentMethod = main.payment_method === "pix" ? "PIX" : "Cartão de crédito";
 
-  // Purchase — somente em pagamento confirmado, deduplicado por orderId
+  // Purchase — somente em pagamento CONFIRMADO ("pago"), deduplicado por orderId
+  // (persistido em localStorage para sobreviver a refresh / nova aba).
   useEffect(() => {
     if (!main || main.status !== "pago") return;
+    const contentIds = Array.from(new Set(orders.map(o => o.product_name)));
+    const eventID = `purchase_${main.id}`;
     fbqTrack(
       "Purchase",
       {
-        content_name: orders.map(o => o.product_name).join(", "),
+        content_name: contentIds.join(", "),
         content_type: "product",
+        content_ids: contentIds,
         currency: "BRL",
-        value: total,
+        value: Number(total.toFixed(2)),
         num_items: orders.reduce((s, o) => s + Number(o.quantity || 1), 0),
         order_id: main.id,
       },
-      `purchase:${main.id}`,
+      { dedupeKey: `purchase:${main.id}`, persist: true, eventID },
     );
   }, [main?.id, main?.status, total]);
 
