@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { Toaster } from "sonner";
 
+import { MetaPixel } from "@/components/meta-pixel";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -58,4 +59,4 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function RootComponent() { return (<><Outlet /><Toaster position="top-center" richColors /></>); }
+function RootComponent() { return (<><MetaPixel /><Outlet /><Toaster position="top-center" richColors /></>); }
