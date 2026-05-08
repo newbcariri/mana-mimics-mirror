@@ -76,21 +76,19 @@ async function getOrCreateCustomer(profile: { full_name: string; email: string; 
   const found = await asaas(`/customers?cpfCnpj=${cpf}`);
   if (found?.data?.[0]?.id) {
     const existing = found.data[0];
-    if (!existing.notificationDisabled) {
-      try {
-        await asaas(`/customers/${existing.id}`, {
-          method: "PUT",
-          body: JSON.stringify({
-            name: profile.full_name,
-            email: profile.email,
-            cpfCnpj: cpf,
-            mobilePhone,
-            notificationDisabled: true,
-          }),
-        });
-      } catch (e) {
-        console.error("failed to disable notifications for existing customer", e);
-      }
+    try {
+      await asaas(`/customers/${existing.id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          name: profile.full_name,
+          email: profile.email,
+          cpfCnpj: cpf,
+          mobilePhone,
+          notificationDisabled: true,
+        }),
+      });
+    } catch (e) {
+      console.error("failed to update existing customer", e);
     }
     return existing.id;
   }
