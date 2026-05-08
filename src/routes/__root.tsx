@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 import { Toaster } from "sonner";
 
 import { MetaPixel } from "@/components/meta-pixel";
+import { WhatsAppFab } from "@/components/whatsapp-fab";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -27,15 +28,15 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "facebook-domain-verification", content: "mddjhghutdw3grx0vmakeky01xhtc9" },
-      { title: "FlexFit Brasil - Conjunto Básico Poliamida Vermelho" },
-      { name: "description", content: "Conjunto fitness em poliamida vermelho com proteção UV 50+, alta compressão e tecnologia Dry. R$ 113,91 no PIX." },
-      { name: "author", content: "FlexFit Brasil" },
-      { property: "og:title", content: "FlexFit Brasil - Conjunto Básico Poliamida Vermelho" },
-      { property: "og:description", content: "Conjunto fitness em poliamida vermelho com proteção UV 50+, alta compressão e tecnologia Dry. R$ 113,91 no PIX." },
+      { title: "FlexFit Store | Conjunto Fitness Premium que Modela o Corpo (Poliamida)" },
+      { name: "description", content: "Conjunto fitness premium em poliamida que modela o corpo. Alta compressão, proteção UV 50+, tecnologia Dry. A partir de R$ 59,90 no PIX." },
+      { name: "author", content: "FlexFit Store" },
+      { property: "og:title", content: "FlexFit Store | Conjunto Fitness Premium que Modela o Corpo (Poliamida)" },
+      { property: "og:description", content: "Conjunto fitness premium em poliamida que modela o corpo. Alta compressão, proteção UV 50+, tecnologia Dry. A partir de R$ 59,90 no PIX." },
       { property: "og:type", content: "product" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "FlexFit Brasil - Conjunto Básico Poliamida Vermelho" },
-      { name: "twitter:description", content: "Conjunto fitness em poliamida vermelho com proteção UV 50+, alta compressão e tecnologia Dry. R$ 113,91 no PIX." },
+      { name: "twitter:title", content: "FlexFit Store | Conjunto Fitness Premium que Modela o Corpo (Poliamida)" },
+      { name: "twitter:description", content: "Conjunto fitness premium em poliamida que modela o corpo. Alta compressão, proteção UV 50+, tecnologia Dry. A partir de R$ 59,90 no PIX." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0a5abc95-a6c0-4ba1-ba5b-a52f0cf7ebe0/id-preview-a3da1f8e--2a636371-c8fa-4899-9425-e477791feabf.lovable.app-1778036461420.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/0a5abc95-a6c0-4ba1-ba5b-a52f0cf7ebe0/id-preview-a3da1f8e--2a636371-c8fa-4899-9425-e477791feabf.lovable.app-1778036461420.png" },
     ],
@@ -60,4 +61,4 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function RootComponent() { return (<><MetaPixel /><Outlet /><Toaster position="top-center" richColors /></>); }
+function RootComponent() { return (<><MetaPixel /><Outlet /><WhatsAppFab /><Toaster position="top-center" richColors /></>); }
