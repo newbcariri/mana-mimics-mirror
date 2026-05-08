@@ -72,15 +72,30 @@ async function asaas(path: string, init: RequestInit = {}) {
 
 async function getOrCreateCustomer(profile: { full_name: string; email: string; cpf: string; phone: string }) {
   const cpf = profile.cpf.replace(/\D/g, "");
+  const mobilePhone = profile.phone.replace(/\D/g, "");
   const found = await asaas(`/customers?cpfCnpj=${cpf}`);
-  if (found?.data?.[0]?.id) return found.data[0].id;
+  if (found?.data?.[0]?.id) {
+    const existing = found.data[0];
+    if (!existing.notificationDisabled) {
+      try {
+        await asaas(`/customers/${existing.id}`, {
+          method: "POST",
+          body: JSON.stringify({ notificationDisabled: true }),
+        });
+      } catch (e) {
+        console.error("failed to disable notifications for existing customer", e);
+      }
+    }
+    return existing.id;
+  }
   const created = await asaas("/customers", {
     method: "POST",
     body: JSON.stringify({
       name: profile.full_name,
       email: profile.email,
       cpfCnpj: cpf,
-      mobilePhone: profile.phone.replace(/\D/g, ""),
+      mobilePhone,
+      notificationDisabled: true,
     }),
   });
   return created.id;
