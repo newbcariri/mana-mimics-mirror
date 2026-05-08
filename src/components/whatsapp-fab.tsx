@@ -1,11 +1,11 @@
 export function WhatsAppFab() {
   return (
     <a
-      href="https://wa.me/5581995393351"
+      href="https://wa.me/5581995724886"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Falar no WhatsApp"
-      className="fixed bottom-5 right-5 z-[60] flex items-center justify-center w-14 h-14 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform"
+      className="fixed bottom-24 right-5 lg:bottom-5 z-[60] flex items-center justify-center w-14 h-14 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform"
       style={{
         backgroundColor: "#25D366",
         boxShadow: "0 6px 20px rgba(37, 211, 102, 0.45)",
