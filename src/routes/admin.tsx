@@ -86,10 +86,13 @@ function AdminPage() {
   const filteredOrders =
     filter === "all" ? orders : orders.filter((o) => o.status === filter);
 
+  // Receita resetada em 08/05/2026 — apenas pedidos a partir desta data contam
+  const REVENUE_RESET_AT = new Date("2026-05-08T00:00:00-03:00").getTime();
   const stats = {
     total: orders.length,
     revenue: orders
       .filter((o) => ["pago", "em_separacao", "enviado", "entregue"].includes(o.status))
+      .filter((o) => new Date(o.created_at).getTime() >= REVENUE_RESET_AT)
       .reduce((s, o) => s + Number(o.total), 0),
     customers: customers.length,
     pending: orders.filter((o) => o.status === "aguardando_pagamento").length,
