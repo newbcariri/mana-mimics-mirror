@@ -283,16 +283,7 @@ function ProductPage() {
           </div>
 
           {/* Shipping calc */}
-          <div className="border border-border rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Truck className="w-4 h-4 text-primary" />
-              <span className="font-semibold text-sm">Calcule o frete</span>
-            </div>
-            <div className="flex gap-2">
-              <input className="flex-1 border border-border rounded-md px-3 py-2 text-sm outline-none focus:border-primary" placeholder="00000-000" />
-              <button className="px-5 bg-foreground text-background rounded-md font-semibold text-sm">OK</button>
-            </div>
-          </div>
+          <ShippingCalc freeShipping={qty >= 2} />
         </div>
       </section>
 
