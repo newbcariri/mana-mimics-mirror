@@ -145,7 +145,7 @@ function ProductPage() {
             {current.type === "video" ? (
               <video src={current.src} poster={current.poster} controls autoPlay muted loop playsInline className="w-full h-full object-cover" />
             ) : (
-              <img src={current.src} alt={PRODUCT.name} className="w-full h-full object-cover" />
+              <img src={current.src} alt={PRODUCT.name} loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).src = PRODUCT.images[0]; }} className="w-full h-full object-cover" />
             )}
             <button onClick={() => setActiveImg((activeImg - 1 + media.length) % media.length)} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronLeft className="w-5 h-5" /></button>
             <button onClick={() => setActiveImg((activeImg + 1) % media.length)} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background"><ChevronRight className="w-5 h-5" /></button>
