@@ -419,7 +419,7 @@ function CheckoutPage() {
                         <div className="font-semibold mb-1 text-foreground flex items-center gap-2">
                           <ShieldCheck className="w-4 h-4 text-success" /> Pagamento instantâneo e seguro
                         </div>
-                        <p className="text-muted-foreground text-xs">5% de desconto · aprovação imediata. O QR Code será gerado na próxima etapa.</p>
+                        <p className="text-muted-foreground text-xs">Aprovação imediata. O QR Code será gerado na próxima etapa.</p>
                       </div>
                       <PixBanksTrust compact />
                     </div>
