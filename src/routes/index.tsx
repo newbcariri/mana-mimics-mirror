@@ -274,7 +274,7 @@ function ProductPage() {
               <span className="w-10 text-center font-semibold">{qty}</span>
               <button onClick={() => setQty(qty + 1)} className="w-10 h-14 flex items-center justify-center hover:bg-muted"><Plus className="w-4 h-4" /></button>
             </div>
-            <button onClick={handleBuy} className="flex-1 h-14 bg-success text-success-foreground rounded-md font-extrabold text-base hover:bg-success/90 transition-colors shadow-lg shadow-success/30 ring-2 ring-success/40 animate-pulse">🛒 GARANTIR MEU CONJUNTO AGORA</button>
+            <button onClick={handleBuy} className="flex-1 h-14 bg-success text-success-foreground rounded-md font-extrabold text-base hover:bg-success/90 hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-success/30 ring-2 ring-success/30">🛒 GARANTIR MEU CONJUNTO AGORA</button>
             <button className="w-12 h-14 border border-border rounded-md flex items-center justify-center hover:bg-muted"><Share2 className="w-4 h-4" /></button>
           </div>
 
