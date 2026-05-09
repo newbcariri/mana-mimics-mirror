@@ -80,7 +80,7 @@ function ProductPage() {
     <div className="min-h-screen bg-background pb-20 lg:pb-0">
       {/* Urgency banner - mobile focus */}
       <div className="bg-primary text-primary-foreground text-center text-xs sm:text-sm font-semibold py-2 px-4">
-        ⏰ Promoção por tempo limitado · ⚠️ Estoque limitado · 🚚 Frete grátis acima de R$199
+        ⏰ Promoção por tempo limitado · ⚠️ Estoque limitado · 🚚 Frete grátis na compra de 2 ou mais conjuntos
       </div>
 
       <SiteHeader />
@@ -172,19 +172,21 @@ function ProductPage() {
           </div>
 
           {/* Price */}
-          <div className="bg-muted/50 rounded-xl p-5 space-y-2">
+          <div className="bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/30 rounded-xl p-5 space-y-2 shadow-sm">
             <div className="flex items-baseline gap-3 flex-wrap">
-              <span className="text-sm text-muted-foreground line-through">{formatBRL(PRODUCT.priceOriginal)}</span>
-              <span className="text-3xl md:text-4xl font-bold text-primary">{formatBRL(PRODUCT.pricePix)}</span>
+              <span className="text-sm text-muted-foreground line-through">De {formatBRL(PRODUCT.priceOriginal)}</span>
               <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded">-{PRODUCT.pixDiscount}%</span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <span className="inline-flex items-center justify-center w-10 h-6 rounded bg-pix text-white font-bold text-[10px]">PIX</span>
-              <span className="text-muted-foreground">à vista no PIX</span>
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <span className="text-base font-bold text-destructive">🔥 HOJE por</span>
+              <span className="text-4xl md:text-5xl font-extrabold text-primary leading-none">{formatBRL(PRODUCT.pricePix)}</span>
+              <span className="inline-flex items-center justify-center px-2 h-6 rounded bg-pix text-white font-bold text-[10px]">PIX</span>
             </div>
-            <div className="text-sm text-muted-foreground pt-2 border-t border-border">
-              <span className="line-through">{formatBRL(PRODUCT.priceCard)}</span>
-              <span className="ml-2">no cartão em até <strong className="text-foreground">{PRODUCT.installments.count}x</strong> de <strong className="text-foreground">{formatBRL(PRODUCT.installments.value)}</strong> sem juros</span>
+            <div className="text-sm text-foreground/80 pt-2 border-t border-primary/20">
+              💳 ou <strong>{formatBRL(PRODUCT.priceCard)}</strong> no cartão em até <strong>{PRODUCT.installments.count}x</strong> de <strong>{formatBRL(PRODUCT.installments.value)}</strong> sem juros
+            </div>
+            <div className="text-sm font-bold text-success flex items-center gap-1.5 bg-success/10 rounded-md px-3 py-2 mt-2">
+              🚚 Frete grátis na compra de 2 ou mais conjuntos
             </div>
             <div className="text-xs text-success font-semibold flex items-center gap-1.5">
               <Award className="w-3.5 h-3.5" /> Ganhe até {formatBRL(PRODUCT.cashback)} de cashback
@@ -250,15 +252,34 @@ function ProductPage() {
             </div>
           </div>
 
+          {/* Trust signals - above buy button */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+            {[
+              { icon: "🔒", label: "Compra 100% segura" },
+              { icon: "🚚", label: "Envio com rastreio" },
+              { icon: "🔁", label: "Troca garantida" },
+              { icon: "🇧🇷", label: "Entrega Brasil" },
+            ].map(t => (
+              <div key={t.label} className="flex items-center gap-1.5 p-2 bg-muted/60 rounded-md">
+                <span className="text-base leading-none">{t.icon}</span>
+                <span className="text-[11px] font-semibold leading-tight">{t.label}</span>
+              </div>
+            ))}
+          </div>
+
           {/* Qty + Buy */}
           <div className="flex gap-3 pt-2">
             <div className="flex items-center border border-border rounded-md">
-              <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-12 flex items-center justify-center hover:bg-muted"><Minus className="w-4 h-4" /></button>
+              <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-14 flex items-center justify-center hover:bg-muted"><Minus className="w-4 h-4" /></button>
               <span className="w-10 text-center font-semibold">{qty}</span>
-              <button onClick={() => setQty(qty + 1)} className="w-10 h-12 flex items-center justify-center hover:bg-muted"><Plus className="w-4 h-4" /></button>
+              <button onClick={() => setQty(qty + 1)} className="w-10 h-14 flex items-center justify-center hover:bg-muted"><Plus className="w-4 h-4" /></button>
             </div>
-            <button onClick={handleBuy} className="flex-1 h-12 bg-success text-success-foreground rounded-md font-bold hover:bg-success/90 transition-colors">COMPRAR</button>
-            <button className="w-12 h-12 border border-border rounded-md flex items-center justify-center hover:bg-muted"><Share2 className="w-4 h-4" /></button>
+            <button onClick={handleBuy} className="flex-1 h-14 bg-success text-success-foreground rounded-md font-extrabold text-base hover:bg-success/90 transition-colors shadow-lg shadow-success/30 ring-2 ring-success/40 animate-pulse">🛒 GARANTIR MEU CONJUNTO AGORA</button>
+            <button className="w-12 h-14 border border-border rounded-md flex items-center justify-center hover:bg-muted"><Share2 className="w-4 h-4" /></button>
+          </div>
+
+          <div className="text-center text-xs font-semibold text-destructive bg-destructive/10 rounded-md px-3 py-2">
+            ⚠️ Estoque limitado — pode esgotar a qualquer momento
           </div>
 
           {/* Shipping calc */}
@@ -271,20 +292,6 @@ function ProductPage() {
               <input className="flex-1 border border-border rounded-md px-3 py-2 text-sm outline-none focus:border-primary" placeholder="00000-000" />
               <button className="px-5 bg-foreground text-background rounded-md font-semibold text-sm">OK</button>
             </div>
-          </div>
-
-          {/* Trust */}
-          <div className="grid grid-cols-3 gap-3 pt-2">
-            {[
-              { icon: ShieldCheck, label: "Compra segura" },
-              { icon: Truck, label: "Frete rápido" },
-              { icon: Check, label: "Troca em 30 dias" },
-            ].map(t => (
-              <div key={t.label} className="flex flex-col items-center text-center gap-1 p-3 bg-muted/50 rounded-md">
-                <t.icon className="w-5 h-5 text-primary" />
-                <span className="text-[11px] font-medium">{t.label}</span>
-              </div>
-            ))}
           </div>
         </div>
       </section>
