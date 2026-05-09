@@ -172,19 +172,21 @@ function ProductPage() {
           </div>
 
           {/* Price */}
-          <div className="bg-muted/50 rounded-xl p-5 space-y-2">
+          <div className="bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/30 rounded-xl p-5 space-y-2 shadow-sm">
             <div className="flex items-baseline gap-3 flex-wrap">
-              <span className="text-sm text-muted-foreground line-through">{formatBRL(PRODUCT.priceOriginal)}</span>
-              <span className="text-3xl md:text-4xl font-bold text-primary">{formatBRL(PRODUCT.pricePix)}</span>
+              <span className="text-sm text-muted-foreground line-through">De {formatBRL(PRODUCT.priceOriginal)}</span>
               <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded">-{PRODUCT.pixDiscount}%</span>
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <span className="inline-flex items-center justify-center w-10 h-6 rounded bg-pix text-white font-bold text-[10px]">PIX</span>
-              <span className="text-muted-foreground">à vista no PIX</span>
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <span className="text-base font-bold text-destructive">🔥 HOJE por</span>
+              <span className="text-4xl md:text-5xl font-extrabold text-primary leading-none">{formatBRL(PRODUCT.pricePix)}</span>
+              <span className="inline-flex items-center justify-center px-2 h-6 rounded bg-pix text-white font-bold text-[10px]">PIX</span>
             </div>
-            <div className="text-sm text-muted-foreground pt-2 border-t border-border">
-              <span className="line-through">{formatBRL(PRODUCT.priceCard)}</span>
-              <span className="ml-2">no cartão em até <strong className="text-foreground">{PRODUCT.installments.count}x</strong> de <strong className="text-foreground">{formatBRL(PRODUCT.installments.value)}</strong> sem juros</span>
+            <div className="text-sm text-foreground/80 pt-2 border-t border-primary/20">
+              💳 ou <strong>{formatBRL(PRODUCT.priceCard)}</strong> no cartão em até <strong>{PRODUCT.installments.count}x</strong> de <strong>{formatBRL(PRODUCT.installments.value)}</strong> sem juros
+            </div>
+            <div className="text-sm font-bold text-success flex items-center gap-1.5 bg-success/10 rounded-md px-3 py-2 mt-2">
+              🚚 Frete grátis na compra de 2 ou mais conjuntos
             </div>
             <div className="text-xs text-success font-semibold flex items-center gap-1.5">
               <Award className="w-3.5 h-3.5" /> Ganhe até {formatBRL(PRODUCT.cashback)} de cashback
