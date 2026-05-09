@@ -80,7 +80,7 @@ function ProductPage() {
     <div className="min-h-screen bg-background pb-20 lg:pb-0">
       {/* Urgency banner - mobile focus */}
       <div className="bg-primary text-primary-foreground text-center text-xs sm:text-sm font-semibold py-2 px-4">
-        ⏰ Promoção por tempo limitado · ⚠️ Estoque limitado · 🚚 Frete grátis acima de R$199
+        ⏰ Promoção por tempo limitado · ⚠️ Estoque limitado · 🚚 Frete grátis na compra de 2 ou mais conjuntos
       </div>
 
       <SiteHeader />
