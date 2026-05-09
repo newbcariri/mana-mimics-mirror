@@ -94,9 +94,9 @@ function CheckoutPage() {
   const [checking, setChecking] = useState(true);
   const [placing, setPlacing] = useState(false);
 
-  // PIX has 5% extra discount
-  const pixDiscount = useMemo(() => payment === "pix" ? Math.round((subtotal - couponDiscount) * 0.05 * 100) / 100 : 0, [payment, subtotal, couponDiscount]);
-  const total = Math.max(0, subtotal - couponDiscount - pixDiscount + shipping);
+  // No PIX discount: combo price is already the final price
+  const pixDiscount = 0;
+  const total = Math.max(0, subtotal - couponDiscount + shipping);
 
   // auth form
   const [authMode, setAuthMode] = useState<"login" | "signup">("signup");
