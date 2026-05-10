@@ -23,7 +23,7 @@ const signupSchema = z.object({
   email: z.string().trim().email("E-mail inválido").max(255),
   phone: z.string().refine(v => onlyDigits(v).length >= 10, "Telefone inválido"),
   cep: z.string().refine(v => onlyDigits(v).length === 8, "CEP deve ter 8 dígitos"),
-  password: z.string().min(8, "A senha deve ter ao menos 8 caracteres").max(72),
+  password: z.string().min(6, "A senha deve ter ao menos 6 caracteres").max(72),
 });
 
 const loginSchema = z.object({
