@@ -43,6 +43,13 @@ function CardPage() {
   const [submitting, setSubmitting] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
+  // Quando o perfil carrega, prefill o número da residência
+  useEffect(() => {
+    if (profile?.number && !addressNumber) setAddressNumber(profile.number);
+  }, [profile, addressNumber]);
+
+  const hasSavedAddressNumber = !!profile?.number;
+
   const brand = useMemo(() => detectBrand(number), [number]);
   const cardValid = useMemo(() => luhnValid(number), [number]);
   const expValid = useMemo(() => {
