@@ -265,17 +265,25 @@ function CardPage() {
               </select>
             </div>
 
-            {/* Address number */}
-            <div>
-              <label className="text-xs font-semibold text-muted-foreground">Número do endereço de cobrança</label>
-              <input
-                value={addressNumber}
-                onChange={(e) => setAddressNumber(e.target.value)}
-                placeholder="Nº"
-                className="mt-1 w-full h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
-              />
-              <p className="text-[11px] text-muted-foreground mt-1">CEP: {profile?.cep}</p>
-            </div>
+            {/* Address number — só pergunta se não estiver salvo no perfil */}
+            {!hasSavedAddressNumber ? (
+              <div>
+                <label className="text-xs font-semibold text-muted-foreground">Número do endereço de cobrança</label>
+                <input
+                  value={addressNumber}
+                  onChange={(e) => setAddressNumber(e.target.value)}
+                  placeholder="Nº"
+                  className="mt-1 w-full h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+                <p className="text-[11px] text-muted-foreground mt-1">CEP: {profile?.cep}</p>
+              </div>
+            ) : (
+              <div className="bg-muted/40 rounded-md p-3 text-xs text-muted-foreground">
+                <span className="font-semibold text-foreground">Endereço de cobrança:</span>{" "}
+                {profile?.street ? `${profile.street}, nº ${profile.number}` : `Nº ${profile.number}`}
+                {profile?.complement ? ` — ${profile.complement}` : ""} · CEP {profile?.cep}
+              </div>
+            )}
 
             <button
               type="submit"
