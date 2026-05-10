@@ -202,6 +202,15 @@ function CheckoutPage() {
     }
   };
 
+  // Prefill número/complemento a partir do perfil quando disponível
+  useEffect(() => {
+    if (profile) {
+      if (profile.number && !number) setNumber(profile.number);
+      if (profile.complement && !complement) setComplement(profile.complement);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile]);
+
   const placeOrder = async () => {
     if (items.length === 0) { toast.error("Carrinho vazio"); return; }
     if (!userId || !profile) return;
@@ -213,39 +222,87 @@ function CheckoutPage() {
     }
     setPlacing(true);
     try {
-      if (needsCpf) {
-        await supabase.from("profiles").update({ cpf: onlyDigits(cpfFinal) }).eq("id", userId);
+      // Atualiza perfil com CPF / endereço se necessário
+      const profileUpdate: any = {};
+      if (needsCpf) profileUpdate.cpf = onlyDigits(cpfFinal);
+      if (number && profile.number !== number) profileUpdate.number = number;
+      if (complement !== (profile.complement || "")) profileUpdate.complement = complement || null;
+      if (cepData) {
+        if (!profile.street && cepData.logradouro) profileUpdate.street = cepData.logradouro;
+        if (!profile.neighborhood && cepData.bairro) profileUpdate.neighborhood = cepData.bairro;
+        if (!profile.city && cepData.localidade) profileUpdate.city = cepData.localidade;
+        if (!profile.state && cepData.uf) profileUpdate.state = cepData.uf;
       }
+      if (Object.keys(profileUpdate).length > 0) {
+        await supabase.from("profiles").update(profileUpdate).eq("id", userId);
+      }
+
+      // Distribui o TOTAL FINAL proporcionalmente entre os itens (para auditoria),
+      // mas o pedido é único.
       const rawLineTotals = items.map(i => i.unitPrice * i.quantity);
       const rawSum = rawLineTotals.reduce((s, v) => s + v, 0) || 1;
-      // Distribui o TOTAL FINAL (subtotal - cupom - pix + frete) proporcionalmente
-      // entre as linhas, garantindo que a soma dos orders.total no banco seja
-      // exatamente igual ao "Total" exibido na UI e ao valor cobrado no PIX.
-      const finalOrderTotal = total;
-      const lineTotals = rawLineTotals.map(v => Math.round((v / rawSum) * finalOrderTotal * 100) / 100);
-      const drift = Math.round((finalOrderTotal - lineTotals.reduce((s, v) => s + v, 0)) * 100) / 100;
+      const lineTotals = rawLineTotals.map(v => Math.round((v / rawSum) * subtotal * 100) / 100);
+      const drift = Math.round((subtotal - lineTotals.reduce((s, v) => s + v, 0)) * 100) / 100;
       if (lineTotals.length > 0) lineTotals[lineTotals.length - 1] = Math.round((lineTotals[lineTotals.length - 1] + drift) * 100) / 100;
 
-      const inserts = items.map((i, idx) => ({
-        user_id: userId,
+      const itemsCount = items.reduce((s, i) => s + i.quantity, 0);
+      const firstItem = items[0];
+
+      const { data: orderRow, error: orderErr } = await supabase
+        .from("orders")
+        .insert({
+          user_id: userId,
+          // Compatibilidade com colunas antigas — guarda o primeiro item como resumo.
+          product_name: firstItem.productName,
+          color: firstItem.color,
+          top_size: firstItem.topSize,
+          legging_size: firstItem.legSize,
+          quantity: itemsCount,
+          subtotal,
+          shipping,
+          discount: couponDiscount,
+          items_count: itemsCount,
+          total,
+          payment_method: payment,
+          shipping_cep: profile.cep,
+          shipping_address: cepData?.logradouro || profile.street || null,
+          shipping_number: number,
+          shipping_complement: complement || null,
+          shipping_neighborhood: cepData?.bairro || profile.neighborhood || null,
+          shipping_city: cepData?.localidade || profile.city || null,
+          shipping_state: cepData?.uf || profile.state || null,
+        } as any)
+        .select("id")
+        .single();
+      if (orderErr || !orderRow) throw orderErr || new Error("Erro ao criar pedido");
+
+      const orderId = orderRow.id as string;
+
+      // Insere itens
+      const itemsInsert = items.map((i, idx) => ({
+        order_id: orderId,
         product_name: i.productName,
         color: i.color,
         top_size: i.topSize,
         legging_size: i.legSize,
         quantity: i.quantity,
-        total: lineTotals[idx],
-        payment_method: payment,
-        shipping_cep: profile.cep,
-        shipping_address: [address, number && `nº ${number}`, complement].filter(Boolean).join(", ") || null,
+        unit_price: i.unitPrice,
+        subtotal: lineTotals[idx],
+        image: i.image || null,
       }));
-      const { data: inserted, error } = await supabase.from("orders").insert(inserts).select("id");
-      if (error) throw error;
+      const { error: itemsErr } = await supabase.from("order_items" as any).insert(itemsInsert);
+      if (itemsErr) console.error("order_items insert error", itemsErr);
+
+      // Histórico inicial
+      await supabase.from("order_history" as any).insert([
+        { order_id: orderId, status: "criado", note: "Pedido criado" },
+        { order_id: orderId, status: "aguardando_pagamento", note: "Aguardando pagamento" },
+      ]);
+
       cart.clear();
       toast.success("Pedido criado!");
-      if (inserted && inserted[0]) {
-        if (payment === "pix") navigate({ to: "/pix/$orderId", params: { orderId: inserted[0].id } });
-        else navigate({ to: "/cartao/$orderId", params: { orderId: inserted[0].id } });
-      } else navigate({ to: "/pedidos" });
+      if (payment === "pix") navigate({ to: "/pix/$orderId", params: { orderId } });
+      else navigate({ to: "/cartao/$orderId", params: { orderId } });
     } catch (err: any) {
       toast.error(err.message || "Erro ao finalizar pedido");
     } finally { setPlacing(false); }
