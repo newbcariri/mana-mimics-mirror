@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
-import { Package, LogOut } from "lucide-react";
+import { Package, LogOut, ChevronRight, User } from "lucide-react";
 
 export const Route = createFileRoute("/pedidos")({
   component: OrdersPage,
@@ -11,6 +11,15 @@ export const Route = createFileRoute("/pedidos")({
 });
 
 const brl = (v: number) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+const STATUS_LABEL: Record<string, { label: string; cls: string }> = {
+  aguardando_pagamento: { label: "Aguardando pagamento", cls: "bg-yellow-100 text-yellow-800" },
+  pago: { label: "Pago", cls: "bg-green-100 text-green-800" },
+  em_separacao: { label: "Em separação", cls: "bg-blue-100 text-blue-800" },
+  enviado: { label: "Enviado", cls: "bg-indigo-100 text-indigo-800" },
+  entregue: { label: "Entregue", cls: "bg-emerald-100 text-emerald-800" },
+  cancelado: { label: "Cancelado", cls: "bg-red-100 text-red-800" },
+};
 
 function OrdersPage() {
   const navigate = useNavigate();
@@ -44,11 +53,16 @@ function OrdersPage() {
         <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <div>
             <h1 className="text-3xl font-bold">Meus Pedidos</h1>
-            {profile && <p className="text-sm text-muted-foreground mt-1">Olá, {profile.full_name.split(" ")[0]}!</p>}
+            {profile && <p className="text-sm text-muted-foreground mt-1">Olá, {profile.full_name?.split(" ")[0]}!</p>}
           </div>
-          <button onClick={logout} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive">
-            <LogOut className="w-4 h-4" /> Sair
-          </button>
+          <div className="flex items-center gap-3">
+            <Link to="/minha-conta" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
+              <User className="w-4 h-4" /> Minha conta
+            </Link>
+            <button onClick={logout} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive">
+              <LogOut className="w-4 h-4" /> Sair
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -61,38 +75,39 @@ function OrdersPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {orders.map(o => (
-              <article key={o.id} className="border border-border rounded-xl p-5">
-                <div className="flex items-start justify-between flex-wrap gap-3">
-                  <div>
-                    <div className="text-xs text-muted-foreground">Pedido #{o.id.slice(0, 8).toUpperCase()}</div>
-                    <div className="font-semibold mt-1">{o.product_name}</div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      Cor: {o.color} · Top: {o.top_size} · Legging: {o.legging_size} · Qtd: {o.quantity}
+            {orders.map(o => {
+              const status = STATUS_LABEL[o.status] || { label: o.status, cls: "bg-muted text-muted-foreground" };
+              const itemsCount = o.items_count || o.quantity || 1;
+              return (
+                <Link
+                  key={o.id}
+                  to="/pedido/$orderId"
+                  params={{ orderId: o.id }}
+                  className="block border border-border rounded-xl p-5 hover:border-primary transition group"
+                >
+                  <div className="flex items-start justify-between flex-wrap gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs text-muted-foreground">Pedido #{o.id.slice(0, 8).toUpperCase()}</div>
+                      <div className="font-semibold mt-1">
+                        {itemsCount} {itemsCount > 1 ? "itens" : "item"}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {new Date(o.created_at).toLocaleString("pt-BR")} · via {o.payment_method?.toUpperCase?.() || "PIX"}
+                      </div>
                     </div>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      {new Date(o.created_at).toLocaleString("pt-BR")} · CEP: {o.shipping_cep}
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-primary">{brl(Number(o.total))}</div>
+                      <span className={`inline-block mt-1 text-[10px] uppercase font-bold tracking-wide ${status.cls} px-2 py-1 rounded`}>
+                        {status.label}
+                      </span>
+                      <div className="text-xs text-primary mt-2 flex items-center justify-end gap-1 group-hover:gap-2 transition-all">
+                        Ver detalhes <ChevronRight className="w-3.5 h-3.5" />
+                      </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xl font-bold text-primary">{brl(o.total)}</div>
-                    <span className="inline-block mt-1 text-[10px] uppercase font-bold tracking-wide bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
-                      {o.status.replace(/_/g, " ")}
-                    </span>
-                    <div className="text-xs text-muted-foreground mt-1">via {o.payment_method.toUpperCase()}</div>
-                    {o.status === "aguardando_pagamento" && o.payment_method === "pix" && (
-                      <Link
-                        to="/pix/$orderId"
-                        params={{ orderId: o.id }}
-                        className="inline-block mt-2 bg-primary text-primary-foreground text-xs font-bold px-3 py-1.5 rounded hover:bg-primary/90"
-                      >
-                        Pagar com PIX
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </article>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>
