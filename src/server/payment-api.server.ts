@@ -3,7 +3,7 @@ import type { Database } from "@/integrations/supabase/types";
 
 const ASAAS_BASE = "https://api.asaas.com/v3";
 
-type Order = Database["public"]["Tables"]["orders"]["Row"];
+
 
 export const PAYMENT_CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
