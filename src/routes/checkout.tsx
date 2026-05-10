@@ -454,7 +454,7 @@ function CheckoutPage() {
                         <span className="font-bold text-sm">PIX</span>
                         {payment === "pix" && <CheckCircle2 className="w-4 h-4 text-primary ml-auto" />}
                       </div>
-                      <p className="text-[11px] text-muted-foreground">5% off · aprovação imediata</p>
+                      <p className="text-[11px] text-muted-foreground">Aprovação imediata</p>
                     </button>
                     <button
                       type="button"
