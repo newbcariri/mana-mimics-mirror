@@ -46,6 +46,12 @@ export const Route = createFileRoute("/api/public/asaas-webhook")({
 
         const supabaseAdmin = createSupabaseAdmin();
 
+        const { data: matchedOrders } = await supabaseAdmin
+          .from("orders")
+          .select("id")
+          .eq("asaas_payment_id", paymentId);
+        const orderIds = (matchedOrders || []).map((o) => o.id);
+
         if (paidEvents.has(event)) {
           const { error } = await supabaseAdmin
             .from("orders")
@@ -54,6 +60,11 @@ export const Route = createFileRoute("/api/public/asaas-webhook")({
           if (error) {
             console.error("asaas-webhook update error", error);
             return new Response("DB error", { status: 500 });
+          }
+          if (orderIds.length > 0) {
+            await (supabaseAdmin as any).from("order_history").insert(
+              orderIds.map((id) => ({ order_id: id, status: "pago", note: "Pagamento aprovado" }))
+            );
           }
         } else if (
           event === "PAYMENT_REFUNDED" ||
@@ -64,6 +75,11 @@ export const Route = createFileRoute("/api/public/asaas-webhook")({
             .from("orders")
             .update({ status: "cancelado" })
             .eq("asaas_payment_id", paymentId);
+          if (orderIds.length > 0) {
+            await (supabaseAdmin as any).from("order_history").insert(
+              orderIds.map((id) => ({ order_id: id, status: "cancelado", note: `Pedido cancelado (${event})` }))
+            );
+          }
         }
 
         return new Response(JSON.stringify({ received: true }), {

@@ -14,53 +14,165 @@ export type Database = {
   }
   public: {
     Tables: {
-      orders: {
+      order_history: {
         Row: {
-          asaas_payment_id: string | null
+          created_at: string
+          id: string
+          note: string | null
+          order_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          order_id: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          order_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_items: {
+        Row: {
           color: string
           created_at: string
           id: string
+          image: string | null
           legging_size: string
-          payment_method: string
+          order_id: string
           product_name: string
           quantity: number
+          subtotal: number
+          top_size: string
+          unit_price: number
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          legging_size: string
+          order_id: string
+          product_name: string
+          quantity?: number
+          subtotal: number
+          top_size: string
+          unit_price: number
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          legging_size?: string
+          order_id?: string
+          product_name?: string
+          quantity?: number
+          subtotal?: number
+          top_size?: string
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          asaas_payment_id: string | null
+          color: string | null
+          created_at: string
+          discount: number
+          id: string
+          items_count: number
+          legging_size: string | null
+          payment_method: string
+          product_name: string | null
+          quantity: number
+          shipping: number
           shipping_address: string | null
           shipping_cep: string
+          shipping_city: string | null
+          shipping_complement: string | null
+          shipping_neighborhood: string | null
+          shipping_number: string | null
+          shipping_state: string | null
           status: string
-          top_size: string
+          subtotal: number | null
+          top_size: string | null
           total: number
+          tracking_code: string | null
           user_id: string
         }
         Insert: {
           asaas_payment_id?: string | null
-          color: string
+          color?: string | null
           created_at?: string
+          discount?: number
           id?: string
-          legging_size: string
+          items_count?: number
+          legging_size?: string | null
           payment_method?: string
-          product_name: string
+          product_name?: string | null
           quantity?: number
+          shipping?: number
           shipping_address?: string | null
           shipping_cep: string
+          shipping_city?: string | null
+          shipping_complement?: string | null
+          shipping_neighborhood?: string | null
+          shipping_number?: string | null
+          shipping_state?: string | null
           status?: string
-          top_size: string
+          subtotal?: number | null
+          top_size?: string | null
           total: number
+          tracking_code?: string | null
           user_id: string
         }
         Update: {
           asaas_payment_id?: string | null
-          color?: string
+          color?: string | null
           created_at?: string
+          discount?: number
           id?: string
-          legging_size?: string
+          items_count?: number
+          legging_size?: string | null
           payment_method?: string
-          product_name?: string
+          product_name?: string | null
           quantity?: number
+          shipping?: number
           shipping_address?: string | null
           shipping_cep?: string
+          shipping_city?: string | null
+          shipping_complement?: string | null
+          shipping_neighborhood?: string | null
+          shipping_number?: string | null
+          shipping_state?: string | null
           status?: string
-          top_size?: string
+          subtotal?: number | null
+          top_size?: string | null
           total?: number
+          tracking_code?: string | null
           user_id?: string
         }
         Relationships: []
@@ -68,32 +180,50 @@ export type Database = {
       profiles: {
         Row: {
           cep: string
+          city: string | null
+          complement: string | null
           cpf: string
           created_at: string
           email: string
           full_name: string
           id: string
+          neighborhood: string | null
+          number: string | null
           phone: string
+          state: string | null
+          street: string | null
           updated_at: string
         }
         Insert: {
           cep: string
+          city?: string | null
+          complement?: string | null
           cpf: string
           created_at?: string
           email: string
           full_name: string
           id: string
+          neighborhood?: string | null
+          number?: string | null
           phone: string
+          state?: string | null
+          street?: string | null
           updated_at?: string
         }
         Update: {
           cep?: string
+          city?: string | null
+          complement?: string | null
           cpf?: string
           created_at?: string
           email?: string
           full_name?: string
           id?: string
+          neighborhood?: string | null
+          number?: string | null
           phone?: string
+          state?: string | null
+          street?: string | null
           updated_at?: string
         }
         Relationships: []

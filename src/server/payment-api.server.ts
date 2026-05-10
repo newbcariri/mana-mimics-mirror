@@ -3,7 +3,7 @@ import type { Database } from "@/integrations/supabase/types";
 
 const ASAAS_BASE = "https://api.asaas.com/v3";
 
-type Order = Database["public"]["Tables"]["orders"]["Row"];
+
 
 export const PAYMENT_CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -105,7 +105,7 @@ async function getOrCreateCustomer(profile: { full_name: string; email: string; 
   return created.id;
 }
 
-async function getOrderGroup(orderId: string, userId: string) {
+async function getOrder(orderId: string, userId: string) {
   const supabaseAdmin = createSupabaseAdmin();
   const { data: order, error } = await supabaseAdmin
     .from("orders")
@@ -114,18 +114,7 @@ async function getOrderGroup(orderId: string, userId: string) {
     .single();
   if (error || !order) throw new Error("Pedido não encontrado");
   if (order.user_id !== userId) throw new Error("Não autorizado");
-
-  const ts = new Date(order.created_at).getTime();
-  const { data: siblings } = await supabaseAdmin
-    .from("orders")
-    .select("id, total, asaas_payment_id, created_at, status")
-    .eq("user_id", userId)
-    .gte("created_at", new Date(ts - 5000).toISOString())
-    .lte("created_at", new Date(ts + 5000).toISOString());
-
-  const group = (siblings && siblings.length > 0 ? siblings : [order]) as Pick<Order, "id" | "total" | "asaas_payment_id" | "created_at" | "status">[];
-  const totalValue = group.reduce((sum, item) => sum + Number(item.total), 0);
-  return { order, group, totalValue };
+  return { order, totalValue: Number(order.total) };
 }
 
 async function getProfile(userId: string) {
@@ -139,18 +128,23 @@ async function getProfile(userId: string) {
   return profile;
 }
 
+async function appendHistory(orderId: string, status: string, note: string) {
+  const supabaseAdmin = createSupabaseAdmin();
+  await (supabaseAdmin as any).from("order_history").insert({ order_id: orderId, status, note });
+}
+
 async function handleOrderSummary(data: any, userId: string) {
   const supabaseAdmin = createSupabaseAdmin();
-  const { order, group, totalValue } = await getOrderGroup(data.orderId, userId);
+  const { order, totalValue } = await getOrder(data.orderId, userId);
   let status = order.status as string;
 
-  // Fallback: if still pending and we have an Asaas payment, check Asaas directly
   if (status === "aguardando_pagamento" && order.asaas_payment_id) {
     try {
       const payment = await asaas(`/payments/${order.asaas_payment_id}`);
       const paid = payment?.status === "CONFIRMED" || payment?.status === "RECEIVED" || payment?.status === "RECEIVED_IN_CASH";
       if (paid) {
-        await supabaseAdmin.from("orders").update({ status: "pago" }).in("id", group.map((g) => g.id));
+        await supabaseAdmin.from("orders").update({ status: "pago" }).eq("id", order.id);
+        await appendHistory(order.id, "pago", "Pagamento aprovado");
         status = "pago";
       }
     } catch (e) {
@@ -163,7 +157,7 @@ async function handleOrderSummary(data: any, userId: string) {
 
 async function handlePix(data: any, userId: string) {
   const supabaseAdmin = createSupabaseAdmin();
-  const { order, group, totalValue } = await getOrderGroup(data.orderId, userId);
+  const { order, totalValue } = await getOrder(data.orderId, userId);
   if (order.asaas_payment_id) {
     const qr = await asaas(`/payments/${order.asaas_payment_id}/pixQrCode`);
     return {
@@ -190,7 +184,8 @@ async function handlePix(data: any, userId: string) {
     }),
   });
   const qr = await asaas(`/payments/${payment.id}/pixQrCode`);
-  await supabaseAdmin.from("orders").update({ asaas_payment_id: payment.id }).in("id", group.map((item) => item.id));
+  await supabaseAdmin.from("orders").update({ asaas_payment_id: payment.id }).eq("id", order.id);
+  await appendHistory(order.id, "aguardando_pagamento", "Cobrança PIX gerada");
   return {
     qrCodeBase64: qr.encodedImage as string,
     payload: qr.payload as string,
@@ -202,7 +197,7 @@ async function handlePix(data: any, userId: string) {
 
 async function handleCard(data: any, userId: string) {
   const supabaseAdmin = createSupabaseAdmin();
-  const { order, group, totalValue } = await getOrderGroup(data.orderId, userId);
+  const { order, totalValue } = await getOrder(data.orderId, userId);
   const profile = await getProfile(userId);
   const customerId = await getOrCreateCustomer(profile);
   const installmentCount = Math.max(1, Math.min(12, Math.floor(data.installmentCount || 1)));
@@ -241,7 +236,8 @@ async function handleCard(data: any, userId: string) {
   await supabaseAdmin
     .from("orders")
     .update({ asaas_payment_id: payment.id, ...(isPaid ? { status: "pago" } : {}) })
-    .in("id", group.map((item) => item.id));
+    .eq("id", order.id);
+  await appendHistory(order.id, isPaid ? "pago" : "aguardando_pagamento", isPaid ? "Pagamento aprovado no cartão" : "Cobrança no cartão criada");
   return { paymentId: payment.id as string, status: payment.status as string, paid: isPaid, installmentCount, value: totalValue };
 }
 

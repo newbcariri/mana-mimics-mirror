@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, Lock, User as UserIcon } from "lucide-react";
+import { Mail, Lock, User as UserIcon, MapPin, CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/conta")({
   component: AccountPage,
@@ -20,7 +20,13 @@ const signupSchema = z.object({
   cpf: z.string().refine(v => onlyDigits(v).length === 11, "CPF deve ter 11 dígitos"),
   phone: z.string().refine(v => onlyDigits(v).length >= 10, "Telefone inválido"),
   cep: z.string().refine(v => onlyDigits(v).length === 8, "CEP deve ter 8 dígitos"),
-  password: z.string().min(8, "A senha deve ter ao menos 8 caracteres").max(72),
+  number: z.string().trim().min(1, "Informe o número da residência"),
+  complement: z.string().optional(),
+  street: z.string().optional(),
+  neighborhood: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  password: z.string().min(6, "A senha deve ter ao menos 6 caracteres").max(72),
 });
 
 const loginSchema = z.object({
@@ -32,7 +38,21 @@ function AccountPage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "", cpf: "", phone: "", cep: "", password: "" });
+  const [cepLoading, setCepLoading] = useState(false);
+  const [form, setForm] = useState({
+    full_name: "",
+    email: "",
+    cpf: "",
+    phone: "",
+    cep: "",
+    number: "",
+    complement: "",
+    street: "",
+    neighborhood: "",
+    city: "",
+    state: "",
+    password: "",
+  });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -41,6 +61,27 @@ function AccountPage() {
   }, [navigate]);
 
   const update = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
+
+  const lookupCep = async (rawCep: string) => {
+    const cep = onlyDigits(rawCep);
+    if (cep.length !== 8) return;
+    setCepLoading(true);
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await res.json();
+      if (data.erro) { toast.error("CEP não encontrado"); return; }
+      setForm(f => ({
+        ...f,
+        street: data.logradouro || "",
+        neighborhood: data.bairro || "",
+        city: data.localidade || "",
+        state: data.uf || "",
+      }));
+    } catch { toast.error("Erro ao buscar CEP"); }
+    finally { setCepLoading(false); }
+  };
+
+  useEffect(() => { if (onlyDigits(form.cep).length === 8) lookupCep(form.cep); }, [form.cep]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +103,13 @@ function AccountPage() {
             cpf: onlyDigits(data.cpf),
             phone: onlyDigits(data.phone),
             cep: onlyDigits(data.cep),
-          });
+            street: data.street || null,
+            number: data.number,
+            complement: data.complement || null,
+            neighborhood: data.neighborhood || null,
+            city: data.city || null,
+            state: data.state || null,
+          } as any);
           if (pErr) throw pErr;
         }
         toast.success("Conta criada com sucesso!");
@@ -107,9 +154,25 @@ function AccountPage() {
                 <Field placeholder="CPF" value={form.cpf} onChange={v => update("cpf", v)} />
                 <Field placeholder="Telefone (com DDD)" value={form.phone} onChange={v => update("phone", v)} />
                 <Field placeholder="CEP de entrega" value={form.cep} onChange={v => update("cep", v)} />
+                {cepLoading && <p className="text-xs text-muted-foreground">Buscando endereço...</p>}
+                {form.street && (
+                  <div className="bg-success/10 border border-success/20 rounded-md p-3 text-sm flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-success mt-0.5 shrink-0" />
+                    <div>
+                      <div className="font-medium">{form.street}</div>
+                      <div className="text-muted-foreground text-xs">{form.neighborhood} — {form.city}/{form.state}</div>
+                    </div>
+                  </div>
+                )}
+                <div className="grid grid-cols-3 gap-2">
+                  <Field placeholder="Número" value={form.number} onChange={v => update("number", v)} />
+                  <div className="col-span-2">
+                    <Field placeholder="Complemento (opcional)" value={form.complement} onChange={v => update("complement", v)} />
+                  </div>
+                </div>
               </>
             )}
-            <Field icon={Lock} type="password" placeholder="Senha" value={form.password} onChange={v => update("password", v)} />
+            <Field icon={Lock} type="password" placeholder="Senha (mínimo 6 caracteres)" value={form.password} onChange={v => update("password", v)} />
 
             <button disabled={loading} type="submit" className="w-full h-12 bg-primary text-primary-foreground rounded-md font-bold hover:bg-primary/90 disabled:opacity-50">
               {loading ? "Processando..." : mode === "login" ? "ENTRAR" : "CRIAR CONTA"}
