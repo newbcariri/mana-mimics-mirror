@@ -27,7 +27,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "facebook-domain-verification", content: "mddjhghutdw3grx0vmakeky01xhtc9" },
+      { name: "facebook-domain-verification", content: "hibnvy385jscn0sa5pyii4nmpmavf9" },
       { title: "FlexFit Store | Conjunto Fitness Premium que Modela o Corpo (Poliamida)" },
       { name: "description", content: "Conjunto fitness premium em poliamida que modela o corpo. Alta compressão, proteção UV 50+, tecnologia Dry. A partir de R$ 59,90 no PIX." },
       { name: "author", content: "FlexFit Store" },
