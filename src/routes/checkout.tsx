@@ -385,7 +385,7 @@ function CheckoutPage() {
                       )}
                     </>
                   )}
-                  <Field icon={Lock} type="password" placeholder="Senha" value={form.password} onChange={v => update("password", v)} valid={form.password.length >= 8} />
+                  <Field icon={Lock} type="password" placeholder="Senha (mínimo 6 caracteres)" value={form.password} onChange={v => update("password", v)} valid={form.password.length >= 6} />
                   <button disabled={authLoading} type="submit" className="w-full h-12 bg-primary text-primary-foreground rounded-md font-bold hover:bg-primary/90 disabled:opacity-50 transition">
                     {authLoading ? "Processando..." : authMode === "signup" ? "CONTINUAR" : "ENTRAR E CONTINUAR"}
                   </button>
