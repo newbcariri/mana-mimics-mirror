@@ -267,19 +267,57 @@ function ProductPage() {
             </div>
           </div>
 
+          {/* Offer selector — combo */}
+          <div>
+            <div className="text-sm font-bold uppercase tracking-wide mb-2">Escolha sua oferta</div>
+            <div className="grid sm:grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setQty(1)}
+                className={`text-left rounded-lg border-2 p-3 transition-all ${qty < 2 ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:border-foreground/30"}`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-sm">1 unidade</span>
+                  <span className="text-xs text-muted-foreground">{formatBRL(PRODUCT.priceOriginal)}</span>
+                </div>
+                <div className="text-lg font-extrabold text-primary mt-0.5">{formatBRL(PRODUCT.pricePix)}</div>
+                <div className="text-[11px] text-muted-foreground">no PIX · economize 50%</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setQty(2)}
+                className={`relative text-left rounded-lg border-2 p-3 transition-all ${qty >= 2 ? "border-success bg-success/10 ring-2 ring-success/30" : "border-success/40 hover:border-success"}`}
+              >
+                <span className="absolute -top-2 right-2 bg-success text-success-foreground text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">Melhor oferta</span>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-sm">2 unidades</span>
+                  <span className="text-xs text-muted-foreground line-through">{formatBRL(PRODUCT.pricePix * 2)}</span>
+                </div>
+                <div className="text-lg font-extrabold text-success mt-0.5">{formatBRL(109)}</div>
+                <div className="text-[11px] text-success font-semibold">R$ 54,50 cada · 🚚 Frete grátis</div>
+              </button>
+            </div>
+          </div>
+
           {/* Trust signals - above buy button */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
             {[
               { icon: "🔒", label: "Compra 100% segura" },
+              { icon: "💳", label: "Pix ou cartão" },
               { icon: "🚚", label: "Envio com rastreio" },
               { icon: "🔁", label: "Troca garantida" },
-              { icon: "🇧🇷", label: "Entrega Brasil" },
             ].map(t => (
               <div key={t.label} className="flex items-center gap-1.5 p-2 bg-muted/60 rounded-md">
                 <span className="text-base leading-none">{t.icon}</span>
                 <span className="text-[11px] font-semibold leading-tight">{t.label}</span>
               </div>
             ))}
+          </div>
+
+          {/* Live scarcity */}
+          <div className="flex flex-wrap gap-2 text-[11px]">
+            <span className="inline-flex items-center gap-1 bg-destructive/10 text-destructive font-semibold px-2.5 py-1 rounded-full">🔥 47 vendidos hoje</span>
+            <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-700 dark:text-yellow-500 font-semibold px-2.5 py-1 rounded-full">📦 Estoque limitado para envio imediato</span>
           </div>
 
           {/* Qty + Buy */}
