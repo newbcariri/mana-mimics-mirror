@@ -493,6 +493,28 @@ function ProductPage() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="max-w-4xl mx-auto px-4 mt-20">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">Perguntas frequentes</h2>
+        <div className="space-y-3">
+          {[
+            { q: "O conjunto fica transparente?", a: "Não. O tecido em poliamida de alta gramatura tem cobertura total e foi testado para garantir zero transparência, mesmo em movimentos como agachamento." },
+            { q: "Qual tamanho devo escolher?", a: "Use a tabela de medidas acima como referência (busto, cintura e quadril). Se estiver entre dois tamanhos, recomendamos o maior para mais conforto na legging." },
+            { q: "Quanto tempo demora a entrega?", a: "Enviamos em até 1 dia útil após a confirmação do pagamento. O prazo de entrega varia de 3 a 10 dias úteis conforme sua região, com código de rastreio enviado por e-mail." },
+            { q: "Posso trocar se não servir?", a: "Sim. Você tem 7 dias após o recebimento para solicitar troca de tamanho ou devolução, conforme o Código de Defesa do Consumidor." },
+            { q: "Como faço o pagamento?", a: "Aceitamos PIX (com aprovação imediata) e cartão de crédito em até 12x sem juros. Toda a compra é 100% segura e criptografada." },
+          ].map((f, i) => (
+            <details key={i} className="group rounded-xl border border-border bg-muted/30 hover:bg-muted/50 transition-colors">
+              <summary className="cursor-pointer list-none flex items-center justify-between gap-3 p-4 font-semibold">
+                <span>{f.q}</span>
+                <Plus className="w-4 h-4 shrink-0 transition-transform group-open:rotate-45" />
+              </summary>
+              <p className="px-4 pb-4 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       {lightbox && (
         <div
           className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 animate-in fade-in"
