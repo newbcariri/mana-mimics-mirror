@@ -522,7 +522,7 @@ function ProductPage() {
           onClick={handleBuy}
           className="flex-1 h-12 bg-success text-success-foreground rounded-md font-bold text-sm hover:bg-success/90 transition-colors shadow-md"
         >
-          COMPRAR AGORA 🔒
+          🛒 Garantir meu conjunto
         </button>
       </div>
     </div>
