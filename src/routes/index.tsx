@@ -163,8 +163,22 @@ function ProductPage() {
             <span className="text-muted-foreground">•</span>
             <a href="#avaliacoes" className="text-primary hover:underline">Faça uma avaliação</a>
           </div>
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tight">{PRODUCT.name}</h1>
-          <p className="text-base text-muted-foreground -mt-2">Compressão alta · Zero transparência · Seca rápido. <strong className="text-foreground">Veste como uma segunda pele.</strong></p>
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight leading-tight">Conjunto fitness que modela o corpo e não marca</h1>
+          <p className="text-base text-muted-foreground -mt-1">Conforto, ajuste perfeito e <strong className="text-foreground">zero transparência</strong> — veste como uma segunda pele.</p>
+          <div className="text-xs text-muted-foreground -mt-1">{PRODUCT.name}</div>
+
+          {/* Proof badges */}
+          <div className="grid grid-cols-3 gap-2 text-[11px] sm:text-xs">
+            <div className="flex items-center gap-1.5 bg-success/10 text-success font-semibold px-2 py-1.5 rounded-md">
+              <Check className="w-3.5 h-3.5 shrink-0" /> +1.000 pedidos enviados
+            </div>
+            <div className="flex items-center gap-1.5 bg-success/10 text-success font-semibold px-2 py-1.5 rounded-md">
+              <Check className="w-3.5 h-3.5 shrink-0" /> Clientes em todo o Brasil
+            </div>
+            <div className="flex items-center gap-1.5 bg-success/10 text-success font-semibold px-2 py-1.5 rounded-md">
+              <Check className="w-3.5 h-3.5 shrink-0" /> 98% recomendam
+            </div>
+          </div>
 
           {/* Stock urgency */}
           <div className="flex flex-wrap gap-2 text-xs">
