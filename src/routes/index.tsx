@@ -163,8 +163,22 @@ function ProductPage() {
             <span className="text-muted-foreground">•</span>
             <a href="#avaliacoes" className="text-primary hover:underline">Faça uma avaliação</a>
           </div>
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tight">{PRODUCT.name}</h1>
-          <p className="text-base text-muted-foreground -mt-2">Compressão alta · Zero transparência · Seca rápido. <strong className="text-foreground">Veste como uma segunda pele.</strong></p>
+          <h1 className="text-2xl md:text-4xl font-bold tracking-tight leading-tight">Conjunto fitness que modela o corpo e não marca</h1>
+          <p className="text-base text-muted-foreground -mt-1">Conforto, ajuste perfeito e <strong className="text-foreground">zero transparência</strong> — veste como uma segunda pele.</p>
+          <div className="text-xs text-muted-foreground -mt-1">{PRODUCT.name}</div>
+
+          {/* Proof badges */}
+          <div className="grid grid-cols-3 gap-2 text-[11px] sm:text-xs">
+            <div className="flex items-center gap-1.5 bg-success/10 text-success font-semibold px-2 py-1.5 rounded-md">
+              <Check className="w-3.5 h-3.5 shrink-0" /> +1.000 pedidos enviados
+            </div>
+            <div className="flex items-center gap-1.5 bg-success/10 text-success font-semibold px-2 py-1.5 rounded-md">
+              <Check className="w-3.5 h-3.5 shrink-0" /> Clientes em todo o Brasil
+            </div>
+            <div className="flex items-center gap-1.5 bg-success/10 text-success font-semibold px-2 py-1.5 rounded-md">
+              <Check className="w-3.5 h-3.5 shrink-0" /> 98% recomendam
+            </div>
+          </div>
 
           {/* Stock urgency */}
           <div className="flex flex-wrap gap-2 text-xs">
@@ -253,19 +267,57 @@ function ProductPage() {
             </div>
           </div>
 
+          {/* Offer selector — combo */}
+          <div>
+            <div className="text-sm font-bold uppercase tracking-wide mb-2">Escolha sua oferta</div>
+            <div className="grid sm:grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setQty(1)}
+                className={`text-left rounded-lg border-2 p-3 transition-all ${qty < 2 ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:border-foreground/30"}`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-sm">1 unidade</span>
+                  <span className="text-xs text-muted-foreground">{formatBRL(PRODUCT.priceOriginal)}</span>
+                </div>
+                <div className="text-lg font-extrabold text-primary mt-0.5">{formatBRL(PRODUCT.pricePix)}</div>
+                <div className="text-[11px] text-muted-foreground">no PIX · economize 50%</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setQty(2)}
+                className={`relative text-left rounded-lg border-2 p-3 transition-all ${qty >= 2 ? "border-success bg-success/10 ring-2 ring-success/30" : "border-success/40 hover:border-success"}`}
+              >
+                <span className="absolute -top-2 right-2 bg-success text-success-foreground text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">Melhor oferta</span>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-sm">2 unidades</span>
+                  <span className="text-xs text-muted-foreground line-through">{formatBRL(PRODUCT.pricePix * 2)}</span>
+                </div>
+                <div className="text-lg font-extrabold text-success mt-0.5">{formatBRL(109)}</div>
+                <div className="text-[11px] text-success font-semibold">R$ 54,50 cada · 🚚 Frete grátis</div>
+              </button>
+            </div>
+          </div>
+
           {/* Trust signals - above buy button */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
             {[
               { icon: "🔒", label: "Compra 100% segura" },
+              { icon: "💳", label: "Pix ou cartão" },
               { icon: "🚚", label: "Envio com rastreio" },
               { icon: "🔁", label: "Troca garantida" },
-              { icon: "🇧🇷", label: "Entrega Brasil" },
             ].map(t => (
               <div key={t.label} className="flex items-center gap-1.5 p-2 bg-muted/60 rounded-md">
                 <span className="text-base leading-none">{t.icon}</span>
                 <span className="text-[11px] font-semibold leading-tight">{t.label}</span>
               </div>
             ))}
+          </div>
+
+          {/* Live scarcity */}
+          <div className="flex flex-wrap gap-2 text-[11px]">
+            <span className="inline-flex items-center gap-1 bg-destructive/10 text-destructive font-semibold px-2.5 py-1 rounded-full">🔥 47 vendidos hoje</span>
+            <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-700 dark:text-yellow-500 font-semibold px-2.5 py-1 rounded-full">📦 Estoque limitado para envio imediato</span>
           </div>
 
           {/* Qty + Buy */}
@@ -441,6 +493,28 @@ function ProductPage() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="max-w-4xl mx-auto px-4 mt-20">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">Perguntas frequentes</h2>
+        <div className="space-y-3">
+          {[
+            { q: "O conjunto fica transparente?", a: "Não. O tecido em poliamida de alta gramatura tem cobertura total e foi testado para garantir zero transparência, mesmo em movimentos como agachamento." },
+            { q: "Qual tamanho devo escolher?", a: "Use a tabela de medidas acima como referência (busto, cintura e quadril). Se estiver entre dois tamanhos, recomendamos o maior para mais conforto na legging." },
+            { q: "Quanto tempo demora a entrega?", a: "Enviamos em até 1 dia útil após a confirmação do pagamento. O prazo de entrega varia de 3 a 10 dias úteis conforme sua região, com código de rastreio enviado por e-mail." },
+            { q: "Posso trocar se não servir?", a: "Sim. Você tem 7 dias após o recebimento para solicitar troca de tamanho ou devolução, conforme o Código de Defesa do Consumidor." },
+            { q: "Como faço o pagamento?", a: "Aceitamos PIX (com aprovação imediata) e cartão de crédito em até 12x sem juros. Toda a compra é 100% segura e criptografada." },
+          ].map((f, i) => (
+            <details key={i} className="group rounded-xl border border-border bg-muted/30 hover:bg-muted/50 transition-colors">
+              <summary className="cursor-pointer list-none flex items-center justify-between gap-3 p-4 font-semibold">
+                <span>{f.q}</span>
+                <Plus className="w-4 h-4 shrink-0 transition-transform group-open:rotate-45" />
+              </summary>
+              <p className="px-4 pb-4 text-sm text-muted-foreground leading-relaxed">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       {lightbox && (
         <div
           className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 animate-in fade-in"
@@ -470,7 +544,7 @@ function ProductPage() {
           onClick={handleBuy}
           className="flex-1 h-12 bg-success text-success-foreground rounded-md font-bold text-sm hover:bg-success/90 transition-colors shadow-md"
         >
-          COMPRAR AGORA 🔒
+          🛒 Garantir meu conjunto
         </button>
       </div>
     </div>
