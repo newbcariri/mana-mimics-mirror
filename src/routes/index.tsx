@@ -117,13 +117,13 @@ function ProductPage() {
           ];
           const current = media[activeImg] ?? media[0];
           return (
-        <div className="grid grid-cols-[80px_1fr] gap-3">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col-reverse lg:grid lg:grid-cols-[80px_1fr] gap-2 lg:gap-3">
+          <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible">
             {media.map((m, i) => (
               <button
                 key={i}
                 onClick={() => setActiveImg(i)}
-                className={`relative aspect-[3/4] rounded-md overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
+                className={`relative shrink-0 w-16 lg:w-auto aspect-[3/4] rounded-md overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
               >
                 <img
                   src={m.poster ?? m.src}
