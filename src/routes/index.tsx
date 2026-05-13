@@ -248,14 +248,20 @@ function ProductPage() {
       </section>
 
       {/* ANTES x DEPOIS */}
-      <section className="max-w-6xl mx-auto px-4 mt-16">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center">Veja a diferença</h2>
-        <p className="text-center text-muted-foreground mt-2 max-w-xl mx-auto">
-          Embalagens abertas estragam em horas. Com a Mini Seladora, seus alimentos duram dias a mais.
-        </p>
-        <div className="mt-6 rounded-2xl overflow-hidden border border-border">
-          <img src={antesDepois} alt="Antes e depois" className="w-full h-auto" />
+      <section className="max-w-5xl mx-auto px-2 sm:px-4 mt-16">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center px-2">
+          Veja a diferença em segundos
+        </h2>
+        <div className="mt-5 rounded-2xl overflow-hidden shadow-xl">
+          <img
+            src={antesDepois}
+            alt="Comparação antes e depois usando a Mini Seladora"
+            className="w-full h-auto block"
+          />
         </div>
+        <p className="text-center text-muted-foreground mt-4 max-w-xl mx-auto px-4 text-sm sm:text-base">
+          Feche suas embalagens e evite desperdício com praticidade.
+        </p>
       </section>
 
       {/* BENEFÍCIOS */}
