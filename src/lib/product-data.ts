@@ -1,126 +1,48 @@
+import seladoraHero from "@/assets/seladora-hero.jpg";
+import seladoraUso from "@/assets/seladora-uso.jpg";
+import dispenserHero from "@/assets/dispenser-hero.jpg";
+import comboKit from "@/assets/combo-kit.jpg";
+
 export const PRODUCT = {
-  name: "Conjunto Fitness Premium em Poliamida",
-  brand: "FlexFit Brasil",
-  rating: 4.9,
-  reviewCount: 740,
-  priceOriginal: 119.90,
-  pricePix: 59.90,
-  priceCard: 62.90,
-  installments: { count: 12, value: 5.24 },
-  pixDiscount: 50,
-  comboPrice: 109.90,
-  cashback: 5.99,
-  images: [
-    "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/5903/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-  ],
+  name: "Mini Seladora Portátil",
+  brand: "Casa Resolve",
+  rating: 4.8,
+  reviewCount: 1024,
+  priceOriginal: 89.90,
+  pricePix: 49.90,
+  priceCard: 49.90,
+  installments: { count: 3, value: 16.63 },
+  pixDiscount: 44,
+  freeShipping: true,
+  images: [seladoraHero, seladoraUso, comboKit],
+  // Mantido para compatibilidade do carrinho/checkout (1 variante)
   colors: [
     {
-      name: "Marrom Escuro", hex: "#4d3527",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/5903/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/400x533/filters:fill(white)",
+      name: "Padrão",
+      hex: "#8FCB3A",
+      img: seladoraHero,
       current: true,
-      gallery: [
-        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/5903/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6045/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6043/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-      ],
-    },
-    {
-      name: "Marrom", hex: "#8b5a3c",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6042/conjunto-basico-poliamida-marrom-claro.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: [
-        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6042/conjunto-basico-poliamida-marrom-claro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6045/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6043/conjunto-basico-poliamida-marrom-escuro.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-      ],
-    },
-    {
-      name: "Vermelho", hex: "#E63946",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6034/conjunto-basico-poliamida-vermelho.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: [
-        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6034/conjunto-basico-poliamida-vermelho.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6031/conjunto-basico-poliamida-vermelho.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-        "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6033/conjunto-basico-poliamida-vermelho.jpg?ims=fit-in/1500x2000/filters:fill(white)",
-      ],
-    },
-    {
-      name: "Preto", hex: "#1a1a1a",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6029/conjunto-basico-poliamida-preto.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6029/conjunto-basico-poliamida-preto.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
-    },
-    {
-      name: "Verde Claro", hex: "#b8c9a8",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6035/conjunto-basico-poliamida-verde-claro.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6035/conjunto-basico-poliamida-verde-claro.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
-    },
-    {
-      name: "Marinho", hex: "#1f2a44",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6051/conjunto-basico-poliamida-azul-marinho.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6051/conjunto-basico-poliamida-azul-marinho.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
-    },
-    {
-      name: "Roxo", hex: "#5b1d3a",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6056/conjunto-basico-poliamida-roxo.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6056/conjunto-basico-poliamida-roxo.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
-    },
-    {
-      name: "Off White", hex: "#ece5d8",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6050/conjunto-basico-poliamida-off-white.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6050/conjunto-basico-poliamida-off-white.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
-    },
-    {
-      name: "Rosa", hex: "#e83e8c",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6127/conjunto-basico-poliamida-rosa.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6127/conjunto-basico-poliamida-rosa.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
-    },
-    {
-      name: "Azul Claro", hex: "#a8c8e0",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6134/conjunto-basico-poliamida-azul-claro.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6134/conjunto-basico-poliamida-azul-claro.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
-    },
-    {
-      name: "Cinza", hex: "#8a8a8a",
-      img: "https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6131/conjunto-basico-poliamida-cinza.jpg?ims=fit-in/400x533/filters:fill(white)",
-      gallery: ["https://manalinda.cdn.magazord.com.br/img/2025/09/produto/6131/conjunto-basico-poliamida-cinza.jpg?ims=fit-in/1500x2000/filters:fill(white)"],
+      gallery: [seladoraHero, seladoraUso, comboKit],
     },
   ],
-  sizes: ["P", "M", "G", "GG"],
-  features: [
-    { title: "Zero Transparência", desc: "Malha com tecnologia que garante alta cobertura." },
-    { title: "Proteção UV 50+", desc: "Bloqueia até 90% dos raios UVA e UVB." },
-    { title: "Tecnologia Dry", desc: "Facilita a evaporação do suor e regula a temperatura." },
-    { title: "Alta Compressão", desc: "Pressão uniforme que protege e firma a musculatura." },
-  ],
-  specs: [
-    ["Composição", "84% Poliamida / 16% Elastano"],
-    ["Tamanho da Modelo", "Veste P na legging e M no top"],
-    ["Cor", "Marrom Escuro"],
-    ["Coleção", "Essential"],
-    ["Material", "Poliamida"],
-    ["Bojo", "Sem Bojo"],
-  ],
-  sizeChart: [
-    { size: "P", bust: "82-86", waist: "62-66", hip: "88-92" },
-    { size: "M", bust: "87-91", waist: "67-71", hip: "93-97" },
-    { size: "G", bust: "92-96", waist: "72-76", hip: "98-102" },
-    { size: "GG", bust: "97-101", waist: "77-81", hip: "103-107" },
-  ],
+  sizes: ["Único"],
 };
 
-export const REVIEWS = [
-  { name: "Mariana S.", rating: 5, date: "25/04/2026", title: "Apaixonada!", text: "Tecido encorpado, não marca nada e a cor é linda mesmo. Já comprei outras 3 cores!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/04/25/b28b37f0b026adb35924b248a0225ff7.jpg?ims=fit-in/600x600" },
-  { name: "Juliana R.", rating: 5, date: "25/04/2026", title: "Vale cada centavo", text: "Compressão perfeita pra musculação. Não escorrega e seca super rápido. Recomendo!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/04/25/3cd9c7cf428ab986a66dfb4beb7ac318.jpg?ims=fit-in/600x600" },
-  { name: "Camila P.", rating: 5, date: "16/04/2026", title: "Melhor conjunto fitness", text: "Vibrante, costuras impecáveis. Veste muito bem o tamanho M.", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/04/16/a797b45eef3a6d7a1f084250e977b477.jpg?ims=fit-in/600x600" },
-  { name: "Renata M.", rating: 5, date: "08/04/2026", title: "Muito bom", text: "Adorei o caimento, o tecido é maravilhoso e veste super bem.", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/04/08/4ca5312f2c80551a648ad40eae043d60.jpg?ims=fit-in/600x600" },
-  { name: "Patrícia D.", rating: 5, date: "31/03/2026", title: "Top demais!", text: "Treino há 5 anos e esse é de longe o melhor conjunto que já tive.", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/03/31/0fb222210fdca673101971dc476ce5dd.jpg?ims=fit-in/600x600" },
-  { name: "Larissa F.", rating: 5, date: "26/03/2026", title: "Amei!", text: "Chegou rapidinho, qualidade impecável. Já é meu segundo pedido.", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/03/26/cf814f909c0cf4c8a748805828ee09f6.jpg?ims=fit-in/600x600" },
-  { name: "Aline T.", rating: 5, date: "25/03/2026", title: "Maravilhoso", text: "Modelagem perfeita, marca a cintura sem apertar. Recomendo demais!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/03/25/0ef81d2e8404c0cfa9a6d906c551cc8f.jpg?ims=fit-in/600x600" },
-  { name: "Fernanda C.", rating: 5, date: "07/03/2026", title: "Sensacional", text: "Tecido grosso, não marca celulite e fica lindo no corpo.", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2026/03/07/31ce0eb3b991eb00791f75f46e5af686.jpeg?ims=fit-in/600x600" },
-  { name: "Vanessa O.", rating: 5, date: "05/10/2025", title: "Qualidade top", text: "Comprei o preto e amei tanto que pedi mais 2 cores. Vale muito a pena!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2025/10/05/ac6f5c6fc7889ee726ef41895a8b6a8c.jpg?ims=fit-in/600x600" },
-  { name: "Tatiane B.", rating: 5, date: "05/10/2025", title: "Conjunto perfeito", text: "Muito confortável, uso pra treinar e pro dia a dia. Super indico!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2025/10/05/5ffa8a57ba20e46f73fef0e872ac5281.jpg?ims=fit-in/600x600" },
-  { name: "Gabriela N.", rating: 5, date: "13/08/2025", title: "Surpreendente", text: "Não esperava uma qualidade tão boa pelo preço. Já é meu favorito!", photo: "https://manalinda.cdn.magazord.com.br/avaliacao_anexo/2025/08/13/aaf23142a33375d69a4f30094e9e1f77.jpg?ims=fit-in/600x600" },
-  { name: "Bianca R.", rating: 5, date: "02/05/2026", title: "Recomendo muito", text: "Comprei meio receosa pelo preço, mas a qualidade me surpreendeu. Tecido firme, costura impecável e veste super bem." },
-  { name: "Sabrina M.", rating: 5, date: "28/04/2026", title: "Vale o investimento", text: "Já lavei várias vezes e continua igual ao primeiro dia. Não desbota e não desfia. Excelente custo-benefício!" },
-  { name: "Eduarda C.", rating: 5, date: "20/04/2026", title: "Confortável demais", text: "Uso até pra dormir de tão confortável. A modelagem valoriza muito o corpo, fiquei apaixonada." },
-  { name: "Helena S.", rating: 5, date: "12/04/2026", title: "Atendimento e produto top", text: "Entrega rápida, embalagem caprichada e o produto é de altíssima qualidade. Já indiquei pra todas as amigas." },
-];
+export const UPSELL = {
+  name: "Dispenser de Papel Filme",
+  price: 19.90,
+  image: dispenserHero,
+  description: "Use junto com a seladora e conserve seus alimentos por muito mais tempo.",
+};
 
+export const COMBO_IMAGE = comboKit;
+export const ANTES_DEPOIS = "/src/assets/antes-depois.jpg";
+
+export const REVIEWS = [
+  { name: "Mariana S.", rating: 5, date: "02/05/2026", title: "Resolveu meu problema na cozinha", text: "Produto muito prático, uso todos os dias para fechar pacotes de café, biscoito e snacks. Vale cada centavo!" },
+  { name: "Juliana R.", rating: 5, date: "28/04/2026", title: "Pequena e poderosa", text: "Cabe na palma da mão, sela tudo em segundos. Acabou o desperdício de comida em casa." },
+  { name: "Camila P.", rating: 5, date: "20/04/2026", title: "Genial", text: "Não acredito que vivi sem isso até hoje. Sela qualquer embalagem rapidinho." },
+  { name: "Renata M.", rating: 5, date: "15/04/2026", title: "Recomendo", text: "Chegou rápido, super fácil de usar. Já indiquei pra minha mãe e minhas amigas." },
+  { name: "Patrícia D.", rating: 4, date: "10/04/2026", title: "Muito bom", text: "Funciona muito bem. Só precisa pegar o jeito da pressão correta." },
+  { name: "Larissa F.", rating: 5, date: "05/04/2026", title: "Top!", text: "Resolveu o problema de sacos abertos na despensa. Agora tudo fica fresco." },
+];

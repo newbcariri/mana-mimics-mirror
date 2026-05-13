@@ -84,10 +84,12 @@ export function SiteHeader() {
       </div>
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
         <Link to="/" className="flex items-center gap-2 shrink-0">
-          <div className="font-display font-extrabold text-xl sm:text-2xl tracking-tight">
-            <span className="text-primary">FLEX</span>FIT
+          <div className="flex flex-col leading-none">
+            <span className="font-display font-extrabold text-xl sm:text-2xl tracking-tight">
+              <span className="text-primary">Casa</span> Resolve
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mt-0.5">online</span>
           </div>
-          <span className="hidden sm:block text-[9px] uppercase tracking-[0.2em] text-muted-foreground border-l border-border pl-2">Brasil<br/>Fitness Wear</span>
         </Link>
         <div className="flex items-center gap-4 ml-auto">
           {authed ? (

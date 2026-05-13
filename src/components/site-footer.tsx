@@ -6,10 +6,10 @@ export function SiteFooter() {
       <div className="border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
           {[
-            { icon: Truck, title: "Frete Grátis", desc: "Acima de R$199,90 para todo Brasil" },
+            { icon: Truck, title: "Frete Grátis", desc: "Para todo o Brasil" },
             { icon: ShieldCheck, title: "Compra Segura", desc: "Site 100% protegido com SSL" },
-            { icon: CreditCard, title: "Até 12x sem juros", desc: "No cartão de crédito" },
-            { icon: Lock, title: "Troca Garantida", desc: "30 dias para trocar sua peça" },
+            { icon: CreditCard, title: "Pix e Cartão", desc: "Pagamento facilitado" },
+            { icon: Lock, title: "Garantia", desc: "7 dias para troca ou devolução" },
           ].map(b => (
             <div key={b.title} className="flex items-center gap-3">
               <b.icon className="w-8 h-8 text-primary shrink-0" />
@@ -22,7 +22,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="py-6 text-center text-xs text-background/50">
-        © 2026 FlexFit Brasil — Todos os direitos reservados.
+        © 2026 Casa Resolve — casaresolveonline.com.br · Todos os direitos reservados.
       </div>
     </footer>
   );
