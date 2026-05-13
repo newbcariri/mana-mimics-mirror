@@ -40,6 +40,7 @@ function ProductPage() {
   const [activeImg, setActiveImg] = useState(0);
   const [withUpsell, setWithUpsell] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [showDispenserVideo, setShowDispenserVideo] = useState(false);
 
   const media: Array<{ type: "video" | "image"; src: string }> = [
     { type: "video", src: seladoraVideo },
