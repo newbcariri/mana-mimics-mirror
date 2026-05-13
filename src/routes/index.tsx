@@ -248,12 +248,12 @@ function ProductPage() {
             </label>
           </div>
 
-          {/* Buy button */}
+          {/* Buy button (secondary — main CTA is the sticky bar on mobile) */}
           <button
             onClick={handleBuy}
-            className="w-full h-14 bg-primary text-primary-foreground rounded-xl text-base sm:text-lg font-extrabold uppercase tracking-wide shadow-lg hover:bg-primary/90 active:scale-[0.99] transition-all"
+            className="w-full h-12 bg-background text-primary border-2 border-primary rounded-xl text-sm sm:text-base font-bold uppercase tracking-wide hover:bg-primary/5 active:scale-[0.99] transition-all"
           >
-            🛒 Quero minha seladora agora
+            Adicionar ao carrinho
           </button>
 
           {/* Trust */}
