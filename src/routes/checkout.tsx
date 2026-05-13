@@ -303,12 +303,12 @@ function CheckoutPage() {
     } finally { setPlacing(false); }
   };
 
-  if (checking) return <div className="min-h-screen bg-background"><SiteHeader /><div className="text-center py-20 text-muted-foreground">Carregando...</div></div>;
+  if (checking) return <div className="min-h-screen overflow-x-hidden bg-background"><SiteHeader /><div className="px-4 pt-8 pb-20 text-center text-muted-foreground">Carregando...</div></div>;
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-background"><SiteHeader />
-        <div className="max-w-md mx-auto py-20 text-center">
+      <div className="min-h-screen overflow-x-hidden bg-background"><SiteHeader />
+        <div className="max-w-md mx-auto px-4 pt-8 pb-20 text-center">
           <p className="text-muted-foreground mb-4">Seu carrinho está vazio</p>
           <Link to="/" className="bg-primary text-primary-foreground px-5 py-2 rounded-md text-sm font-semibold">Voltar à loja</Link>
         </div>
@@ -320,40 +320,40 @@ function CheckoutPage() {
   const isAuthed = !!userId && !!profile;
 
   return (
-    <div className="min-h-screen bg-background pb-24 lg:pb-0">
+    <div className="min-h-screen overflow-x-hidden bg-background pb-32 lg:pb-0">
       <SiteHeader />
 
       {/* Social proof bar */}
       <div className="bg-muted/40 border-b border-border">
-        <div className="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[11px] sm:text-xs">
-          <span className="flex items-center gap-1 font-semibold">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-5 gap-y-1.5 text-[11px] sm:text-xs">
+          <span className="hidden sm:flex items-center gap-1 font-semibold">
             <span className="flex">
               {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}
             </span>
             <span className="ml-1">4.8/5</span>
             <span className="text-muted-foreground font-normal">(2.143 avaliações)</span>
           </span>
-          <span className="flex items-center gap-1 text-muted-foreground"><Package className="w-3.5 h-3.5 text-success" /> <strong className="text-foreground">+3.000</strong> pedidos entregues</span>
-          <span className="flex items-center gap-1 text-muted-foreground"><Truck className="w-3.5 h-3.5 text-success" /> Frete grátis acima de R$ 199</span>
-          <span className="flex items-center gap-1 text-muted-foreground"><ShieldCheck className="w-3.5 h-3.5 text-success" /> Compra 100% segura</span>
+          <span className="flex items-center gap-1 text-muted-foreground whitespace-nowrap"><Package className="w-3.5 h-3.5 text-success" /> <strong className="text-foreground">+3.000</strong> entregues</span>
+          <span className="hidden min-[380px]:flex items-center gap-1 text-muted-foreground whitespace-nowrap"><Truck className="w-3.5 h-3.5 text-success" /> Frete grátis</span>
+          <span className="flex items-center gap-1 text-muted-foreground whitespace-nowrap"><ShieldCheck className="w-3.5 h-3.5 text-success" /> Compra 100% segura</span>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 pt-8 pb-6 lg:pt-10 lg:pb-10">
-        <h1 className="text-2xl lg:text-3xl font-bold mb-1 mt-2">Finalizar compra</h1>
-        <p className="text-xs lg:text-sm text-muted-foreground mb-6 flex items-center gap-2">
-          <Lock className="w-4 h-4 text-success" /> Pagamento protegido · SSL 256-bit · Dados criptografados
+      <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 pt-6 pb-6 lg:pt-10 lg:pb-10">
+        <h1 className="text-2xl lg:text-3xl font-bold mb-1 mt-3 leading-tight">Finalizar compra</h1>
+        <p className="text-xs lg:text-sm text-muted-foreground mb-5 flex flex-wrap items-center gap-x-2 gap-y-1">
+          <Lock className="w-4 h-4 text-success shrink-0" /> <span>Pagamento protegido</span><span>·</span><span>Dados criptografados</span>
         </p>
 
-        <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8">
+        <div className="grid min-w-0 lg:grid-cols-[minmax(0,1fr)_400px] gap-5 lg:gap-8">
           {/* LEFT */}
-          <div className="space-y-5">
+          <div className="min-w-0 space-y-4 lg:space-y-5">
             {!isAuthed ? (
-              <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
+              <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
                 <h2 className="font-bold mb-4 flex items-center gap-2"><UserIcon className="w-5 h-5 text-primary" />Identificação</h2>
                 <div className="flex bg-muted rounded-lg p-1 mb-5">
-                  <button type="button" onClick={() => setAuthMode("signup")} className={`flex-1 py-2 rounded-md text-sm font-semibold transition ${authMode === "signup" ? "bg-background shadow" : "text-muted-foreground"}`}>Sou novo cliente</button>
-                  <button type="button" onClick={() => setAuthMode("login")} className={`flex-1 py-2 rounded-md text-sm font-semibold transition ${authMode === "login" ? "bg-background shadow" : "text-muted-foreground"}`}>Já tenho conta</button>
+                  <button type="button" onClick={() => setAuthMode("signup")} className={`flex-1 min-w-0 px-2 py-2 rounded-md text-xs sm:text-sm font-semibold transition ${authMode === "signup" ? "bg-background shadow" : "text-muted-foreground"}`}>Sou novo cliente</button>
+                  <button type="button" onClick={() => setAuthMode("login")} className={`flex-1 min-w-0 px-2 py-2 rounded-md text-xs sm:text-sm font-semibold transition ${authMode === "login" ? "bg-background shadow" : "text-muted-foreground"}`}>Já tenho conta</button>
                 </div>
                 <form onSubmit={handleAuth} className="space-y-3">
                   {authMode === "signup" && (
@@ -380,7 +380,7 @@ function CheckoutPage() {
               </section>
             ) : (
               <>
-                <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
+                <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="font-bold flex items-center gap-2"><CheckCircle2 className="w-5 h-5 text-success" />Seus dados</h2>
                     <span className="text-[11px] text-success font-semibold uppercase tracking-wide">Confirmado</span>
@@ -393,21 +393,21 @@ function CheckoutPage() {
                   </div>
                 </section>
 
-                <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
+                <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
                   <h2 className="font-bold mb-4">Endereço de entrega</h2>
                   {cepLoading && <p className="text-xs text-muted-foreground mb-2">Buscando endereço pelo CEP...</p>}
                   {cepData && (
-                    <div className="bg-success/10 border border-success/20 rounded-md p-3 mb-3 text-sm flex items-start gap-2">
+                    <div className="bg-success/10 border border-success/20 rounded-md p-3 mb-3 text-sm flex items-start gap-2 min-w-0">
                       <CheckCircle2 className="w-4 h-4 text-success mt-0.5 shrink-0" />
-                      <div>
+                      <div className="min-w-0">
                         <div className="font-medium">{cepData.logradouro}</div>
                         <div className="text-muted-foreground text-xs">{cepData.bairro} — {cepData.localidade}/{cepData.uf}</div>
                       </div>
                     </div>
                   )}
-                  <div className="grid grid-cols-3 gap-3 mb-3">
-                    <input value={number} onChange={e => setNumber(e.target.value)} placeholder="Número" className="h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
-                    <input value={complement} onChange={e => setComplement(e.target.value)} placeholder="Complemento (opcional)" className="col-span-2 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                    <input value={number} onChange={e => setNumber(e.target.value)} placeholder="Número" className="w-full min-w-0 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                    <input value={complement} onChange={e => setComplement(e.target.value)} placeholder="Complemento (opcional)" className="w-full min-w-0 sm:col-span-2 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                   </div>
                   {(!profile?.cpf || onlyDigits(profile.cpf).length !== 11) && (
                     <div className="mt-3">
@@ -426,11 +426,11 @@ function CheckoutPage() {
                   )}
                 </section>
 
-                <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
+                <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
                   <h2 className="font-bold mb-4 flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary" />Forma de pagamento</h2>
 
                   {/* Method selector — card style */}
-                  <div className="grid grid-cols-2 gap-3 mb-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
                     <button
                       type="button"
                       onClick={() => setPayment("pix")}
@@ -448,9 +448,9 @@ function CheckoutPage() {
                       onClick={() => setPayment("cartao")}
                       className={`relative p-4 rounded-lg border-2 text-left transition ${payment === "cartao" ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:border-primary/40"}`}
                     >
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1 min-w-0">
                         <CreditCard className="w-5 h-5 text-primary" />
-                        <span className="font-bold text-sm">Cartão de Crédito</span>
+                        <span className="font-bold text-sm min-w-0">Cartão de Crédito</span>
                         {payment === "cartao" && <CheckCircle2 className="w-4 h-4 text-primary ml-auto" />}
                       </div>
                       <p className="text-[11px] text-muted-foreground">Em até 12x sem juros</p>
@@ -490,17 +490,17 @@ function CheckoutPage() {
                 </section>
 
                 {/* Trust badges */}
-                <section className="grid grid-cols-3 gap-3 text-center">
-                  <TrustBadge icon={ShieldCheck} title="Compra Segura" subtitle="Garantia total" />
-                  <TrustBadge icon={Lock} title="SSL Seguro" subtitle="Criptografia 256-bit" />
-                  <TrustBadge icon={BadgeCheck} title="Dados Protegidos" subtitle="LGPD compliance" />
+                <section className="grid grid-cols-1 min-[380px]:grid-cols-3 gap-2 sm:gap-3 text-center">
+                  <TrustBadge icon={ShieldCheck} title="Compra 100% segura" subtitle="" />
+                  <TrustBadge icon={Lock} title="Pagamento protegido" subtitle="" />
+                  <TrustBadge icon={BadgeCheck} title="Dados criptografados" subtitle="" />
                 </section>
               </>
             )}
           </div>
 
           {/* RIGHT — sticky summary */}
-          <aside className="bg-card border border-border rounded-xl p-5 lg:p-6 h-fit lg:sticky lg:top-24 space-y-4 shadow-sm">
+          <aside className="w-full max-w-full min-w-0 bg-card border border-border rounded-xl p-4 lg:p-6 h-fit lg:sticky lg:top-24 space-y-4 shadow-sm">
             <h2 className="font-bold flex items-center justify-between">
               Resumo do pedido
               <span className="text-[11px] text-success font-semibold flex items-center gap-1"><Lock className="w-3 h-3" /> Compra segura</span>
@@ -525,12 +525,12 @@ function CheckoutPage() {
             {/* Coupon */}
             <div className="border-t border-border pt-3">
               <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1 mb-2"><Tag className="w-3 h-3" /> Cupom de desconto</label>
-              <div className="flex gap-2">
-                <input value={coupon} onChange={e => setCoupon(e.target.value.toUpperCase())} placeholder="DIGITE O CUPOM" className="flex-1 h-10 px-3 border border-border rounded-md text-sm outline-none focus:border-primary uppercase" disabled={!!couponApplied} />
+              <div className="flex gap-2 min-w-0">
+                <input value={coupon} onChange={e => setCoupon(e.target.value.toUpperCase())} placeholder="DIGITE O CUPOM" className="min-w-0 flex-1 h-10 px-3 border border-border rounded-md text-sm outline-none focus:border-primary uppercase" disabled={!!couponApplied} />
                 {couponApplied ? (
-                  <button onClick={() => { setCouponApplied(null); setCoupon(""); }} className="px-3 h-10 text-xs font-semibold text-destructive border border-border rounded-md hover:bg-muted">Remover</button>
+                  <button onClick={() => { setCouponApplied(null); setCoupon(""); }} className="shrink-0 px-3 h-10 text-xs font-semibold text-destructive border border-border rounded-md hover:bg-muted">Remover</button>
                 ) : (
-                  <button onClick={applyCoupon} className="px-4 h-10 text-xs font-bold text-primary border border-primary rounded-md hover:bg-primary/5">APLICAR</button>
+                  <button onClick={applyCoupon} className="shrink-0 px-3 sm:px-4 h-10 text-xs font-bold text-primary border border-primary rounded-md hover:bg-primary/5">APLICAR</button>
                 )}
               </div>
               {couponApplied && (
@@ -576,12 +576,12 @@ function CheckoutPage() {
 
       {/* Mobile sticky CTA */}
       {isAuthed && (
-        <div className="fixed lg:hidden bottom-0 left-0 right-0 bg-card border-t border-border p-3 z-40 shadow-2xl">
+        <div className="fixed lg:hidden bottom-0 left-0 right-0 bg-card border-t border-border p-3 z-40 shadow-2xl pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
           <div className="flex items-center justify-between mb-2 text-sm">
             <span className="text-muted-foreground">Total</span>
             <span className="text-xl font-bold text-primary">{brl(total)}</span>
           </div>
-          <button onClick={placeOrder} disabled={placing} className="w-full h-12 bg-success text-success-foreground rounded-md font-bold hover:bg-success/90 disabled:opacity-50 flex items-center justify-center gap-2">
+          <button onClick={placeOrder} disabled={placing} className="w-full min-h-12 h-12 bg-success text-success-foreground rounded-md font-bold hover:bg-success/90 disabled:opacity-50 flex items-center justify-center gap-2 text-base shadow-md">
             {placing ? "Processando..." : <>Finalizar Compra <Lock className="w-4 h-4" /></>}
           </button>
         </div>
@@ -603,10 +603,10 @@ function Info({ label, value }: { label: string; value?: string }) {
 
 function TrustBadge({ icon: Icon, title, subtitle }: { icon: any; title: string; subtitle: string }) {
   return (
-    <div className="border border-border rounded-lg p-3 bg-card">
+    <div className="border border-border rounded-lg p-2.5 sm:p-3 bg-card">
       <Icon className="w-5 h-5 text-success mx-auto mb-1" />
-      <div className="text-[11px] font-bold">{title}</div>
-      <div className="text-[10px] text-muted-foreground">{subtitle}</div>
+      <div className="text-[11px] font-bold leading-tight">{title}</div>
+      {subtitle && <div className="text-[10px] text-muted-foreground">{subtitle}</div>}
     </div>
   );
 }
@@ -621,7 +621,7 @@ function Field({ icon: Icon, type = "text", placeholder, value, onChange, valid 
         placeholder={placeholder}
         value={value}
         onChange={e => onChange(e.target.value)}
-        className={`w-full h-12 ${Icon ? "pl-10" : "pl-4"} ${showCheck ? "pr-10" : "pr-4"} border rounded-md text-sm outline-none focus:ring-2 focus:ring-primary/20 transition ${showCheck ? "border-success" : "border-border focus:border-primary"}`}
+        className={`w-full min-w-0 h-12 ${Icon ? "pl-10" : "pl-4"} ${showCheck ? "pr-10" : "pr-4"} border rounded-md text-sm outline-none focus:ring-2 focus:ring-primary/20 transition ${showCheck ? "border-success" : "border-border focus:border-primary"}`}
       />
       {showCheck && <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-success" />}
     </div>

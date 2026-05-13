@@ -65,10 +65,13 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 bg-background border-b border-border">
       <div className="bg-foreground text-background">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-3 sm:gap-4 text-center">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-center gap-2 sm:gap-4 text-center">
           <Clock className="w-4 h-4 shrink-0 text-primary" />
-          <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wide">Promoção termina em</span>
-          <div className="flex items-center gap-1.5 sm:gap-2" suppressHydrationWarning>
+          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide whitespace-nowrap">
+            <span className="sm:hidden">Promo termina em</span>
+            <span className="hidden sm:inline">Promoção termina em</span>
+          </span>
+          <div className="flex items-center gap-1 sm:gap-2" suppressHydrationWarning>
             {mounted ? (
               <>
                 <CountdownBox value={days} label="dias" />

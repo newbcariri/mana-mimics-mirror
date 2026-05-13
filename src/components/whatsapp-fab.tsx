@@ -1,11 +1,16 @@
+import { useLocation } from "@tanstack/react-router";
+
 export function WhatsAppFab() {
+  const location = useLocation();
+  const isCheckout = location.pathname === "/checkout";
+
   return (
     <a
       href="https://wa.me/5581995724886"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Falar no WhatsApp"
-      className="fixed bottom-28 right-3 lg:bottom-5 lg:right-5 z-[60] flex items-center justify-center w-12 h-12 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform"
+      className={`fixed right-3 lg:bottom-5 lg:right-5 z-[60] items-center justify-center w-12 h-12 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform ${isCheckout ? "hidden lg:flex" : "bottom-28 flex"}`}
       style={{
         backgroundColor: "#25D366",
         boxShadow: "0 6px 20px rgba(37, 211, 102, 0.45)",
