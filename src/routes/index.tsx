@@ -561,19 +561,88 @@ function ProductPage() {
         </div>
       </section>
 
-      {lightbox && (
+      {secondOpen && (
         <div
-          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 animate-in fade-in"
-          onClick={() => setLightbox(null)}
+          className="fixed inset-0 z-[100] bg-black/60 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in"
+          onClick={() => setSecondOpen(false)}
         >
-          <button
-            onClick={() => setLightbox(null)}
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
-            aria-label="Fechar"
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-background w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto"
           >
-            <X className="w-5 h-5" />
-          </button>
-          <img src={lightbox} alt="Foto da avaliação" className="max-w-full max-h-full rounded-lg shadow-2xl" />
+            <div className="sticky top-0 bg-background border-b border-border px-4 py-3 flex items-center justify-between">
+              <div>
+                <div className="text-[11px] font-bold text-success uppercase tracking-wider">2ª unidade</div>
+                <div className="font-bold text-base">Escolha a cor da segunda unidade</div>
+              </div>
+              <button
+                onClick={() => setSecondOpen(false)}
+                aria-label="Fechar"
+                className="w-9 h-9 rounded-full hover:bg-muted flex items-center justify-center"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-4 space-y-5">
+              <div>
+                <div className="text-sm font-semibold mb-2">
+                  Cor: <span className="text-muted-foreground font-normal">{PRODUCT.colors[secondColor].name}</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {PRODUCT.colors.map((c, i) => (
+                    <button
+                      key={c.name}
+                      onClick={() => setSecondColor(i)}
+                      title={c.name}
+                      aria-label={`Cor ${c.name}`}
+                      className={`w-12 h-16 rounded-md overflow-hidden border-2 transition-all ${secondColor === i ? "border-primary ring-2 ring-primary/30" : "border-border hover:border-foreground/30"}`}
+                    >
+                      <img src={c.img} alt={c.name} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Top</div>
+                  <div className="flex gap-1.5 flex-wrap">
+                    {PRODUCT.sizes.map(s => (
+                      <button
+                        key={s}
+                        onClick={() => setSecondTopSize(s)}
+                        className={`w-11 h-11 rounded-md border text-sm font-semibold transition-all ${secondTopSize === s ? "bg-foreground text-background border-foreground" : "border-border bg-background hover:border-foreground"}`}
+                      >{s}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Legging</div>
+                  <div className="flex gap-1.5 flex-wrap">
+                    {PRODUCT.sizes.map(s => (
+                      <button
+                        key={s}
+                        onClick={() => setSecondLegSize(s)}
+                        className={`w-11 h-11 rounded-md border text-sm font-semibold transition-all ${secondLegSize === s ? "bg-foreground text-background border-foreground" : "border-border bg-background hover:border-foreground"}`}
+                      >{s}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-success/10 text-success text-xs font-semibold rounded-md px-3 py-2 text-center">
+                🚚 Frete grátis · 2 conjuntos por {formatBRL(109)}
+              </div>
+
+              <button
+                onClick={confirmSecondUnit}
+                className="w-full h-12 bg-success text-success-foreground rounded-md font-extrabold text-sm hover:bg-success/90 active:scale-[0.98] transition-all shadow-md ring-2 ring-success/30"
+              >
+                ✅ Confirmar e ir para o checkout
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
