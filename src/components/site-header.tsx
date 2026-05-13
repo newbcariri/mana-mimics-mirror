@@ -3,7 +3,7 @@ import { User, ShoppingBag, Package, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useCart } from "@/lib/cart-store";
 import { supabase } from "@/integrations/supabase/client";
-import logo from "@/assets/logo-casa-resolve.png";
+
 
 // Promo deadline: 1 day and 17 hours from the moment the user first loads the site (persisted)
 function getPromoDeadline() {
@@ -84,9 +84,9 @@ export function SiteHeader() {
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 py-2 sm:py-3 flex items-center gap-4">
-        <Link to="/" className="flex flex-col items-center shrink-0 leading-none mx-auto sm:mx-0">
-          <img src={logo} alt="Casa Resolve" className="h-12 sm:h-14 w-auto object-contain" />
-          <span className="text-[9px] uppercase tracking-[0.3em] text-muted-foreground -mt-1">online</span>
+        <Link to="/" className="flex flex-col items-start shrink-0 leading-none">
+          <span className="text-xl sm:text-2xl font-bold tracking-tight">Casa Resolve</span>
+          <span className="text-[9px] uppercase tracking-[0.3em] text-muted-foreground mt-0.5">online</span>
         </Link>
         <div className="flex items-center gap-4 ml-auto">
           {authed ? (
