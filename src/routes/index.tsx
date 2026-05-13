@@ -201,14 +201,15 @@ function ProductPage() {
             <div className="px-4 pt-4 pb-1 font-extrabold text-sm sm:text-base">
               🔥 Evite desperdício de verdade com o kit completo
             </div>
-            <label className="block cursor-pointer px-4 pb-4">
-              <div className="flex gap-3 items-center">
-                <button
-                  type="button"
-                  onClick={e => { e.preventDefault(); setShowDispenserVideo(true); }}
-                  className="relative w-20 h-20 rounded-lg overflow-hidden bg-muted shrink-0 group"
-                  aria-label="Ver como funciona o dispenser"
-                >
+            <div className="px-4 pb-4">
+              {/* ÁREA 2 — clique aqui abre o vídeo, NÃO mexe no checkbox */}
+              <button
+                type="button"
+                onClick={() => setShowDispenserVideo(true)}
+                className="w-full text-left flex gap-3 items-center group"
+                aria-label="Ver vídeo do dispenser"
+              >
+                <span className="relative w-20 h-20 rounded-lg overflow-hidden bg-muted shrink-0 block">
                   <img src={UPSELL.image} alt="Dispenser de papel filme" className="w-full h-full object-cover" />
                   <span className="absolute inset-0 bg-black/35 flex items-center justify-center group-hover:bg-black/50 transition">
                     <Play className="w-6 h-6 text-white fill-white" />
@@ -216,36 +217,38 @@ function ProductPage() {
                   <span className="absolute bottom-0 inset-x-0 bg-black/70 text-white text-[9px] font-bold text-center py-0.5">
                     Ver vídeo
                   </span>
-                </button>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs sm:text-sm text-foreground/80 leading-snug">
+                </span>
+                <span className="flex-1 min-w-0 block">
+                  <span className="block text-xs sm:text-sm text-foreground/80 leading-snug">
                     Use a <strong>seladora + dispenser</strong> e conserve seus alimentos por muito mais tempo.
-                  </p>
-                  <div className="mt-2 flex items-baseline gap-2 flex-wrap">
+                  </span>
+                  <span className="mt-2 flex items-baseline gap-2 flex-wrap">
                     <span className="text-xs text-muted-foreground line-through">De {formatBRL(PRODUCT.priceOriginal + UPSELL.price)}</span>
                     <span className="text-lg font-extrabold text-primary">Por {formatBRL(PRODUCT.pricePix + UPSELL.price)}</span>
-                  </div>
-                  <div className="text-[11px] text-muted-foreground">
+                  </span>
+                  <span className="block text-[11px] text-muted-foreground">
                     Seladora {formatBRL(PRODUCT.pricePix)} + Dispenser {formatBRL(UPSELL.price)}
-                  </div>
-                </div>
-              </div>
-              <div
-                className={`mt-3 flex items-center gap-3 rounded-xl border-2 px-3 py-2.5 transition ${
-                  withUpsell ? "border-primary bg-primary/10" : "border-dashed border-primary/50 bg-background"
+                  </span>
+                </span>
+              </button>
+
+              {/* ÁREA 1 — clique em qualquer lugar marca/desmarca o checkbox */}
+              <label
+                className={`mt-3 flex items-center gap-3 rounded-xl border-2 px-3 py-3 cursor-pointer select-none transition active:scale-[0.99] ${
+                  withUpsell ? "border-primary bg-primary/10" : "border-dashed border-primary/50 bg-background hover:bg-primary/5"
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={withUpsell}
                   onChange={e => setWithUpsell(e.target.checked)}
-                  className="w-5 h-5 accent-[oklch(0.62_0.18_145)] shrink-0"
+                  className="w-5 h-5 accent-[oklch(0.62_0.18_145)] shrink-0 cursor-pointer"
                 />
                 <span className="text-sm font-bold flex-1">
                   {withUpsell ? "✔ Kit completo selecionado" : `Adicionar dispenser por +${formatBRL(UPSELL.price)}`}
                 </span>
-              </div>
-            </label>
+              </label>
+            </div>
           </div>
 
           {/* Buy button (secondary — main CTA is the sticky bar on mobile) */}
