@@ -377,9 +377,9 @@ function ProductPage() {
         <p className="text-muted-foreground mt-2">Mais de 1.000 lares já resolveram o problema do desperdício.</p>
         <button
           onClick={handleBuy}
-          className="mt-6 inline-flex items-center justify-center h-14 px-8 bg-primary text-primary-foreground rounded-xl text-base font-extrabold uppercase tracking-wide shadow-lg hover:bg-primary/90"
+          className="mt-6 inline-flex items-center justify-center h-12 px-8 bg-background text-primary border-2 border-primary rounded-xl text-sm font-bold uppercase tracking-wide hover:bg-primary/5"
         >
-          🛒 Quero minha seladora — {formatBRL(total)}
+          Adicionar ao carrinho — {formatBRL(total)}
         </button>
         <div className="text-xs text-muted-foreground mt-3">🚚 Frete grátis · 🔒 Compra 100% segura</div>
       </section>
