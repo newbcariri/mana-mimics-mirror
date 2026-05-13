@@ -323,14 +323,6 @@ function CheckoutPage() {
     <div className="min-h-screen bg-background pb-24 lg:pb-0">
       <SiteHeader />
 
-      {/* Urgency bar */}
-      <div className="bg-primary text-primary-foreground">
-        <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold">
-          <Clock className="w-4 h-4" />
-          Promoção termina em <span className="font-mono tabular-nums bg-white/15 px-2 py-0.5 rounded">{promoTime}</span>
-        </div>
-      </div>
-
       {/* Social proof bar */}
       <div className="bg-muted/40 border-b border-border">
         <div className="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[11px] sm:text-xs">
@@ -347,8 +339,8 @@ function CheckoutPage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-6 lg:py-10">
-        <h1 className="text-2xl lg:text-3xl font-bold mb-1">Finalizar compra</h1>
+      <div className="max-w-6xl mx-auto px-4 pt-8 pb-6 lg:pt-10 lg:pb-10">
+        <h1 className="text-2xl lg:text-3xl font-bold mb-1 mt-2">Finalizar compra</h1>
         <p className="text-xs lg:text-sm text-muted-foreground mb-6 flex items-center gap-2">
           <Lock className="w-4 h-4 text-success" /> Pagamento protegido · SSL 256-bit · Dados criptografados
         </p>
