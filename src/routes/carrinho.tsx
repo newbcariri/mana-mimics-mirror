@@ -74,11 +74,11 @@ function CartPage() {
               <div className="text-sm font-bold">✔ Kit completo selecionado</div>
             </div>
           ) : (
-            <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/5 p-4 flex items-center gap-3">
+            <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/5 p-4 flex flex-col sm:flex-row sm:items-center gap-3">
               <button
                 type="button"
                 onClick={() => setShowDispenserVideo(true)}
-                className="relative w-16 h-16 rounded-lg overflow-hidden bg-muted shrink-0 group"
+                className="relative w-16 h-16 rounded-lg overflow-hidden bg-muted shrink-0 group self-start"
                 aria-label="Ver como funciona o dispenser"
               >
                 <img src={UPSELL.image} alt={UPSELL.name} className="w-full h-full object-cover" />
@@ -92,9 +92,9 @@ function CartPage() {
               </div>
               <button
                 onClick={addUpsell}
-                className="shrink-0 bg-primary text-primary-foreground rounded-lg px-3 py-2 text-xs font-extrabold whitespace-nowrap hover:bg-primary/90"
+                className="shrink-0 w-full sm:w-auto h-12 bg-primary text-primary-foreground rounded-xl px-5 text-sm font-extrabold whitespace-nowrap hover:bg-primary/90 active:scale-[0.99] shadow-md ring-2 ring-primary/20 inline-flex items-center justify-center gap-2"
               >
-                + {brl(UPSELL.price)}
+                <Plus className="w-4 h-4" /> Adicionar ao pedido +{brl(UPSELL.price)}
               </button>
             </div>
           );
