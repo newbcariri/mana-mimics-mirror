@@ -1,8 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck, Check } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
+import { UPSELL } from "@/lib/product-data";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/carrinho")({
   component: CartPage,
@@ -47,6 +49,42 @@ function CartPage() {
           <Truck className="w-6 h-6 text-primary shrink-0" />
           <div className="text-sm font-semibold">Frete grátis garantido para todo o Brasil 🚚</div>
         </div>
+
+        {(() => {
+          const hasUpsell = items.some(i => i.productName === UPSELL.name);
+          const addUpsell = () => {
+            cart.add({
+              productName: UPSELL.name,
+              color: "Padrão",
+              topSize: "-",
+              legSize: "-",
+              quantity: 1,
+              unitPrice: UPSELL.price,
+              image: UPSELL.image,
+            });
+            toast.success("Dispenser adicionado ao kit!");
+          };
+          return hasUpsell ? (
+            <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/10 p-4 flex items-center gap-3">
+              <Check className="w-6 h-6 text-primary shrink-0" />
+              <div className="text-sm font-bold">✔ Kit completo selecionado</div>
+            </div>
+          ) : (
+            <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/5 p-4 flex items-center gap-3">
+              <img src={UPSELL.image} alt={UPSELL.name} className="w-16 h-16 rounded-lg object-cover bg-muted shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-extrabold">🔥 Aproveite e leve também</div>
+                <div className="text-xs text-muted-foreground">{UPSELL.name} — conserva ainda mais seus alimentos</div>
+              </div>
+              <button
+                onClick={addUpsell}
+                className="shrink-0 bg-primary text-primary-foreground rounded-lg px-3 py-2 text-xs font-extrabold whitespace-nowrap hover:bg-primary/90"
+              >
+                + {brl(UPSELL.price)}
+              </button>
+            </div>
+          );
+        })()}
 
         <div className="grid lg:grid-cols-[1fr_360px] gap-8">
           <div className="space-y-3">
