@@ -523,7 +523,7 @@ function CheckoutPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-medium truncate">{i.productName}</div>
-                    <div className="text-xs text-muted-foreground">{i.color} · T:{i.topSize}/L:{i.legSize}</div>
+                    <div className="text-xs text-muted-foreground">Qtd: {i.quantity}</div>
                   </div>
                   <div className="font-semibold whitespace-nowrap">{brl(i.unitPrice * i.quantity)}</div>
                 </div>
