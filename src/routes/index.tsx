@@ -87,7 +87,7 @@ function ProductPage() {
       <SiteHeader />
 
       {/* Social proof bar */}
-      <div className="bg-muted/40 border-b border-border">
+      <div className="hidden sm:block bg-muted/40 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-2 text-xs sm:text-sm">
           <span className="text-yellow-500">⭐⭐⭐⭐⭐</span>
           <span className="font-semibold">4.8/5</span>
@@ -117,13 +117,13 @@ function ProductPage() {
           ];
           const current = media[activeImg] ?? media[0];
           return (
-        <div className="grid grid-cols-[80px_1fr] gap-3">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col-reverse lg:grid lg:grid-cols-[80px_1fr] gap-2 lg:gap-3">
+          <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible">
             {media.map((m, i) => (
               <button
                 key={i}
                 onClick={() => setActiveImg(i)}
-                className={`relative aspect-[3/4] rounded-md overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
+                className={`relative shrink-0 w-16 lg:w-auto aspect-[3/4] rounded-md overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
               >
                 <img
                   src={m.poster ?? m.src}
@@ -156,19 +156,22 @@ function ProductPage() {
         })()}
 
         {/* Info */}
-        <div className="space-y-5">
-          <div className="flex items-center gap-3 text-sm">
+        <div className="flex flex-col gap-4 lg:gap-0 lg:block lg:space-y-5">
+          {/* Rating */}
+          <div className="order-1 lg:order-none flex items-center gap-2 lg:gap-3 text-sm flex-wrap">
             <Stars value={PRODUCT.rating} />
+            <span className="font-semibold">{PRODUCT.rating}/5</span>
             <span className="text-muted-foreground">({PRODUCT.reviewCount}) avaliações</span>
-            <span className="text-muted-foreground">•</span>
-            <a href="#avaliacoes" className="text-primary hover:underline">Faça uma avaliação</a>
+            <a href="#avaliacoes" className="hidden sm:inline text-primary hover:underline">Faça uma avaliação</a>
           </div>
-          <h1 className="text-2xl md:text-4xl font-bold tracking-tight leading-tight">Conjunto fitness que modela o corpo e não marca</h1>
-          <p className="text-base text-muted-foreground -mt-1">Conforto, ajuste perfeito e <strong className="text-foreground">zero transparência</strong> — veste como uma segunda pele.</p>
-          <div className="text-xs text-muted-foreground -mt-1">{PRODUCT.name}</div>
 
-          {/* Proof badges */}
-          <div className="grid grid-cols-3 gap-2 text-[11px] sm:text-xs">
+          {/* H1 — smaller on mobile */}
+          <h1 className="order-2 lg:order-none text-lg sm:text-2xl md:text-4xl font-bold tracking-tight leading-tight">Conjunto fitness que modela o corpo e não marca</h1>
+          <p className="order-3 lg:order-none hidden sm:block text-base text-muted-foreground -mt-1">Conforto, ajuste perfeito e <strong className="text-foreground">zero transparência</strong> — veste como uma segunda pele.</p>
+          <div className="order-12 lg:order-none text-xs text-muted-foreground -mt-1">{PRODUCT.name}</div>
+
+          {/* Proof badges — pushed below buy on mobile */}
+          <div className="order-11 lg:order-none grid grid-cols-3 gap-2 text-[10px] sm:text-xs">
             <div className="flex items-center gap-1.5 bg-success/10 text-success font-semibold px-2 py-1.5 rounded-md">
               <Check className="w-3.5 h-3.5 shrink-0" /> +1.000 pedidos enviados
             </div>
@@ -180,21 +183,21 @@ function ProductPage() {
             </div>
           </div>
 
-          {/* Stock urgency */}
-          <div className="flex flex-wrap gap-2 text-xs">
+          {/* Stock urgency — desktop in place; on mobile pushed down */}
+          <div className="order-13 lg:order-none flex flex-wrap gap-2 text-xs">
             <span className="inline-flex items-center gap-1 bg-destructive/10 text-destructive font-semibold px-2.5 py-1 rounded-full">⚠️ Estoque limitado</span>
             <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-700 dark:text-yellow-500 font-semibold px-2.5 py-1 rounded-full">⏰ Promoção por tempo limitado</span>
           </div>
 
-          {/* Price */}
-          <div className="bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/30 rounded-xl p-5 space-y-2 shadow-sm">
+          {/* Price — high priority on mobile */}
+          <div className="order-4 lg:order-none bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/30 rounded-xl p-3.5 sm:p-5 space-y-1.5 sm:space-y-2 shadow-sm">
             <div className="flex items-baseline gap-3 flex-wrap">
               <span className="text-sm text-muted-foreground line-through">De {formatBRL(PRODUCT.priceOriginal)}</span>
               <span className="bg-primary text-primary-foreground text-xs font-bold px-2 py-1 rounded">-{PRODUCT.pixDiscount}%</span>
             </div>
             <div className="flex items-baseline gap-2 flex-wrap">
               <span className="text-base font-bold text-destructive">🔥 HOJE por</span>
-              <span className="text-4xl md:text-5xl font-extrabold text-primary leading-none">{formatBRL(PRODUCT.pricePix)}</span>
+              <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-primary leading-none">{formatBRL(PRODUCT.pricePix)}</span>
               <span className="inline-flex items-center justify-center px-2 h-6 rounded bg-pix text-white font-bold text-[10px]">PIX</span>
             </div>
             <div className="text-sm text-foreground/80 pt-2 border-t border-primary/20">
@@ -209,7 +212,7 @@ function ProductPage() {
           </div>
 
           {/* Color picker */}
-          <div>
+          <div className="order-5 lg:order-none">
             <div className="text-sm font-semibold mb-2">Cor: <span className="text-muted-foreground font-normal">{PRODUCT.colors[selectedColor].name}</span></div>
             <div className="flex flex-wrap gap-2">
               {PRODUCT.colors.map((c, i) => (
@@ -217,6 +220,7 @@ function ProductPage() {
                   key={c.name}
                   onClick={() => { setSelectedColor(i); setActiveImg(0); }}
                   title={c.name}
+                  aria-label={`Cor ${c.name}`}
                   className={`w-12 h-16 rounded-md overflow-hidden border-2 transition-all ${selectedColor === i ? "border-primary ring-2 ring-primary/30" : "border-border hover:border-foreground/30"}`}
                 >
                   <img src={c.img} alt={c.name} className="w-full h-full object-cover" />
@@ -226,7 +230,7 @@ function ProductPage() {
           </div>
 
           {/* Sizes */}
-          <div className="border-2 border-dashed border-border rounded-lg p-4 bg-muted/30">
+          <div className="order-6 lg:order-none border-2 border-dashed border-border rounded-lg p-3 sm:p-4 bg-muted/30">
             <div className="flex items-center justify-between mb-3">
               <div className="text-sm font-bold uppercase tracking-wide">
                 Selecione o tamanho <span className="text-primary">*</span>
@@ -235,42 +239,40 @@ function ProductPage() {
                 Tabela de medidas
               </a>
             </div>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-2 gap-3 sm:gap-5">
               <div>
-                <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Tamanho do Top</div>
-                <div className="flex gap-2 flex-wrap">
+                <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Top</div>
+                <div className="flex gap-1.5 sm:gap-2 flex-wrap">
                   {PRODUCT.sizes.map(s => (
                     <button
                       key={s}
                       onClick={() => setTopSize(s)}
                       aria-label={`Tamanho do top ${s}`}
-                      className={`w-12 h-12 rounded-md border text-sm font-semibold transition-all ${topSize === s ? "bg-foreground text-background border-foreground" : "border-border bg-background hover:border-foreground"}`}
+                      className={`w-11 h-11 sm:w-12 sm:h-12 rounded-md border text-sm font-semibold transition-all ${topSize === s ? "bg-foreground text-background border-foreground" : "border-border bg-background hover:border-foreground"}`}
                     >{s}</button>
                   ))}
                 </div>
-                {topSize && <div className="text-[11px] text-muted-foreground mt-1.5">Selecionado: <span className="font-semibold text-foreground">{topSize}</span></div>}
               </div>
               <div>
-                <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Tamanho da Legging</div>
-                <div className="flex gap-2 flex-wrap">
+                <div className="text-xs font-semibold mb-2 text-muted-foreground uppercase">Legging</div>
+                <div className="flex gap-1.5 sm:gap-2 flex-wrap">
                   {PRODUCT.sizes.map(s => (
                     <button
                       key={s}
                       onClick={() => setLegSize(s)}
                       aria-label={`Tamanho da legging ${s}`}
-                      className={`w-12 h-12 rounded-md border text-sm font-semibold transition-all ${legSize === s ? "bg-foreground text-background border-foreground" : "border-border bg-background hover:border-foreground"}`}
+                      className={`w-11 h-11 sm:w-12 sm:h-12 rounded-md border text-sm font-semibold transition-all ${legSize === s ? "bg-foreground text-background border-foreground" : "border-border bg-background hover:border-foreground"}`}
                     >{s}</button>
                   ))}
                 </div>
-                {legSize && <div className="text-[11px] text-muted-foreground mt-1.5">Selecionado: <span className="font-semibold text-foreground">{legSize}</span></div>}
               </div>
             </div>
           </div>
 
           {/* Offer selector — combo */}
-          <div>
+          <div className="order-7 lg:order-none">
             <div className="text-sm font-bold uppercase tracking-wide mb-2">Escolha sua oferta</div>
-            <div className="grid sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setQty(1)}
@@ -299,8 +301,19 @@ function ProductPage() {
             </div>
           </div>
 
-          {/* Trust signals - above buy button */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
+          {/* Qty + Buy */}
+          <div className="order-8 lg:order-none flex gap-2 sm:gap-3 pt-2">
+            <div className="flex items-center border border-border rounded-md">
+              <button onClick={() => setQty(Math.max(1, qty - 1))} aria-label="Diminuir" className="w-10 h-14 flex items-center justify-center hover:bg-muted"><Minus className="w-4 h-4" /></button>
+              <span className="w-10 text-center font-semibold">{qty}</span>
+              <button onClick={() => setQty(qty + 1)} aria-label="Aumentar" className="w-10 h-14 flex items-center justify-center hover:bg-muted"><Plus className="w-4 h-4" /></button>
+            </div>
+            <button onClick={handleBuy} className="flex-1 h-14 bg-success text-success-foreground rounded-md font-extrabold text-sm sm:text-base hover:bg-success/90 hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-success/30 ring-2 ring-success/30">🛒 COMPRAR AGORA</button>
+            <button aria-label="Compartilhar" className="hidden sm:flex w-12 h-14 border border-border rounded-md items-center justify-center hover:bg-muted"><Share2 className="w-4 h-4" /></button>
+          </div>
+
+          {/* Trust signals — right under buy button */}
+          <div className="order-9 lg:order-none grid grid-cols-2 sm:grid-cols-4 gap-2">
             {[
               { icon: "🔒", label: "Compra 100% segura" },
               { icon: "💳", label: "Pix ou cartão" },
@@ -315,28 +328,19 @@ function ProductPage() {
           </div>
 
           {/* Live scarcity */}
-          <div className="flex flex-wrap gap-2 text-[11px]">
+          <div className="order-10 lg:order-none flex flex-wrap gap-2 text-[11px]">
             <span className="inline-flex items-center gap-1 bg-destructive/10 text-destructive font-semibold px-2.5 py-1 rounded-full">🔥 47 vendidos hoje</span>
             <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-700 dark:text-yellow-500 font-semibold px-2.5 py-1 rounded-full">📦 Estoque limitado para envio imediato</span>
           </div>
 
-          {/* Qty + Buy */}
-          <div className="flex gap-3 pt-2">
-            <div className="flex items-center border border-border rounded-md">
-              <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-14 flex items-center justify-center hover:bg-muted"><Minus className="w-4 h-4" /></button>
-              <span className="w-10 text-center font-semibold">{qty}</span>
-              <button onClick={() => setQty(qty + 1)} className="w-10 h-14 flex items-center justify-center hover:bg-muted"><Plus className="w-4 h-4" /></button>
-            </div>
-            <button onClick={handleBuy} className="flex-1 h-14 bg-success text-success-foreground rounded-md font-extrabold text-base hover:bg-success/90 hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-success/30 ring-2 ring-success/30">🛒 GARANTIR MEU CONJUNTO AGORA</button>
-            <button className="w-12 h-14 border border-border rounded-md flex items-center justify-center hover:bg-muted"><Share2 className="w-4 h-4" /></button>
-          </div>
-
-          <div className="text-center text-xs font-semibold text-destructive bg-destructive/10 rounded-md px-3 py-2">
+          <div className="order-14 lg:order-none text-center text-xs font-semibold text-destructive bg-destructive/10 rounded-md px-3 py-2">
             ⚠️ Estoque limitado — pode esgotar a qualquer momento
           </div>
 
           {/* Shipping calc */}
-          <ShippingCalc freeShipping={qty >= 2} />
+          <div className="order-15 lg:order-none">
+            <ShippingCalc freeShipping={qty >= 2} />
+          </div>
         </div>
       </section>
 
@@ -535,16 +539,16 @@ function ProductPage() {
       <SiteFooter />
 
       {/* Sticky mobile buy bar */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-background/95 backdrop-blur border-t border-border px-3 py-2.5 flex items-center gap-3 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
-        <div className="flex-1 min-w-0">
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-background/95 backdrop-blur border-t border-border px-3 py-2.5 flex items-center gap-2 shadow-[0_-4px_12px_rgba(0,0,0,0.12)]">
+        <div className="shrink-0">
           <div className="text-[10px] text-muted-foreground line-through leading-none">{formatBRL(PRODUCT.priceOriginal)}</div>
-          <div className="text-base font-bold text-primary leading-tight">{formatBRL(PRODUCT.pricePix)}<span className="text-[10px] font-normal text-muted-foreground ml-1">no PIX</span></div>
+          <div className="text-base font-bold text-primary leading-tight">{formatBRL(PRODUCT.pricePix)}<span className="text-[10px] font-normal text-muted-foreground ml-1">PIX</span></div>
         </div>
         <button
           onClick={handleBuy}
-          className="flex-1 h-12 bg-success text-success-foreground rounded-md font-bold text-sm hover:bg-success/90 transition-colors shadow-md"
+          className="flex-1 h-12 bg-success text-success-foreground rounded-md font-extrabold text-sm hover:bg-success/90 active:scale-[0.98] transition-all shadow-md ring-2 ring-success/30"
         >
-          🛒 Garantir meu conjunto
+          🛒 COMPRAR AGORA
         </button>
       </div>
     </div>
