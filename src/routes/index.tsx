@@ -198,15 +198,28 @@ function ProductPage() {
             <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
               ⭐ Melhor escolha
             </div>
-            <div className="px-4 pt-4 pb-2 font-extrabold text-sm sm:text-base flex items-center gap-2">
-              🔥 Kit Completo de Conservação
+            <div className="px-4 pt-4 pb-1 font-extrabold text-sm sm:text-base">
+              🔥 Evite desperdício de verdade com o kit completo
             </div>
             <label className="block cursor-pointer px-4 pb-4">
               <div className="flex gap-3 items-center">
-                <img src={COMBO_IMAGE} alt="Seladora + Dispenser" className="w-20 h-20 rounded-lg object-cover bg-muted shrink-0" />
+                <button
+                  type="button"
+                  onClick={e => { e.preventDefault(); setShowDispenserVideo(true); }}
+                  className="relative w-20 h-20 rounded-lg overflow-hidden bg-muted shrink-0 group"
+                  aria-label="Ver como funciona o dispenser"
+                >
+                  <img src={UPSELL.image} alt="Dispenser de papel filme" className="w-full h-full object-cover" />
+                  <span className="absolute inset-0 bg-black/35 flex items-center justify-center group-hover:bg-black/50 transition">
+                    <Play className="w-6 h-6 text-white fill-white" />
+                  </span>
+                  <span className="absolute bottom-0 inset-x-0 bg-black/70 text-white text-[9px] font-bold text-center py-0.5">
+                    Ver vídeo
+                  </span>
+                </button>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs sm:text-sm text-foreground/80 leading-snug">
-                    Use os dois juntos e <strong>conserve seus alimentos por muito mais tempo</strong>.
+                    Use a <strong>seladora + dispenser</strong> e conserve seus alimentos por muito mais tempo.
                   </p>
                   <div className="mt-2 flex items-baseline gap-2 flex-wrap">
                     <span className="text-xs text-muted-foreground line-through">De {formatBRL(PRODUCT.priceOriginal + UPSELL.price)}</span>
