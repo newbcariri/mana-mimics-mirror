@@ -161,6 +161,11 @@ function CartPage() {
         </div>
       </div>
       <SiteFooter />
+      <VideoModal
+        open={showDispenserVideo}
+        src={dispenserVideo}
+        onClose={() => setShowDispenserVideo(false)}
+      />
     </div>
   );
 }
