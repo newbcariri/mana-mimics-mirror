@@ -8,6 +8,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { fbqTrack } from "@/lib/fbq";
 import antesDepois from "@/assets/antes-depois.jpg";
+import seladoraVideo from "@/assets/seladora-demo.mp4";
 
 export const Route = createFileRoute("/")({
   component: ProductPage,
@@ -38,7 +39,10 @@ function ProductPage() {
   const [withUpsell, setWithUpsell] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  const media = PRODUCT.images;
+  const media: Array<{ type: "video" | "image"; src: string }> = [
+    { type: "video", src: seladoraVideo },
+    ...PRODUCT.images.map(src => ({ type: "image" as const, src })),
+  ];
 
   useEffect(() => {
     fbqTrack(
@@ -98,16 +102,35 @@ function ProductPage() {
             <span className="absolute top-3 left-3 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
               Mais vendido
             </span>
-            <img src={media[activeImg]} alt={PRODUCT.name} className="w-full h-full object-cover" />
+            {media[activeImg].type === "video" ? (
+              <video
+                key={media[activeImg].src}
+                src={media[activeImg].src}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover scale-[1.35] translate-y-[12%]"
+              />
+            ) : (
+              <img src={media[activeImg].src} alt={PRODUCT.name} className="w-full h-full object-cover" />
+            )}
           </div>
-          <div className="grid grid-cols-3 gap-2">
-            {media.map((src, i) => (
+          <div className="grid grid-cols-4 gap-2">
+            {media.map((m, i) => (
               <button
                 key={i}
                 onClick={() => setActiveImg(i)}
-                className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
+                className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
               >
-                <img src={src} alt="" className="w-full h-full object-cover" />
+                {m.type === "video" ? (
+                  <>
+                    <video src={m.src} muted playsInline className="absolute inset-0 w-full h-full object-cover scale-[1.35] translate-y-[12%]" />
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/30 text-white text-xl">▶</span>
+                  </>
+                ) : (
+                  <img src={m.src} alt="" className="w-full h-full object-cover" />
+                )}
               </button>
             ))}
           </div>
