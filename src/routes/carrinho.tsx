@@ -8,6 +8,11 @@ import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { UPSELL } from "@/lib/product-data";
 import { toast } from "sonner";
 import dispenserVideo from "@/assets/dispenser-demo.mp4";
+import dispenser1 from "@/assets/dispenser-1.png";
+import dispenser2 from "@/assets/dispenser-2.png";
+import dispenser3 from "@/assets/dispenser-3.png";
+
+const DISPENSER_GALLERY = [dispenser1, dispenser2, dispenser3];
 
 export const Route = createFileRoute("/carrinho")({
   component: CartPage,
