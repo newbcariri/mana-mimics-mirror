@@ -74,32 +74,61 @@ function CartPage() {
             toast.success("Dispenser adicionado ao kit!");
           };
           return hasUpsell ? (
-            <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/10 p-4 flex items-center gap-3">
-              <Check className="w-6 h-6 text-primary shrink-0" />
-              <div className="text-sm font-bold">✔ Kit completo selecionado</div>
+            <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/15 p-4 shadow-sm ring-1 ring-primary/30 transition">
+              <div className="flex items-center gap-3 mb-3">
+                <Check className="w-6 h-6 text-primary shrink-0" />
+                <div className="text-sm font-bold">✔ Kit completo selecionado</div>
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 snap-x">
+                {DISPENSER_GALLERY.map((src, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setShowDispenserVideo(true)}
+                    className="relative shrink-0 w-24 h-24 rounded-xl overflow-hidden bg-white border border-primary/40 group snap-start"
+                    aria-label="Ver como funciona o dispenser"
+                  >
+                    <img src={src} alt={`${UPSELL.name} ${idx + 1}`} className="w-full h-full object-cover" />
+                    <span className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/50 transition">
+                      <Play className="w-5 h-5 text-white fill-white" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <div className="text-[11px] text-muted-foreground mt-2 text-center">▶ Toque nas imagens para ver como funciona</div>
             </div>
           ) : (
-            <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/5 p-4 flex flex-col sm:flex-row sm:items-center gap-3">
-              <button
-                type="button"
-                onClick={() => setShowDispenserVideo(true)}
-                className="relative w-16 h-16 rounded-lg overflow-hidden bg-muted shrink-0 group self-start"
-                aria-label="Ver como funciona o dispenser"
-              >
-                <img src={UPSELL.image} alt={UPSELL.name} className="w-full h-full object-cover" />
-                <span className="absolute inset-0 bg-black/35 flex items-center justify-center group-hover:bg-black/50 transition">
-                  <Play className="w-5 h-5 text-white fill-white" />
-                </span>
-              </button>
-              <div className="flex-1 min-w-0">
+            <div className="mb-6 rounded-2xl border-2 border-border hover:border-primary bg-muted/30 hover:bg-primary/5 p-4 shadow-sm hover:shadow-md transition-all">
+              <div className="flex items-center gap-2 mb-3">
                 <div className="text-sm font-extrabold">🔥 Aproveite e leve também</div>
-                <div className="text-xs text-muted-foreground">{UPSELL.name} — conserva ainda mais seus alimentos</div>
               </div>
+              <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 snap-x mb-3">
+                {DISPENSER_GALLERY.map((src, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setShowDispenserVideo(true)}
+                    className="relative shrink-0 w-24 h-24 rounded-xl overflow-hidden bg-white border border-border group snap-start"
+                    aria-label="Ver como funciona o dispenser"
+                  >
+                    <img src={src} alt={`${UPSELL.name} ${idx + 1}`} className="w-full h-full object-cover" />
+                    <span className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/50 transition">
+                      <Play className="w-5 h-5 text-white fill-white" />
+                    </span>
+                    {idx === 0 && (
+                      <span className="absolute bottom-0 inset-x-0 bg-black/70 text-white text-[9px] font-bold text-center py-0.5">
+                        Ver vídeo
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <div className="text-xs text-muted-foreground mb-3">{UPSELL.name} — conserva ainda mais seus alimentos</div>
               <button
                 onClick={addUpsell}
-                className="shrink-0 w-full sm:w-auto h-12 bg-primary text-primary-foreground rounded-xl px-5 text-sm font-extrabold whitespace-nowrap hover:bg-primary/90 active:scale-[0.99] shadow-md ring-2 ring-primary/20 inline-flex items-center justify-center gap-2"
+                className="w-full h-12 bg-primary text-primary-foreground rounded-xl px-5 text-sm font-extrabold whitespace-nowrap hover:bg-primary/90 active:scale-[0.99] shadow-md ring-2 ring-primary/20 inline-flex items-center justify-center gap-2"
               >
-                <Plus className="w-4 h-4" /> Adicionar ao pedido +{brl(UPSELL.price)}
+                <Plus className="w-4 h-4" /> Adicionar ao pedido por +{brl(UPSELL.price)}
               </button>
             </div>
           );
