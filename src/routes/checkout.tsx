@@ -13,7 +13,7 @@ import { fbqTrack } from "@/lib/fbq";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
-  head: () => ({ meta: [{ title: "Checkout Seguro — FlexFit Brasil" }] }),
+  head: () => ({ meta: [{ title: "Checkout Seguro — Casa Resolve" }] }),
 });
 
 const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -58,14 +58,9 @@ function CheckoutPage() {
 
   const subtotalRaw = cartTotal(items);
   const totalQty = items.reduce((s, i) => s + i.quantity, 0);
-  const _unitPrices: number[] = [];
-  items.forEach(i => { for (let k = 0; k < i.quantity; k++) _unitPrices.push(i.unitPrice); });
-  _unitPrices.sort((a, b) => b - a);
-  const _pairs = Math.floor(_unitPrices.length / 2);
-  const _leftover = _unitPrices.slice(_pairs * 2).reduce((s, v) => s + v, 0);
-  const subtotal = _pairs > 0 ? _pairs * 109 + _leftover : subtotalRaw;
-  const comboActive = totalQty >= 2;
-  const shipping = comboActive ? 0 : subtotalRaw >= 199.9 ? 0 : 19.9;
+  const subtotal = subtotalRaw;
+  const comboActive = false;
+  const shipping = 0;
 
   // Coupon
   const [coupon, setCoupon] = useState("");
