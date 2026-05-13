@@ -349,11 +349,11 @@ function CheckoutPage() {
           {/* LEFT */}
           <div className="min-w-0 space-y-4 lg:space-y-5">
             {!isAuthed ? (
-              <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
+              <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
                 <h2 className="font-bold mb-4 flex items-center gap-2"><UserIcon className="w-5 h-5 text-primary" />Identificação</h2>
                 <div className="flex bg-muted rounded-lg p-1 mb-5">
-                  <button type="button" onClick={() => setAuthMode("signup")} className={`flex-1 py-2 rounded-md text-sm font-semibold transition ${authMode === "signup" ? "bg-background shadow" : "text-muted-foreground"}`}>Sou novo cliente</button>
-                  <button type="button" onClick={() => setAuthMode("login")} className={`flex-1 py-2 rounded-md text-sm font-semibold transition ${authMode === "login" ? "bg-background shadow" : "text-muted-foreground"}`}>Já tenho conta</button>
+                  <button type="button" onClick={() => setAuthMode("signup")} className={`flex-1 min-w-0 px-2 py-2 rounded-md text-xs sm:text-sm font-semibold transition ${authMode === "signup" ? "bg-background shadow" : "text-muted-foreground"}`}>Sou novo cliente</button>
+                  <button type="button" onClick={() => setAuthMode("login")} className={`flex-1 min-w-0 px-2 py-2 rounded-md text-xs sm:text-sm font-semibold transition ${authMode === "login" ? "bg-background shadow" : "text-muted-foreground"}`}>Já tenho conta</button>
                 </div>
                 <form onSubmit={handleAuth} className="space-y-3">
                   {authMode === "signup" && (
@@ -380,7 +380,7 @@ function CheckoutPage() {
               </section>
             ) : (
               <>
-                <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
+                <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="font-bold flex items-center gap-2"><CheckCircle2 className="w-5 h-5 text-success" />Seus dados</h2>
                     <span className="text-[11px] text-success font-semibold uppercase tracking-wide">Confirmado</span>
@@ -393,21 +393,21 @@ function CheckoutPage() {
                   </div>
                 </section>
 
-                <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
+                <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
                   <h2 className="font-bold mb-4">Endereço de entrega</h2>
                   {cepLoading && <p className="text-xs text-muted-foreground mb-2">Buscando endereço pelo CEP...</p>}
                   {cepData && (
-                    <div className="bg-success/10 border border-success/20 rounded-md p-3 mb-3 text-sm flex items-start gap-2">
+                    <div className="bg-success/10 border border-success/20 rounded-md p-3 mb-3 text-sm flex items-start gap-2 min-w-0">
                       <CheckCircle2 className="w-4 h-4 text-success mt-0.5 shrink-0" />
-                      <div>
+                      <div className="min-w-0">
                         <div className="font-medium">{cepData.logradouro}</div>
                         <div className="text-muted-foreground text-xs">{cepData.bairro} — {cepData.localidade}/{cepData.uf}</div>
                       </div>
                     </div>
                   )}
-                  <div className="grid grid-cols-3 gap-3 mb-3">
-                    <input value={number} onChange={e => setNumber(e.target.value)} placeholder="Número" className="h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
-                    <input value={complement} onChange={e => setComplement(e.target.value)} placeholder="Complemento (opcional)" className="col-span-2 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                    <input value={number} onChange={e => setNumber(e.target.value)} placeholder="Número" className="w-full min-w-0 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                    <input value={complement} onChange={e => setComplement(e.target.value)} placeholder="Complemento (opcional)" className="w-full min-w-0 sm:col-span-2 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                   </div>
                   {(!profile?.cpf || onlyDigits(profile.cpf).length !== 11) && (
                     <div className="mt-3">
@@ -426,11 +426,11 @@ function CheckoutPage() {
                   )}
                 </section>
 
-                <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
+                <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
                   <h2 className="font-bold mb-4 flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary" />Forma de pagamento</h2>
 
                   {/* Method selector — card style */}
-                  <div className="grid grid-cols-2 gap-3 mb-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
                     <button
                       type="button"
                       onClick={() => setPayment("pix")}
