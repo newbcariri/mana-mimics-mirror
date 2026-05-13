@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { Star, Check, ShieldCheck, Truck, Package, CreditCard, Plus, Zap, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Star, ShieldCheck, Truck, Package, CreditCard, Plus, Zap, Play } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { VideoModal } from "@/components/video-modal";
 import { PRODUCT, REVIEWS, UPSELL, COMBO_IMAGE } from "@/lib/product-data";
 import { cart } from "@/lib/cart-store";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -9,6 +10,7 @@ import { toast } from "sonner";
 import { fbqTrack } from "@/lib/fbq";
 import antesDepois from "@/assets/antes-depois.jpg";
 import seladoraVideo from "@/assets/seladora-demo.mp4";
+import dispenserVideo from "@/assets/dispenser-demo.mp4";
 
 export const Route = createFileRoute("/")({
   component: ProductPage,
