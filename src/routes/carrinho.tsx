@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck, Check } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck, Check, Play } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { VideoModal } from "@/components/video-modal";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { UPSELL } from "@/lib/product-data";
 import { toast } from "sonner";
+import dispenserVideo from "@/assets/dispenser-demo.mp4";
 
 export const Route = createFileRoute("/carrinho")({
   component: CartPage,
@@ -16,6 +19,7 @@ const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", curren
 function CartPage() {
   const items = useCart();
   const navigate = useNavigate();
+  const [showDispenserVideo, setShowDispenserVideo] = useState(false);
   const subtotal = cartTotal(items);
   const shipping = 0; // frete grátis sempre
   const total = subtotal + shipping;
@@ -71,7 +75,17 @@ function CartPage() {
             </div>
           ) : (
             <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/5 p-4 flex items-center gap-3">
-              <img src={UPSELL.image} alt={UPSELL.name} className="w-16 h-16 rounded-lg object-cover bg-muted shrink-0" />
+              <button
+                type="button"
+                onClick={() => setShowDispenserVideo(true)}
+                className="relative w-16 h-16 rounded-lg overflow-hidden bg-muted shrink-0 group"
+                aria-label="Ver como funciona o dispenser"
+              >
+                <img src={UPSELL.image} alt={UPSELL.name} className="w-full h-full object-cover" />
+                <span className="absolute inset-0 bg-black/35 flex items-center justify-center group-hover:bg-black/50 transition">
+                  <Play className="w-5 h-5 text-white fill-white" />
+                </span>
+              </button>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-extrabold">🔥 Aproveite e leve também</div>
                 <div className="text-xs text-muted-foreground">{UPSELL.name} — conserva ainda mais seus alimentos</div>
@@ -90,7 +104,24 @@ function CartPage() {
           <div className="space-y-3">
             {items.map(i => (
               <div key={i.id} className="flex gap-4 border border-border rounded-xl p-4">
-                <img src={i.image} alt="" className="w-24 h-24 object-cover rounded-md bg-muted" />
+                {i.productName === UPSELL.name ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowDispenserVideo(true)}
+                    className="relative w-24 h-24 rounded-md overflow-hidden bg-muted shrink-0 group"
+                    aria-label="Ver como funciona o dispenser"
+                  >
+                    <img src={i.image} alt="" className="w-full h-full object-cover" />
+                    <span className="absolute inset-0 bg-black/35 flex items-center justify-center group-hover:bg-black/50 transition">
+                      <Play className="w-6 h-6 text-white fill-white" />
+                    </span>
+                    <span className="absolute bottom-0 inset-x-0 bg-black/70 text-white text-[9px] font-bold text-center py-0.5">
+                      Ver vídeo
+                    </span>
+                  </button>
+                ) : (
+                  <img src={i.image} alt="" className="w-24 h-24 object-cover rounded-md bg-muted" />
+                )}
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold">{i.productName}</div>
                   <div className="text-sm text-muted-foreground mt-1">{brl(i.unitPrice)} · un</div>
@@ -130,6 +161,11 @@ function CartPage() {
         </div>
       </div>
       <SiteFooter />
+      <VideoModal
+        open={showDispenserVideo}
+        src={dispenserVideo}
+        onClose={() => setShowDispenserVideo(false)}
+      />
     </div>
   );
 }
