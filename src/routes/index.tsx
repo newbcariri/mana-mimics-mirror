@@ -178,46 +178,51 @@ function ProductPage() {
             </div>
           </div>
 
-          {/* Upsell checkbox */}
-          <label
-            className={`block cursor-pointer rounded-2xl border-2 p-3 sm:p-4 transition-all ${
-              withUpsell ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-dashed border-primary/50 hover:border-primary"
+          {/* Upsell — Kit completo (destaque máximo) */}
+          <div
+            className={`relative rounded-2xl border-2 transition-all overflow-hidden ${
+              withUpsell ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-primary/60 bg-primary/[0.03]"
             }`}
           >
-            <div className="flex gap-3 items-start">
-              <input
-                type="checkbox"
-                checked={withUpsell}
-                onChange={e => setWithUpsell(e.target.checked)}
-                className="mt-1 w-5 h-5 accent-[oklch(0.62_0.18_145)] shrink-0"
-              />
-              <img src={UPSELL.image} alt={UPSELL.name} className="w-16 h-16 rounded-lg object-cover bg-muted shrink-0" />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-bold text-sm">Adicionar {UPSELL.name}</span>
-                  <span className="bg-primary text-primary-foreground text-[10px] font-extrabold px-2 py-0.5 rounded-full">+{formatBRL(UPSELL.price)}</span>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1 leading-snug">{UPSELL.description}</p>
-              </div>
+            <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-[10px] font-extrabold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+              ⭐ Melhor escolha
             </div>
-          </label>
-
-          {/* Combo block */}
-          {withUpsell && (
-            <div className="rounded-2xl overflow-hidden border-2 border-primary bg-primary/5">
-              <div className="px-4 py-3 bg-primary text-primary-foreground font-bold text-sm flex items-center gap-2">
-                🔥 Kit completo de conservação
-              </div>
-              <div className="p-4 flex items-center gap-4">
-                <img src={COMBO_IMAGE} alt="Kit completo" className="w-24 h-24 rounded-lg object-cover bg-muted" />
-                <div>
-                  <div className="font-bold text-sm">Seladora + Dispenser</div>
-                  <p className="text-xs text-muted-foreground mt-1">Kit completo para conservar alimentos com mais eficiência.</p>
-                  <div className="text-lg font-extrabold text-primary mt-1">Total: {formatBRL(total)}</div>
+            <div className="px-4 pt-4 pb-2 font-extrabold text-sm sm:text-base flex items-center gap-2">
+              🔥 Kit Completo de Conservação
+            </div>
+            <label className="block cursor-pointer px-4 pb-4">
+              <div className="flex gap-3 items-center">
+                <img src={COMBO_IMAGE} alt="Seladora + Dispenser" className="w-20 h-20 rounded-lg object-cover bg-muted shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm text-foreground/80 leading-snug">
+                    Use os dois juntos e <strong>conserve seus alimentos por muito mais tempo</strong>.
+                  </p>
+                  <div className="mt-2 flex items-baseline gap-2 flex-wrap">
+                    <span className="text-xs text-muted-foreground line-through">De {formatBRL(PRODUCT.priceOriginal + UPSELL.price)}</span>
+                    <span className="text-lg font-extrabold text-primary">Por {formatBRL(PRODUCT.pricePix + UPSELL.price)}</span>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">
+                    Seladora {formatBRL(PRODUCT.pricePix)} + Dispenser {formatBRL(UPSELL.price)}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+              <div
+                className={`mt-3 flex items-center gap-3 rounded-xl border-2 px-3 py-2.5 transition ${
+                  withUpsell ? "border-primary bg-primary/10" : "border-dashed border-primary/50 bg-background"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={withUpsell}
+                  onChange={e => setWithUpsell(e.target.checked)}
+                  className="w-5 h-5 accent-[oklch(0.62_0.18_145)] shrink-0"
+                />
+                <span className="text-sm font-bold flex-1">
+                  {withUpsell ? "✔ Kit completo selecionado" : `Adicionar dispenser por +${formatBRL(UPSELL.price)}`}
+                </span>
+              </div>
+            </label>
+          </div>
 
           {/* Buy button */}
           <button
