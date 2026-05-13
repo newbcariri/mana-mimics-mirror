@@ -97,8 +97,11 @@ function ProductPage() {
       {/* HERO — first fold */}
       <section className="max-w-6xl mx-auto px-4 pt-4 lg:pt-8 grid lg:grid-cols-2 gap-6 lg:gap-10">
         {/* Gallery */}
-        <div className="flex flex-col gap-3">
-          <div className="relative aspect-square bg-muted rounded-2xl overflow-hidden">
+        <div className="flex flex-col gap-3 items-center w-full">
+          <div
+            className="relative w-full max-w-[420px] bg-black rounded-[18px] overflow-hidden mx-auto shadow-xl"
+            style={{ aspectRatio: "9 / 16" }}
+          >
             <span className="absolute top-3 left-3 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
               Mais vendido
             </span>
@@ -110,13 +113,19 @@ function ProductPage() {
                 loop
                 muted
                 playsInline
-                className="absolute inset-0 w-full h-full object-cover scale-[1.35] translate-y-[12%]"
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ objectPosition: "center center", transform: "translateY(6%) scale(1.18)" }}
               />
             ) : (
-              <img src={media[activeImg].src} alt={PRODUCT.name} className="w-full h-full object-cover" />
+              <img
+                src={media[activeImg].src}
+                alt={PRODUCT.name}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ objectPosition: "center center" }}
+              />
             )}
           </div>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-2 w-full max-w-[420px]">
             {media.map((m, i) => (
               <button
                 key={i}
