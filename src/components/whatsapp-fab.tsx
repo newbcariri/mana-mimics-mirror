@@ -5,7 +5,7 @@ export function WhatsAppFab() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Falar no WhatsApp"
-      className="fixed bottom-24 right-5 lg:bottom-5 z-[60] flex items-center justify-center w-14 h-14 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform"
+      className="fixed bottom-28 right-3 lg:bottom-5 lg:right-5 z-[60] flex items-center justify-center w-12 h-12 rounded-full shadow-lg hover:scale-105 active:scale-95 transition-transform"
       style={{
         backgroundColor: "#25D366",
         boxShadow: "0 6px 20px rgba(37, 211, 102, 0.45)",
@@ -18,7 +18,7 @@ export function WhatsAppFab() {
       />
       <svg
         viewBox="0 0 32 32"
-        className="relative w-7 h-7 text-white"
+        className="relative w-6 h-6 text-white"
         fill="currentColor"
         aria-hidden
       >
