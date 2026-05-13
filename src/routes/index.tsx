@@ -37,6 +37,12 @@ function ProductPage() {
   const [legSize, setLegSize] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const selectionRef = useRef<HTMLDivElement>(null);
+  const [highlight, setHighlight] = useState(false);
+  const [secondOpen, setSecondOpen] = useState(false);
+  const [secondColor, setSecondColor] = useState(0);
+  const [secondTopSize, setSecondTopSize] = useState<string | null>(null);
+  const [secondLegSize, setSecondLegSize] = useState<string | null>(null);
 
   const initials = (name: string) => name.split(" ").map(p => p[0]).join("").slice(0, 2).toUpperCase();
 
@@ -54,27 +60,63 @@ function ProductPage() {
     );
   }, []);
 
-  const handleBuy = () => {
-    if (!topSize || !legSize) {
-      toast.error("Selecione o tamanho do top e da legging");
-      return;
-    }
-    const c = PRODUCT.colors[selectedColor];
-    cart.add({
-      productName: PRODUCT.name,
-      color: c.name,
-      topSize, legSize, quantity: qty,
-      unitPrice: PRODUCT.pricePix,
-      image: c.img,
+  const flashSelection = () => {
+    selectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    setHighlight(true);
+    window.setTimeout(() => setHighlight(false), 2500);
+  };
+
+  const addToCartAndGo = (items: Array<{ colorIdx: number; topSize: string; legSize: string; quantity: number }>) => {
+    let totalQty = 0;
+    items.forEach(it => {
+      const c = PRODUCT.colors[it.colorIdx];
+      cart.add({
+        productName: PRODUCT.name,
+        color: c.name,
+        topSize: it.topSize,
+        legSize: it.legSize,
+        quantity: it.quantity,
+        unitPrice: PRODUCT.pricePix,
+        image: c.img,
+      });
+      totalQty += it.quantity;
     });
     fbqTrack("AddToCart", {
       content_name: PRODUCT.name,
       content_type: "product",
       currency: "BRL",
-      value: PRODUCT.pricePix * qty,
+      value: PRODUCT.pricePix * totalQty,
     });
     toast.success("Adicionado ao carrinho!");
     navigate({ to: "/carrinho" });
+  };
+
+  const handleBuy = () => {
+    if (!topSize || !legSize) {
+      toast.error("Selecione o tamanho e a cor para continuar");
+      flashSelection();
+      return;
+    }
+    if (qty >= 2) {
+      setSecondColor(selectedColor);
+      setSecondTopSize(topSize);
+      setSecondLegSize(legSize);
+      setSecondOpen(true);
+      return;
+    }
+    addToCartAndGo([{ colorIdx: selectedColor, topSize, legSize, quantity: qty }]);
+  };
+
+  const confirmSecondUnit = () => {
+    if (!secondTopSize || !secondLegSize) {
+      toast.error("Selecione o tamanho da 2ª unidade");
+      return;
+    }
+    setSecondOpen(false);
+    addToCartAndGo([
+      { colorIdx: selectedColor, topSize: topSize!, legSize: legSize!, quantity: 1 },
+      { colorIdx: secondColor, topSize: secondTopSize, legSize: secondLegSize, quantity: 1 },
+    ]);
   };
 
   return (
