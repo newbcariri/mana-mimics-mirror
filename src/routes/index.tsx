@@ -179,6 +179,14 @@ function ProductPage() {
             <div className="text-sm font-bold text-primary flex items-center gap-2 bg-primary/10 rounded-md px-3 py-2 mt-1">
               <Truck className="w-4 h-4" /> Frete grátis para todo o Brasil
             </div>
+            <div className="flex flex-wrap gap-2 pt-1">
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-red-50 text-red-600 border border-red-200 rounded-full px-2.5 py-1">
+                🔥 Estoque limitado
+              </span>
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-2.5 py-1">
+                📦 Envio em até 24h
+              </span>
+            </div>
           </div>
 
           {/* Upsell — Kit completo (destaque máximo) */}
