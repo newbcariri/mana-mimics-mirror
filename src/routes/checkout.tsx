@@ -303,12 +303,12 @@ function CheckoutPage() {
     } finally { setPlacing(false); }
   };
 
-  if (checking) return <div className="min-h-screen bg-background"><SiteHeader /><div className="text-center py-20 text-muted-foreground">Carregando...</div></div>;
+  if (checking) return <div className="min-h-screen overflow-x-hidden bg-background"><SiteHeader /><div className="px-4 pt-8 pb-20 text-center text-muted-foreground">Carregando...</div></div>;
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-background"><SiteHeader />
-        <div className="max-w-md mx-auto py-20 text-center">
+      <div className="min-h-screen overflow-x-hidden bg-background"><SiteHeader />
+        <div className="max-w-md mx-auto px-4 pt-8 pb-20 text-center">
           <p className="text-muted-foreground mb-4">Seu carrinho está vazio</p>
           <Link to="/" className="bg-primary text-primary-foreground px-5 py-2 rounded-md text-sm font-semibold">Voltar à loja</Link>
         </div>
@@ -320,34 +320,34 @@ function CheckoutPage() {
   const isAuthed = !!userId && !!profile;
 
   return (
-    <div className="min-h-screen bg-background pb-24 lg:pb-0">
+    <div className="min-h-screen overflow-x-hidden bg-background pb-32 lg:pb-0">
       <SiteHeader />
 
       {/* Social proof bar */}
       <div className="bg-muted/40 border-b border-border">
-        <div className="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-[11px] sm:text-xs">
-          <span className="flex items-center gap-1 font-semibold">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-5 gap-y-1.5 text-[11px] sm:text-xs">
+          <span className="hidden sm:flex items-center gap-1 font-semibold">
             <span className="flex">
               {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />)}
             </span>
             <span className="ml-1">4.8/5</span>
             <span className="text-muted-foreground font-normal">(2.143 avaliações)</span>
           </span>
-          <span className="flex items-center gap-1 text-muted-foreground"><Package className="w-3.5 h-3.5 text-success" /> <strong className="text-foreground">+3.000</strong> pedidos entregues</span>
-          <span className="flex items-center gap-1 text-muted-foreground"><Truck className="w-3.5 h-3.5 text-success" /> Frete grátis acima de R$ 199</span>
-          <span className="flex items-center gap-1 text-muted-foreground"><ShieldCheck className="w-3.5 h-3.5 text-success" /> Compra 100% segura</span>
+          <span className="flex items-center gap-1 text-muted-foreground whitespace-nowrap"><Package className="w-3.5 h-3.5 text-success" /> <strong className="text-foreground">+3.000</strong> entregues</span>
+          <span className="hidden min-[380px]:flex items-center gap-1 text-muted-foreground whitespace-nowrap"><Truck className="w-3.5 h-3.5 text-success" /> Frete grátis</span>
+          <span className="flex items-center gap-1 text-muted-foreground whitespace-nowrap"><ShieldCheck className="w-3.5 h-3.5 text-success" /> Compra 100% segura</span>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 pt-8 pb-6 lg:pt-10 lg:pb-10">
-        <h1 className="text-2xl lg:text-3xl font-bold mb-1 mt-2">Finalizar compra</h1>
-        <p className="text-xs lg:text-sm text-muted-foreground mb-6 flex items-center gap-2">
-          <Lock className="w-4 h-4 text-success" /> Pagamento protegido · SSL 256-bit · Dados criptografados
+      <div className="w-full max-w-6xl mx-auto px-3 sm:px-4 pt-6 pb-6 lg:pt-10 lg:pb-10">
+        <h1 className="text-2xl lg:text-3xl font-bold mb-1 mt-3 leading-tight">Finalizar compra</h1>
+        <p className="text-xs lg:text-sm text-muted-foreground mb-5 flex flex-wrap items-center gap-x-2 gap-y-1">
+          <Lock className="w-4 h-4 text-success shrink-0" /> <span>Pagamento protegido</span><span>·</span><span>Dados criptografados</span>
         </p>
 
-        <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8">
+        <div className="grid min-w-0 lg:grid-cols-[minmax(0,1fr)_400px] gap-5 lg:gap-8">
           {/* LEFT */}
-          <div className="space-y-5">
+          <div className="min-w-0 space-y-4 lg:space-y-5">
             {!isAuthed ? (
               <section className="border border-border rounded-xl p-5 lg:p-6 bg-card">
                 <h2 className="font-bold mb-4 flex items-center gap-2"><UserIcon className="w-5 h-5 text-primary" />Identificação</h2>
