@@ -448,9 +448,9 @@ function CheckoutPage() {
                       onClick={() => setPayment("cartao")}
                       className={`relative p-4 rounded-lg border-2 text-left transition ${payment === "cartao" ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:border-primary/40"}`}
                     >
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1 min-w-0">
                         <CreditCard className="w-5 h-5 text-primary" />
-                        <span className="font-bold text-sm">Cartão de Crédito</span>
+                        <span className="font-bold text-sm min-w-0">Cartão de Crédito</span>
                         {payment === "cartao" && <CheckCircle2 className="w-4 h-4 text-primary ml-auto" />}
                       </div>
                       <p className="text-[11px] text-muted-foreground">Em até 12x sem juros</p>
@@ -490,17 +490,17 @@ function CheckoutPage() {
                 </section>
 
                 {/* Trust badges */}
-                <section className="grid grid-cols-3 gap-3 text-center">
-                  <TrustBadge icon={ShieldCheck} title="Compra Segura" subtitle="Garantia total" />
-                  <TrustBadge icon={Lock} title="SSL Seguro" subtitle="Criptografia 256-bit" />
-                  <TrustBadge icon={BadgeCheck} title="Dados Protegidos" subtitle="LGPD compliance" />
+                <section className="grid grid-cols-1 min-[380px]:grid-cols-3 gap-2 sm:gap-3 text-center">
+                  <TrustBadge icon={ShieldCheck} title="Compra 100% segura" subtitle="" />
+                  <TrustBadge icon={Lock} title="Pagamento protegido" subtitle="" />
+                  <TrustBadge icon={BadgeCheck} title="Dados criptografados" subtitle="" />
                 </section>
               </>
             )}
           </div>
 
           {/* RIGHT — sticky summary */}
-          <aside className="bg-card border border-border rounded-xl p-5 lg:p-6 h-fit lg:sticky lg:top-24 space-y-4 shadow-sm">
+          <aside className="w-full max-w-full min-w-0 bg-card border border-border rounded-xl p-4 lg:p-6 h-fit lg:sticky lg:top-24 space-y-4 shadow-sm">
             <h2 className="font-bold flex items-center justify-between">
               Resumo do pedido
               <span className="text-[11px] text-success font-semibold flex items-center gap-1"><Lock className="w-3 h-3" /> Compra segura</span>
@@ -525,12 +525,12 @@ function CheckoutPage() {
             {/* Coupon */}
             <div className="border-t border-border pt-3">
               <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1 mb-2"><Tag className="w-3 h-3" /> Cupom de desconto</label>
-              <div className="flex gap-2">
-                <input value={coupon} onChange={e => setCoupon(e.target.value.toUpperCase())} placeholder="DIGITE O CUPOM" className="flex-1 h-10 px-3 border border-border rounded-md text-sm outline-none focus:border-primary uppercase" disabled={!!couponApplied} />
+              <div className="flex gap-2 min-w-0">
+                <input value={coupon} onChange={e => setCoupon(e.target.value.toUpperCase())} placeholder="DIGITE O CUPOM" className="min-w-0 flex-1 h-10 px-3 border border-border rounded-md text-sm outline-none focus:border-primary uppercase" disabled={!!couponApplied} />
                 {couponApplied ? (
-                  <button onClick={() => { setCouponApplied(null); setCoupon(""); }} className="px-3 h-10 text-xs font-semibold text-destructive border border-border rounded-md hover:bg-muted">Remover</button>
+                  <button onClick={() => { setCouponApplied(null); setCoupon(""); }} className="shrink-0 px-3 h-10 text-xs font-semibold text-destructive border border-border rounded-md hover:bg-muted">Remover</button>
                 ) : (
-                  <button onClick={applyCoupon} className="px-4 h-10 text-xs font-bold text-primary border border-primary rounded-md hover:bg-primary/5">APLICAR</button>
+                  <button onClick={applyCoupon} className="shrink-0 px-3 sm:px-4 h-10 text-xs font-bold text-primary border border-primary rounded-md hover:bg-primary/5">APLICAR</button>
                 )}
               </div>
               {couponApplied && (
@@ -576,12 +576,12 @@ function CheckoutPage() {
 
       {/* Mobile sticky CTA */}
       {isAuthed && (
-        <div className="fixed lg:hidden bottom-0 left-0 right-0 bg-card border-t border-border p-3 z-40 shadow-2xl">
+        <div className="fixed lg:hidden bottom-0 left-0 right-0 bg-card border-t border-border p-3 z-40 shadow-2xl pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
           <div className="flex items-center justify-between mb-2 text-sm">
             <span className="text-muted-foreground">Total</span>
             <span className="text-xl font-bold text-primary">{brl(total)}</span>
           </div>
-          <button onClick={placeOrder} disabled={placing} className="w-full h-12 bg-success text-success-foreground rounded-md font-bold hover:bg-success/90 disabled:opacity-50 flex items-center justify-center gap-2">
+          <button onClick={placeOrder} disabled={placing} className="w-full min-h-12 h-12 bg-success text-success-foreground rounded-md font-bold hover:bg-success/90 disabled:opacity-50 flex items-center justify-center gap-2 text-base shadow-md">
             {placing ? "Processando..." : <>Finalizar Compra <Lock className="w-4 h-4" /></>}
           </button>
         </div>
@@ -603,10 +603,10 @@ function Info({ label, value }: { label: string; value?: string }) {
 
 function TrustBadge({ icon: Icon, title, subtitle }: { icon: any; title: string; subtitle: string }) {
   return (
-    <div className="border border-border rounded-lg p-3 bg-card">
+    <div className="border border-border rounded-lg p-2.5 sm:p-3 bg-card">
       <Icon className="w-5 h-5 text-success mx-auto mb-1" />
-      <div className="text-[11px] font-bold">{title}</div>
-      <div className="text-[10px] text-muted-foreground">{subtitle}</div>
+      <div className="text-[11px] font-bold leading-tight">{title}</div>
+      {subtitle && <div className="text-[10px] text-muted-foreground">{subtitle}</div>}
     </div>
   );
 }
@@ -621,7 +621,7 @@ function Field({ icon: Icon, type = "text", placeholder, value, onChange, valid 
         placeholder={placeholder}
         value={value}
         onChange={e => onChange(e.target.value)}
-        className={`w-full h-12 ${Icon ? "pl-10" : "pl-4"} ${showCheck ? "pr-10" : "pr-4"} border rounded-md text-sm outline-none focus:ring-2 focus:ring-primary/20 transition ${showCheck ? "border-success" : "border-border focus:border-primary"}`}
+        className={`w-full min-w-0 h-12 ${Icon ? "pl-10" : "pl-4"} ${showCheck ? "pr-10" : "pr-4"} border rounded-md text-sm outline-none focus:ring-2 focus:ring-primary/20 transition ${showCheck ? "border-success" : "border-border focus:border-primary"}`}
       />
       {showCheck && <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-success" />}
     </div>
