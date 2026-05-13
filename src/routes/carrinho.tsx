@@ -104,7 +104,24 @@ function CartPage() {
           <div className="space-y-3">
             {items.map(i => (
               <div key={i.id} className="flex gap-4 border border-border rounded-xl p-4">
-                <img src={i.image} alt="" className="w-24 h-24 object-cover rounded-md bg-muted" />
+                {i.productName === UPSELL.name ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowDispenserVideo(true)}
+                    className="relative w-24 h-24 rounded-md overflow-hidden bg-muted shrink-0 group"
+                    aria-label="Ver como funciona o dispenser"
+                  >
+                    <img src={i.image} alt="" className="w-full h-full object-cover" />
+                    <span className="absolute inset-0 bg-black/35 flex items-center justify-center group-hover:bg-black/50 transition">
+                      <Play className="w-6 h-6 text-white fill-white" />
+                    </span>
+                    <span className="absolute bottom-0 inset-x-0 bg-black/70 text-white text-[9px] font-bold text-center py-0.5">
+                      Ver vídeo
+                    </span>
+                  </button>
+                ) : (
+                  <img src={i.image} alt="" className="w-24 h-24 object-cover rounded-md bg-muted" />
+                )}
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold">{i.productName}</div>
                   <div className="text-sm text-muted-foreground mt-1">{brl(i.unitPrice)} · un</div>
