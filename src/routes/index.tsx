@@ -87,7 +87,7 @@ function ProductPage() {
       <SiteHeader />
 
       {/* Social proof bar */}
-      <div className="bg-muted/40 border-b border-border">
+      <div className="hidden sm:block bg-muted/40 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-2 text-xs sm:text-sm">
           <span className="text-yellow-500">⭐⭐⭐⭐⭐</span>
           <span className="font-semibold">4.8/5</span>
