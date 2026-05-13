@@ -272,7 +272,7 @@ function ProductPage() {
           </div>
 
           {/* Sizes */}
-          <div className="order-6 lg:order-none border-2 border-dashed border-border rounded-lg p-3 sm:p-4 bg-muted/30">
+          <div ref={selectionRef} className={`order-6 lg:order-none border-2 border-dashed rounded-lg p-3 sm:p-4 bg-muted/30 transition-all duration-300 scroll-mt-24 ${highlight ? "border-primary ring-4 ring-primary/40 animate-pulse bg-primary/5" : "border-border"}`}>
             <div className="flex items-center justify-between mb-3">
               <div className="text-sm font-bold uppercase tracking-wide">
                 Selecione o tamanho <span className="text-primary">*</span>
