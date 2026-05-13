@@ -75,7 +75,17 @@ function CartPage() {
             </div>
           ) : (
             <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/5 p-4 flex items-center gap-3">
-              <img src={UPSELL.image} alt={UPSELL.name} className="w-16 h-16 rounded-lg object-cover bg-muted shrink-0" />
+              <button
+                type="button"
+                onClick={() => setShowDispenserVideo(true)}
+                className="relative w-16 h-16 rounded-lg overflow-hidden bg-muted shrink-0 group"
+                aria-label="Ver como funciona o dispenser"
+              >
+                <img src={UPSELL.image} alt={UPSELL.name} className="w-full h-full object-cover" />
+                <span className="absolute inset-0 bg-black/35 flex items-center justify-center group-hover:bg-black/50 transition">
+                  <Play className="w-5 h-5 text-white fill-white" />
+                </span>
+              </button>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-extrabold">🔥 Aproveite e leve também</div>
                 <div className="text-xs text-muted-foreground">{UPSELL.name} — conserva ainda mais seus alimentos</div>
