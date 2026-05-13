@@ -3,7 +3,7 @@ import { Star, ShieldCheck, Truck, Package, CreditCard, Plus, Zap, Play } from "
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { VideoModal } from "@/components/video-modal";
-import { PRODUCT, REVIEWS, UPSELL, COMBO_IMAGE } from "@/lib/product-data";
+import { PRODUCT, REVIEWS, UPSELL } from "@/lib/product-data";
 import { cart } from "@/lib/cart-store";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
