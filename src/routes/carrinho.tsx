@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck, Check } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck, Check, Play } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { VideoModal } from "@/components/video-modal";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { UPSELL } from "@/lib/product-data";
 import { toast } from "sonner";
+import dispenserVideo from "@/assets/dispenser-demo.mp4";
 
 export const Route = createFileRoute("/carrinho")({
   component: CartPage,
