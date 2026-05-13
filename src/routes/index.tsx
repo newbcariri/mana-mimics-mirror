@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Heart, Share2, Truck, Plus, Minus, Check, ShieldCheck, Award, Droplets, Zap, X } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { ShippingCalc } from "@/components/shipping-calc";
