@@ -19,6 +19,7 @@ const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", curren
 function CartPage() {
   const items = useCart();
   const navigate = useNavigate();
+  const [showDispenserVideo, setShowDispenserVideo] = useState(false);
   const subtotal = cartTotal(items);
   const shipping = 0; // frete grátis sempre
   const total = subtotal + shipping;
