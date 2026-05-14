@@ -11,6 +11,7 @@ import dispenserVideo from "@/assets/dispenser-demo.mp4";
 import dispenser1 from "@/assets/dispenser-1.png";
 import dispenser2 from "@/assets/dispenser-2.png";
 import dispenser3 from "@/assets/dispenser-3.png";
+import { sendWebhookEvent } from "@/lib/webhook";
 
 const DISPENSER_GALLERY = [dispenser1, dispenser2, dispenser3];
 
