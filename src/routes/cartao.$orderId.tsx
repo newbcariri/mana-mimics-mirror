@@ -38,7 +38,7 @@ function CardPage() {
   const [number, setNumber] = useState("");
   const [exp, setExp] = useState("");
   const [ccv, setCcv] = useState("");
-  const [installments, setInstallments] = useState(1);
+  const installments = 1;
   const [addressNumber, setAddressNumber] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
