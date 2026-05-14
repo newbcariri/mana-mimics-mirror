@@ -85,6 +85,8 @@ function ProductPage() {
       currency: "BRL",
       value: total,
     });
+    sendWebhookEvent({ tipo_evento: "iniciar_checkout", produto: PRODUCT.name, valor: PRODUCT.pricePix });
+    sendWebhookEvent({ tipo_evento: "add_carrinho", produto: PRODUCT.name, valor: PRODUCT.pricePix });
     toast.success("Adicionado ao carrinho!");
     navigate({ to: "/carrinho" });
   };
