@@ -27,7 +27,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "facebook-domain-verification", content: "hibnvy385jscn0sa5pyii4nmpmavf9" },
+      { name: "facebook-domain-verification", content: "5907opeinrjc89nr1wgg1gu928g7w3" },
       { title: "Casa Resolve | Mini Seladora Portátil — Feche Embalagens em Segundos" },
       { name: "description", content: "Mini Seladora Portátil que fecha qualquer embalagem em segundos. Mantenha seus alimentos frescos por muito mais tempo. R$ 49,90 com frete grátis." },
       { name: "author", content: "Casa Resolve" },
