@@ -20,6 +20,7 @@ import { Route as PixOrderIdRouteImport } from './routes/pix.$orderId'
 import { Route as PedidoOrderIdRouteImport } from './routes/pedido.$orderId'
 import { Route as PagamentoConfirmadoOrderIdRouteImport } from './routes/pagamento-confirmado.$orderId'
 import { Route as CartaoOrderIdRouteImport } from './routes/cartao.$orderId'
+import { Route as BoletoOrderIdRouteImport } from './routes/boleto.$orderId'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as ApiPublicRevealKeyRouteImport } from './routes/api/public/reveal-key'
 import { Route as ApiPublicPixRouteImport } from './routes/api/public/pix'
@@ -84,6 +85,11 @@ const CartaoOrderIdRoute = CartaoOrderIdRouteImport.update({
   path: '/cartao/$orderId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoletoOrderIdRoute = BoletoOrderIdRouteImport.update({
+  id: '/boleto/$orderId',
+  path: '/boleto/$orderId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/minha-conta': typeof MinhaContaRoute
   '/pedidos': typeof PedidosRoute
   '/api/$': typeof ApiSplatRoute
+  '/boleto/$orderId': typeof BoletoOrderIdRoute
   '/cartao/$orderId': typeof CartaoOrderIdRoute
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pedido/$orderId': typeof PedidoOrderIdRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/minha-conta': typeof MinhaContaRoute
   '/pedidos': typeof PedidosRoute
   '/api/$': typeof ApiSplatRoute
+  '/boleto/$orderId': typeof BoletoOrderIdRoute
   '/cartao/$orderId': typeof CartaoOrderIdRoute
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pedido/$orderId': typeof PedidoOrderIdRoute
@@ -170,6 +178,7 @@ export interface FileRoutesById {
   '/minha-conta': typeof MinhaContaRoute
   '/pedidos': typeof PedidosRoute
   '/api/$': typeof ApiSplatRoute
+  '/boleto/$orderId': typeof BoletoOrderIdRoute
   '/cartao/$orderId': typeof CartaoOrderIdRoute
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pedido/$orderId': typeof PedidoOrderIdRoute
@@ -192,6 +201,7 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/pedidos'
     | '/api/$'
+    | '/boleto/$orderId'
     | '/cartao/$orderId'
     | '/pagamento-confirmado/$orderId'
     | '/pedido/$orderId'
@@ -212,6 +222,7 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/pedidos'
     | '/api/$'
+    | '/boleto/$orderId'
     | '/cartao/$orderId'
     | '/pagamento-confirmado/$orderId'
     | '/pedido/$orderId'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/minha-conta'
     | '/pedidos'
     | '/api/$'
+    | '/boleto/$orderId'
     | '/cartao/$orderId'
     | '/pagamento-confirmado/$orderId'
     | '/pedido/$orderId'
@@ -253,6 +265,7 @@ export interface RootRouteChildren {
   MinhaContaRoute: typeof MinhaContaRoute
   PedidosRoute: typeof PedidosRoute
   ApiSplatRoute: typeof ApiSplatRoute
+  BoletoOrderIdRoute: typeof BoletoOrderIdRoute
   CartaoOrderIdRoute: typeof CartaoOrderIdRoute
   PagamentoConfirmadoOrderIdRoute: typeof PagamentoConfirmadoOrderIdRoute
   PedidoOrderIdRoute: typeof PedidoOrderIdRoute
@@ -344,6 +357,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CartaoOrderIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/boleto/$orderId': {
+      id: '/boleto/$orderId'
+      path: '/boleto/$orderId'
+      fullPath: '/boleto/$orderId'
+      preLoaderRoute: typeof BoletoOrderIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/$': {
       id: '/api/$'
       path: '/api/$'
@@ -405,6 +425,7 @@ const rootRouteChildren: RootRouteChildren = {
   MinhaContaRoute: MinhaContaRoute,
   PedidosRoute: PedidosRoute,
   ApiSplatRoute: ApiSplatRoute,
+  BoletoOrderIdRoute: BoletoOrderIdRoute,
   CartaoOrderIdRoute: CartaoOrderIdRoute,
   PagamentoConfirmadoOrderIdRoute: PagamentoConfirmadoOrderIdRoute,
   PedidoOrderIdRoute: PedidoOrderIdRoute,
