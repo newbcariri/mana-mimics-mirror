@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "@tanstack/react-router";
 
 const PIXEL_ID = "1902524127096818";
+const PIXEL_ID_SECONDARY = "2469959593452830";
 
 declare global {
   interface Window {
@@ -41,9 +42,11 @@ function loadPixel() {
   // Desabilita eventos automáticos do Pixel (clicks em botões viram "Subscribe", etc).
   // Precisa ser chamado ANTES do init para ter efeito.
   window.fbq("set", "autoConfig", false, PIXEL_ID);
+  window.fbq("set", "autoConfig", false, PIXEL_ID_SECONDARY);
   window.fbq("init", PIXEL_ID);
+  window.fbq("init", PIXEL_ID_SECONDARY);
   if (import.meta.env.DEV) {
-    console.log("[Meta Pixel] loaded with ID:", PIXEL_ID);
+    console.log("[Meta Pixel] loaded with IDs:", PIXEL_ID, PIXEL_ID_SECONDARY);
   }
 }
 
@@ -80,6 +83,13 @@ export function MetaPixel() {
         style={{ display: "none" }}
         alt=""
         src={`https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`}
+      />
+      <img
+        height="1"
+        width="1"
+        style={{ display: "none" }}
+        alt=""
+        src={`https://www.facebook.com/tr?id=${PIXEL_ID_SECONDARY}&ev=PageView&noscript=1`}
       />
     </noscript>
   );
