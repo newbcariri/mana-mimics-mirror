@@ -25,6 +25,7 @@ import { Route as ApiPublicRevealKeyRouteImport } from './routes/api/public/reve
 import { Route as ApiPublicPixRouteImport } from './routes/api/public/pix'
 import { Route as ApiPublicOrderSummaryRouteImport } from './routes/api/public/order-summary'
 import { Route as ApiPublicCardRouteImport } from './routes/api/public/card'
+import { Route as ApiPublicBoletoRouteImport } from './routes/api/public/boleto'
 import { Route as ApiPublicAsaasWebhookRouteImport } from './routes/api/public/asaas-webhook'
 
 const PedidosRoute = PedidosRouteImport.update({
@@ -108,6 +109,11 @@ const ApiPublicCardRoute = ApiPublicCardRouteImport.update({
   path: '/api/public/card',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicBoletoRoute = ApiPublicBoletoRouteImport.update({
+  id: '/api/public/boleto',
+  path: '/api/public/boleto',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicAsaasWebhookRoute = ApiPublicAsaasWebhookRouteImport.update({
   id: '/api/public/asaas-webhook',
   path: '/api/public/asaas-webhook',
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/pedido/$orderId': typeof PedidoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
   '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
+  '/api/public/boleto': typeof ApiPublicBoletoRoute
   '/api/public/card': typeof ApiPublicCardRoute
   '/api/public/order-summary': typeof ApiPublicOrderSummaryRoute
   '/api/public/pix': typeof ApiPublicPixRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/pedido/$orderId': typeof PedidoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
   '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
+  '/api/public/boleto': typeof ApiPublicBoletoRoute
   '/api/public/card': typeof ApiPublicCardRoute
   '/api/public/order-summary': typeof ApiPublicOrderSummaryRoute
   '/api/public/pix': typeof ApiPublicPixRoute
@@ -167,6 +175,7 @@ export interface FileRoutesById {
   '/pedido/$orderId': typeof PedidoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
   '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
+  '/api/public/boleto': typeof ApiPublicBoletoRoute
   '/api/public/card': typeof ApiPublicCardRoute
   '/api/public/order-summary': typeof ApiPublicOrderSummaryRoute
   '/api/public/pix': typeof ApiPublicPixRoute
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/pedido/$orderId'
     | '/pix/$orderId'
     | '/api/public/asaas-webhook'
+    | '/api/public/boleto'
     | '/api/public/card'
     | '/api/public/order-summary'
     | '/api/public/pix'
@@ -207,6 +217,7 @@ export interface FileRouteTypes {
     | '/pedido/$orderId'
     | '/pix/$orderId'
     | '/api/public/asaas-webhook'
+    | '/api/public/boleto'
     | '/api/public/card'
     | '/api/public/order-summary'
     | '/api/public/pix'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/pedido/$orderId'
     | '/pix/$orderId'
     | '/api/public/asaas-webhook'
+    | '/api/public/boleto'
     | '/api/public/card'
     | '/api/public/order-summary'
     | '/api/public/pix'
@@ -246,6 +258,7 @@ export interface RootRouteChildren {
   PedidoOrderIdRoute: typeof PedidoOrderIdRoute
   PixOrderIdRoute: typeof PixOrderIdRoute
   ApiPublicAsaasWebhookRoute: typeof ApiPublicAsaasWebhookRoute
+  ApiPublicBoletoRoute: typeof ApiPublicBoletoRoute
   ApiPublicCardRoute: typeof ApiPublicCardRoute
   ApiPublicOrderSummaryRoute: typeof ApiPublicOrderSummaryRoute
   ApiPublicPixRoute: typeof ApiPublicPixRoute
@@ -366,6 +379,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicCardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/boleto': {
+      id: '/api/public/boleto'
+      path: '/api/public/boleto'
+      fullPath: '/api/public/boleto'
+      preLoaderRoute: typeof ApiPublicBoletoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/asaas-webhook': {
       id: '/api/public/asaas-webhook'
       path: '/api/public/asaas-webhook'
@@ -390,6 +410,7 @@ const rootRouteChildren: RootRouteChildren = {
   PedidoOrderIdRoute: PedidoOrderIdRoute,
   PixOrderIdRoute: PixOrderIdRoute,
   ApiPublicAsaasWebhookRoute: ApiPublicAsaasWebhookRoute,
+  ApiPublicBoletoRoute: ApiPublicBoletoRoute,
   ApiPublicCardRoute: ApiPublicCardRoute,
   ApiPublicOrderSummaryRoute: ApiPublicOrderSummaryRoute,
   ApiPublicPixRoute: ApiPublicPixRoute,
