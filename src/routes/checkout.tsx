@@ -85,7 +85,7 @@ function CheckoutPage() {
   const [cepLoading, setCepLoading] = useState(false);
   const [number, setNumber] = useState("");
   const [complement, setComplement] = useState("");
-  const [payment, setPayment] = useState<"pix" | "cartao">("pix");
+  const [payment, setPayment] = useState<"pix" | "cartao" | "boleto">("pix");
   const [checking, setChecking] = useState(true);
   const [placing, setPlacing] = useState(false);
 
