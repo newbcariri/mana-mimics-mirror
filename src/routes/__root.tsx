@@ -59,6 +59,9 @@ export const Route = createRootRoute({
       {
         children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','G-SXL0L3Q6CJ',{send_page_view:true});window.__gaLastPath=location.pathname+location.search;`,
       },
+      {
+        children: `(function(c,l,a,r,i,t,y){if(c[i])return;c[i]=function(){(c[i].q=c[i].q||[]).push(arguments)};t=l.createElement(a);t.async=1;t.src="https://www.clarity.ms/tag/"+r;y=l.getElementsByTagName(a)[0];y.parentNode.insertBefore(t,y);})(window,document,"script","wqxivdl8we","clarity");`,
+      },
     ],
   }),
   shellComponent: RootShell,
