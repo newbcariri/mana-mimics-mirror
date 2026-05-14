@@ -7,19 +7,39 @@ declare global {
   interface Window {
     fbq?: any;
     _fbq?: any;
+    gtag?: (...args: any[]) => void;
+    dataLayer?: any[];
     __metaPixelLoaded?: boolean;
     __metaPixelLastPath?: string | null;
     __metaPixelUnsub?: () => void;
+    __gaLastPath?: string | null;
   }
 }
 
-function trackPageView(path: string) {
+const GA_ID = "G-SXL0L3Q6CJ";
+
+function trackPageView(path: string, fullPath: string) {
   if (typeof window === "undefined") return;
-  if (window.__metaPixelLastPath === path) return;
-  window.__metaPixelLastPath = path;
-  if (typeof window.fbq === "function") {
-    window.fbq("track", "PageView");
-    if (import.meta.env.DEV) console.log("[Meta Pixel] PageView:", path);
+
+  if (window.__metaPixelLastPath !== path) {
+    window.__metaPixelLastPath = path;
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "PageView");
+      if (import.meta.env.DEV) console.log("[Meta Pixel] PageView:", path);
+    }
+  }
+
+  if (window.__gaLastPath !== fullPath) {
+    window.__gaLastPath = fullPath;
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "page_view", {
+        page_path: fullPath,
+        page_location: window.location.href,
+        page_title: typeof document !== "undefined" ? document.title : undefined,
+        send_to: GA_ID,
+      });
+      if (import.meta.env.DEV) console.log("[GA4] page_view:", fullPath);
+    }
   }
 }
 
