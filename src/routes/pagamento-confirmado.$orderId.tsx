@@ -101,7 +101,17 @@ function SuccessPage() {
     } catch (e) {
       console.error("[fbq] Purchase failed", e);
     }
-  }, [main?.id, total]);
+    sendWebhookEvent(
+      {
+        tipo_evento: "pagamento_aprovado",
+        produto: main.product_name || "Mini Seladora Portátil",
+        valor: Number(total.toFixed(2)),
+        nome_cliente: profile?.full_name || "",
+        telefone: profile?.phone || "",
+      },
+      { dedupeKey: `pagamento_aprovado:${main.id}` },
+    );
+  }, [main?.id, total, profile?.full_name, profile?.phone]);
 
   if (loading) {
     return (
