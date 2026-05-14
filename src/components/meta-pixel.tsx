@@ -53,7 +53,7 @@ export function MetaPixel() {
   useEffect(() => {
     if (window.__metaPixelUnsub) return;
     const unsub = router.subscribe("onResolved", ({ toLocation }) => {
-      trackPageView(toLocation.pathname);
+      trackPageView(toLocation.pathname, toLocation.pathname + (toLocation.searchStr || ""));
     });
     window.__metaPixelUnsub = unsub;
   }, [router]);
