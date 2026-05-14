@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { PixBanksTrust } from "@/components/pix-banks-trust";
 import { supabase } from "@/integrations/supabase/client";
 import { postPaymentApi } from "@/lib/payment-api";
+import { sendWebhookEvent } from "@/lib/webhook";
 
 export const Route = createFileRoute("/pix/$orderId")({
   component: PixPage,
