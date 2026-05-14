@@ -11,6 +11,7 @@ import dispenserVideo from "@/assets/dispenser-demo.mp4";
 import dispenser1 from "@/assets/dispenser-1.png";
 import dispenser2 from "@/assets/dispenser-2.png";
 import dispenser3 from "@/assets/dispenser-3.png";
+import { sendWebhookEvent } from "@/lib/webhook";
 
 const DISPENSER_GALLERY = [dispenser1, dispenser2, dispenser3];
 
@@ -72,6 +73,7 @@ function CartPage() {
               image: UPSELL.image,
             });
             toast.success("Dispenser adicionado ao kit!");
+            sendWebhookEvent({ tipo_evento: "add_carrinho", produto: UPSELL.name, valor: UPSELL.price }, { dedupeKey: `add_carrinho:${UPSELL.name}:${Date.now()}` });
           };
           return hasUpsell ? (
             <div className="mb-6 rounded-2xl border-2 border-primary bg-primary/15 p-4 shadow-sm ring-1 ring-primary/30 transition">

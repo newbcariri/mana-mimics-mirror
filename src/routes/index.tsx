@@ -8,6 +8,7 @@ import { cart } from "@/lib/cart-store";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { fbqTrack } from "@/lib/fbq";
+import { sendWebhookEvent } from "@/lib/webhook";
 import antesDepois from "@/assets/antes-depois.jpg";
 import seladoraVideo from "@/assets/seladora-demo.mp4";
 import dispenserVideo from "@/assets/dispenser-demo.mp4";
@@ -84,6 +85,8 @@ function ProductPage() {
       currency: "BRL",
       value: total,
     });
+    sendWebhookEvent({ tipo_evento: "iniciar_checkout", produto: PRODUCT.name, valor: PRODUCT.pricePix });
+    sendWebhookEvent({ tipo_evento: "add_carrinho", produto: PRODUCT.name, valor: PRODUCT.pricePix });
     toast.success("Adicionado ao carrinho!");
     navigate({ to: "/carrinho" });
   };

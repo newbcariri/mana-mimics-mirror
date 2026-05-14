@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
 import { fbqTrack } from "@/lib/fbq";
+import { sendWebhookEvent } from "@/lib/webhook";
 
 export const Route = createFileRoute("/pagamento-confirmado/$orderId")({
   component: SuccessPage,
@@ -100,7 +101,17 @@ function SuccessPage() {
     } catch (e) {
       console.error("[fbq] Purchase failed", e);
     }
-  }, [main?.id, total]);
+    sendWebhookEvent(
+      {
+        tipo_evento: "pagamento_aprovado",
+        produto: main.product_name || "Mini Seladora Portátil",
+        valor: Number(total.toFixed(2)),
+        nome_cliente: profile?.full_name || "",
+        telefone: profile?.phone || "",
+      },
+      { dedupeKey: `pagamento_aprovado:${main.id}` },
+    );
+  }, [main?.id, total, profile?.full_name, profile?.phone]);
 
   if (loading) {
     return (

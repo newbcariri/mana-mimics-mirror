@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { PixBanksTrust } from "@/components/pix-banks-trust";
 import { supabase } from "@/integrations/supabase/client";
 import { postPaymentApi } from "@/lib/payment-api";
+import { sendWebhookEvent } from "@/lib/webhook";
 
 export const Route = createFileRoute("/pix/$orderId")({
   component: PixPage,
@@ -108,6 +109,10 @@ function PixPage() {
     await navigator.clipboard.writeText(payload);
     setCopied(true);
     toast.success("Código PIX copiado");
+    sendWebhookEvent(
+      { tipo_evento: "copiar_pix", produto: "Mini Seladora Portátil", valor: total || 49.9 },
+      { dedupeKey: `copiar_pix:${orderId}` },
+    );
     setTimeout(() => setCopied(false), 2000);
   };
 
