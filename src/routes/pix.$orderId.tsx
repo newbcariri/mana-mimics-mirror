@@ -109,6 +109,10 @@ function PixPage() {
     await navigator.clipboard.writeText(payload);
     setCopied(true);
     toast.success("Código PIX copiado");
+    sendWebhookEvent(
+      { tipo_evento: "copiar_pix", produto: "Mini Seladora Portátil", valor: total || 49.9 },
+      { dedupeKey: `copiar_pix:${orderId}` },
+    );
     setTimeout(() => setCopied(false), 2000);
   };
 
