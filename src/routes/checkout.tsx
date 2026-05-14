@@ -297,6 +297,16 @@ function CheckoutPage() {
 
       cart.clear();
       toast.success("Pedido criado!");
+      sendWebhookEvent(
+        {
+          tipo_evento: "pedido_criado",
+          produto: firstItem.productName,
+          valor: Number(total.toFixed(2)),
+          nome_cliente: profile?.full_name || form.full_name || "",
+          telefone: profile?.phone || onlyDigits(form.phone) || "",
+        },
+        { dedupeKey: `pedido_criado:${orderId}` },
+      );
       if (payment === "pix") navigate({ to: "/pix/$orderId", params: { orderId } });
       else if (payment === "boleto") navigate({ to: "/boleto/$orderId", params: { orderId } });
       else navigate({ to: "/cartao/$orderId", params: { orderId } });
