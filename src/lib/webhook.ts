@@ -34,13 +34,21 @@ export async function sendWebhookEvent(
       window.localStorage.setItem(storeKey, "1");
     }
 
+    // Envia os campos diretamente no corpo (sem wrapper "value")
+    const body = JSON.stringify({
+      tipo_evento: payload.tipo_evento,
+      produto: payload.produto,
+      valor: payload.valor,
+      ...(payload.nome_cliente !== undefined ? { nome_cliente: payload.nome_cliente } : {}),
+      ...(payload.telefone !== undefined ? { telefone: payload.telefone } : {}),
+    });
+
     // Fire-and-forget: não bloqueia UX
     void fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      body,
       keepalive: true,
-      mode: "no-cors",
     }).catch((err) => console.warn("[webhook] falhou", err));
   } catch (err) {
     console.warn("[webhook] erro", err);
