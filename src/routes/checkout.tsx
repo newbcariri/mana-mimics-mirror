@@ -453,7 +453,7 @@ function CheckoutPage() {
                         <span className="font-bold text-sm min-w-0">Cartão de Crédito</span>
                         {payment === "cartao" && <CheckCircle2 className="w-4 h-4 text-primary ml-auto" />}
                       </div>
-                      <p className="text-[11px] text-muted-foreground">Em até 12x sem juros</p>
+                      <p className="text-[11px] text-muted-foreground">Pagamento à vista em 1x</p>
                     </button>
                   </div>
 

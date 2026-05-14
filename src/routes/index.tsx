@@ -174,7 +174,7 @@ function ProductPage() {
               <span className="text-4xl sm:text-5xl font-extrabold text-primary leading-none">{formatBRL(PRODUCT.pricePix)}</span>
             </div>
             <div className="text-sm text-foreground/80 pt-1">
-              💳 ou <strong>3x de {formatBRL(PRODUCT.installments.value)}</strong> sem juros no cartão
+              💳 ou <strong>{formatBRL(PRODUCT.pricePix)} em 1x no cartão</strong>
             </div>
             <div className="text-sm font-bold text-primary flex items-center gap-2 bg-primary/10 rounded-md px-3 py-2 mt-1">
               <Truck className="w-4 h-4" /> Frete grátis para todo o Brasil
