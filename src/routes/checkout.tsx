@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, Clock, BadgeCheck, CreditCard, Star, Truck, Package, Barcode } from "lucide-react";
 import { maskCPF, maskPhone, maskCEP, onlyDigits } from "@/lib/checkout-utils";
 import { fbqTrack } from "@/lib/fbq";
+import { sendWebhookEvent } from "@/lib/webhook";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
