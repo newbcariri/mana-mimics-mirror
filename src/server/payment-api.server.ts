@@ -241,12 +241,67 @@ async function handleCard(data: any, userId: string) {
   return { paymentId: payment.id as string, status: payment.status as string, paid: isPaid, installmentCount, value: totalValue };
 }
 
+async function handleBoleto(data: any, userId: string) {
+  const supabaseAdmin = createSupabaseAdmin();
+  const { order, totalValue } = await getOrder(data.orderId, userId);
+
+  if (order.asaas_payment_id) {
+    const payment = await asaas(`/payments/${order.asaas_payment_id}`);
+    let identificationField: string | undefined;
+    try {
+      const idf = await asaas(`/payments/${order.asaas_payment_id}/identificationField`);
+      identificationField = idf?.identificationField;
+    } catch (e) {
+      console.error("boleto identificationField fetch failed", e);
+    }
+    return {
+      paymentId: order.asaas_payment_id as string,
+      value: totalValue,
+      bankSlipUrl: payment.bankSlipUrl as string | undefined,
+      identificationField,
+      dueDate: payment.dueDate as string | undefined,
+    };
+  }
+
+  const profile = await getProfile(userId);
+  const customerId = await getOrCreateCustomer(profile);
+  const dueDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const payment = await asaas("/payments", {
+    method: "POST",
+    body: JSON.stringify({
+      customer: customerId,
+      billingType: "BOLETO",
+      value: Number(totalValue.toFixed(2)),
+      dueDate,
+      description: `Pedido ${order.id.slice(0, 8).toUpperCase()}`,
+      externalReference: order.id,
+    }),
+  });
+  let identificationField: string | undefined;
+  try {
+    const idf = await asaas(`/payments/${payment.id}/identificationField`);
+    identificationField = idf?.identificationField;
+  } catch (e) {
+    console.error("boleto identificationField fetch failed", e);
+  }
+  await supabaseAdmin.from("orders").update({ asaas_payment_id: payment.id }).eq("id", order.id);
+  await appendHistory(order.id, "aguardando_pagamento", "Boleto bancário gerado");
+  return {
+    paymentId: payment.id as string,
+    value: totalValue,
+    bankSlipUrl: payment.bankSlipUrl as string | undefined,
+    identificationField,
+    dueDate: payment.dueDate as string | undefined,
+  };
+}
+
 export async function handlePaymentAction(action: string | undefined, request: Request) {
   try {
     const data = await request.json();
     const userId = await requireUserId(request);
     if (action === "pix") return paymentJson(await handlePix(data, userId));
     if (action === "card") return paymentJson(await handleCard(data, userId));
+    if (action === "boleto") return paymentJson(await handleBoleto(data, userId));
     if (action === "order-summary") return paymentJson(await handleOrderSummary(data, userId));
     return paymentJson({ error: "Endpoint não encontrado" }, 404);
   } catch (error: any) {
