@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { supabase } from "@/integrations/supabase/client";
 import { fbqTrack } from "@/lib/fbq";
+import { sendWebhookEvent } from "@/lib/webhook";
 
 export const Route = createFileRoute("/pagamento-confirmado/$orderId")({
   component: SuccessPage,
