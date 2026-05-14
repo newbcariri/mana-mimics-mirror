@@ -38,7 +38,7 @@ function CardPage() {
   const [number, setNumber] = useState("");
   const [exp, setExp] = useState("");
   const [ccv, setCcv] = useState("");
-  const [installments, setInstallments] = useState(1);
+  const installments = 1;
   const [addressNumber, setAddressNumber] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -152,7 +152,7 @@ function CardPage() {
     );
   }
 
-  const installOptions = Array.from({ length: 12 }, (_, i) => i + 1).map((n) => ({ n, each: total / n }));
+  
 
   return (
     <div className="min-h-screen bg-background pb-24 lg:pb-8">
@@ -251,18 +251,13 @@ function CardPage() {
               </div>
             </div>
 
-            {/* Installments */}
+            {/* Pagamento à vista — somente 1x */}
             <div>
-              <label className="text-xs font-semibold text-muted-foreground">Parcelamento</label>
-              <select
-                value={installments}
-                onChange={(e) => setInstallments(Number(e.target.value))}
-                className="mt-1 w-full h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background"
-              >
-                {installOptions.map((o) => (
-                  <option key={o.n} value={o.n}>{o.n}x de {brl(o.each)} sem juros</option>
-                ))}
-              </select>
+              <label className="text-xs font-semibold text-muted-foreground">Forma de pagamento</label>
+              <div className="mt-1 w-full h-12 px-4 border border-border rounded-md text-sm bg-muted/30 flex items-center justify-between">
+                <span className="font-semibold text-foreground">Cartão de crédito — à vista</span>
+                <span className="font-bold text-primary">{brl(total)} em 1x</span>
+              </div>
             </div>
 
             {/* Address number — só pergunta se não estiver salvo no perfil */}
