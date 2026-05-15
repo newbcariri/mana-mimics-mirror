@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Star, ShieldCheck, Truck, Package, CreditCard, Plus, Zap, Play } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ProductGallery, type GalleryItem } from "@/components/product-gallery";
 import { VideoModal } from "@/components/video-modal";
 import { PRODUCT, REVIEWS, UPSELL } from "@/lib/product-data";
 import { cart } from "@/lib/cart-store";
@@ -39,7 +40,7 @@ const FAQ = [
 
 function ProductPage() {
   const navigate = useNavigate();
-  const [activeImg, setActiveImg] = useState(0);
+  const [_activeImg, _setActiveImg] = useState(0);
   const [withUpsell, setWithUpsell] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showDispenserVideo, setShowDispenserVideo] = useState(false);
