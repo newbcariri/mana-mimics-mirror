@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, BadgeCheck, CreditCard, Star, Truck, Package } from "lucide-react";
-import { maskCPF, maskPhone, maskCEP, onlyDigits } from "@/lib/checkout-utils";
+import { maskPhone, maskCEP, onlyDigits } from "@/lib/checkout-utils";
 import { fbqTrack } from "@/lib/fbq";
 import { sendWebhookEvent } from "@/lib/webhook";
 
