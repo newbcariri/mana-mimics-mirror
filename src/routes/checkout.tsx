@@ -524,7 +524,6 @@ function CheckoutPage() {
               <span className="font-semibold">Total</span>
               <div className="text-right">
                 <div className="text-2xl font-bold text-primary">{brl(total)}</div>
-                {payment === "cartao" && <div className="text-[11px] text-muted-foreground">à vista em 1x no cartão</div>}
               </div>
             </div>
 
