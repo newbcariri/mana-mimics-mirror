@@ -129,7 +129,6 @@ function CheckoutPage() {
   const update = (k: string, v: string) => {
     let val = v;
     if (k === "phone") val = maskPhone(v);
-    else if (k === "phone") val = maskPhone(v);
     else if (k === "cep") val = maskCEP(v);
     setForm(f => ({ ...f, [k]: val }));
   };
