@@ -350,32 +350,37 @@ function CheckoutPage() {
           <div className="min-w-0 space-y-4 lg:space-y-5">
             {!isAuthed ? (
               <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
-                <h2 className="font-bold mb-4 flex items-center gap-2"><UserIcon className="w-5 h-5 text-primary" />Identificação</h2>
-                <div className="flex bg-muted rounded-lg p-1 mb-5">
-                  <button type="button" onClick={() => setAuthMode("signup")} className={`flex-1 min-w-0 px-2 py-2 rounded-md text-xs sm:text-sm font-semibold transition ${authMode === "signup" ? "bg-background shadow" : "text-muted-foreground"}`}>Sou novo cliente</button>
-                  <button type="button" onClick={() => setAuthMode("login")} className={`flex-1 min-w-0 px-2 py-2 rounded-md text-xs sm:text-sm font-semibold transition ${authMode === "login" ? "bg-background shadow" : "text-muted-foreground"}`}>Já tenho conta</button>
-                </div>
+                <h2 className="font-bold mb-1 flex items-center gap-2"><UserIcon className="w-5 h-5 text-primary" />Seus dados para entrega</h2>
+                <p className="text-xs text-muted-foreground mb-4">Preencha e finalize — sem cadastro, sem senha.</p>
                 <form onSubmit={handleAuth} className="space-y-3">
-                  {authMode === "signup" && (
-                    <Field icon={UserIcon} placeholder="Nome completo" value={form.full_name} onChange={v => update("full_name", v)} valid={form.full_name.trim().length >= 3} />
-                  )}
+                  <Field icon={UserIcon} placeholder="Nome completo" value={form.full_name} onChange={v => update("full_name", v)} valid={form.full_name.trim().length >= 3} />
                   <Field icon={Mail} type="email" placeholder="E-mail" value={form.email} onChange={v => update("email", v)} valid={/.+@.+\..+/.test(form.email)} />
-                  {authMode === "signup" && (
-                    <>
-                      <Field placeholder="Telefone (com DDD)" value={form.phone} onChange={v => update("phone", v)} valid={onlyDigits(form.phone).length >= 10} />
-                      <Field placeholder="CEP de entrega" value={form.cep} onChange={v => update("cep", v)} valid={onlyDigits(form.cep).length === 8} />
-                      {cepLoading && <p className="text-xs text-muted-foreground">Buscando endereço...</p>}
-                      {cepData && (
-                        <p className="text-xs text-success flex items-center gap-1">
-                          <CheckCircle2 className="w-3 h-3" /> {cepData.logradouro}, {cepData.bairro} — {cepData.localidade}/{cepData.uf}
-                        </p>
-                      )}
-                    </>
+                  <Field placeholder="Telefone (com DDD)" value={form.phone} onChange={v => update("phone", v)} valid={onlyDigits(form.phone).length >= 10} />
+                  <Field placeholder="CPF" value={form.cpf} onChange={v => update("cpf", v)} valid={onlyDigits(form.cpf).length === 11} />
+                  <Field placeholder="CEP de entrega" value={form.cep} onChange={v => update("cep", v)} valid={onlyDigits(form.cep).length === 8} />
+                  {cepLoading && <p className="text-xs text-muted-foreground">Buscando endereço...</p>}
+                  {cepData && (
+                    <p className="text-xs text-success flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" /> {cepData.logradouro}, {cepData.bairro} — {cepData.localidade}/{cepData.uf}
+                    </p>
                   )}
-                  <Field icon={Lock} type="password" placeholder="Senha (mínimo 6 caracteres)" value={form.password} onChange={v => update("password", v)} valid={form.password.length >= 6} />
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <Field placeholder="Número" value={form.number} onChange={v => update("number", v)} valid={form.number.trim().length > 0} />
+                    <div className="sm:col-span-2">
+                      <Field placeholder="Complemento (opcional)" value={form.complement} onChange={v => update("complement", v)} />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] sm:text-xs font-semibold text-muted-foreground pt-2">
+                    <span className="flex items-center gap-1">🔒 Compra 100% segura</span>
+                    <span className="flex items-center gap-1">🚚 Envio em até 24h</span>
+                    <span className="flex items-center gap-1">💳 Pagamento protegido</span>
+                  </div>
+
                   <button disabled={authLoading} type="submit" className="w-full h-12 bg-primary text-primary-foreground rounded-md font-bold hover:bg-primary/90 disabled:opacity-50 transition">
-                    {authLoading ? "Processando..." : authMode === "signup" ? "CONTINUAR" : "ENTRAR E CONTINUAR"}
+                    {authLoading ? "Processando..." : "IR PARA PAGAMENTO"}
                   </button>
+                  <p className="text-center text-xs text-muted-foreground">Você não precisa criar conta para comprar</p>
                 </form>
               </section>
             ) : (
