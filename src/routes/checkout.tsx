@@ -295,9 +295,7 @@ function CheckoutPage() {
         },
         { dedupeKey: `pedido_criado:${orderId}` },
       );
-      if (payment === "pix") navigate({ to: "/pix/$orderId", params: { orderId } });
-      else if (payment === "boleto") navigate({ to: "/boleto/$orderId", params: { orderId } });
-      else navigate({ to: "/cartao/$orderId", params: { orderId } });
+      navigate({ to: "/pix/$orderId", params: { orderId } });
     } catch (err: any) {
       toast.error(err.message || "Erro ao finalizar pedido");
     } finally { setPlacing(false); }
