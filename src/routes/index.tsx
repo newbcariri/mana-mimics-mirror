@@ -159,12 +159,15 @@ function ProductPage() {
             <span className="text-muted-foreground">· +1.000 clientes satisfeitos</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
-            Feche qualquer embalagem em segundos e evite desperdício
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight">
+            Nunca mais jogue comida fora por causa de embalagem aberta
           </h1>
           <p className="text-base text-muted-foreground -mt-1">
-            Mantenha seus alimentos frescos por muito mais tempo com a <strong className="text-foreground">{PRODUCT.name}</strong>.
+            Com a <strong className="text-foreground">{PRODUCT.name}</strong> você sela qualquer embalagem em segundos e mantém seus alimentos frescos por <strong className="text-foreground">até 5x mais tempo</strong> — sem desperdício e sem gastar mais.
           </p>
+          <div className="inline-flex items-center gap-2 text-xs font-bold bg-red-50 text-red-600 border border-red-200 rounded-full px-3 py-1.5 w-fit">
+            ⏳ Restam poucas unidades em estoque
+          </div>
 
           {/* Price */}
           <div className="bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/30 rounded-2xl p-4 sm:p-5 space-y-2">
