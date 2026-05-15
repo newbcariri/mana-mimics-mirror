@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Star, ShieldCheck, Truck, Package, CreditCard, Plus, Zap, Play } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ProductGallery, type GalleryItem } from "@/components/product-gallery";
 import { VideoModal } from "@/components/video-modal";
 import { PRODUCT, REVIEWS, UPSELL } from "@/lib/product-data";
 import { cart } from "@/lib/cart-store";
@@ -39,12 +40,12 @@ const FAQ = [
 
 function ProductPage() {
   const navigate = useNavigate();
-  const [activeImg, setActiveImg] = useState(0);
+  
   const [withUpsell, setWithUpsell] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [showDispenserVideo, setShowDispenserVideo] = useState(false);
 
-  const media: Array<{ type: "video" | "image"; src: string }> = [
+  const media: GalleryItem[] = [
     { type: "video", src: seladoraVideo },
     { type: "video", src: seladoraVideo2 },
     ...PRODUCT.images.map(src => ({ type: "image" as const, src })),
@@ -104,55 +105,7 @@ function ProductPage() {
 
       {/* HERO — first fold */}
       <section className="max-w-6xl mx-auto px-4 pt-4 lg:pt-8 grid lg:grid-cols-2 gap-6 lg:gap-10">
-        {/* Gallery */}
-        <div className="flex flex-col gap-3 items-center w-full">
-          <div
-            className={`relative w-full max-w-[420px] rounded-[18px] overflow-hidden mx-auto shadow-xl ${media[activeImg].type === "video" ? "bg-black" : "bg-white"}`}
-            style={{ aspectRatio: "9 / 16" }}
-          >
-            <span className="absolute top-3 left-3 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-              Mais vendido
-            </span>
-            {media[activeImg].type === "video" ? (
-              <video
-                key={media[activeImg].src}
-                src={media[activeImg].src}
-                autoPlay
-                loop
-                muted
-                playsInline
-                controls
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{ objectPosition: "center center", transform: "translateY(6%) scale(1.18)" }}
-              />
-            ) : (
-              <img
-                src={media[activeImg].src}
-                alt={PRODUCT.name}
-                className="absolute inset-0 w-full h-full object-contain"
-                style={{ objectPosition: "center center" }}
-              />
-            )}
-          </div>
-          <div className="grid grid-cols-4 gap-2 w-full max-w-[420px]">
-            {media.map((m, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveImg(i)}
-                className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${activeImg === i ? "border-primary" : "border-border hover:border-foreground/30"}`}
-              >
-                {m.type === "video" ? (
-                  <>
-                    <video src={m.src} muted playsInline className="absolute inset-0 w-full h-full object-cover scale-[1.35] translate-y-[12%]" />
-                    <span className="absolute inset-0 flex items-center justify-center bg-black/30 text-white text-xl">▶</span>
-                  </>
-                ) : (
-                  <img src={m.src} alt="" className="w-full h-full object-cover" />
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
+        <ProductGallery items={media} alt={PRODUCT.name} badge="Mais vendido" />
 
         {/* Buy panel */}
         <div className="flex flex-col gap-4">
