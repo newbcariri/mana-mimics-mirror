@@ -91,8 +91,7 @@ function CheckoutPage() {
 
   // guest checkout form
   const [authLoading, setAuthLoading] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "", phone: "", cpf: "", cep: "", number: "", complement: "" });
-  const [cpfFinal, setCpfFinal] = useState("");
+  const [form, setForm] = useState({ full_name: "", email: "", phone: "", cep: "", number: "", complement: "" });
 
   const loadSession = async () => {
     const { data: { session } } = await supabase.auth.getSession();
