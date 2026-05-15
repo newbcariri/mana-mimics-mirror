@@ -11,6 +11,7 @@ import { fbqTrack } from "@/lib/fbq";
 import { sendWebhookEvent } from "@/lib/webhook";
 import antesDepois from "@/assets/antes-depois.jpg";
 import seladoraVideo from "@/assets/seladora-demo.mp4";
+import seladoraVideo2 from "@/assets/seladora-demo-2.mp4";
 import dispenserVideo from "@/assets/dispenser-demo.mp4";
 
 export const Route = createFileRoute("/")({
@@ -45,6 +46,7 @@ function ProductPage() {
 
   const media: Array<{ type: "video" | "image"; src: string }> = [
     { type: "video", src: seladoraVideo },
+    { type: "video", src: seladoraVideo2 },
     ...PRODUCT.images.map(src => ({ type: "image" as const, src })),
   ];
 
@@ -105,7 +107,7 @@ function ProductPage() {
         {/* Gallery */}
         <div className="flex flex-col gap-3 items-center w-full">
           <div
-            className="relative w-full max-w-[420px] bg-black rounded-[18px] overflow-hidden mx-auto shadow-xl"
+            className={`relative w-full max-w-[420px] rounded-[18px] overflow-hidden mx-auto shadow-xl ${media[activeImg].type === "video" ? "bg-black" : "bg-white"}`}
             style={{ aspectRatio: "9 / 16" }}
           >
             <span className="absolute top-3 left-3 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
@@ -119,6 +121,7 @@ function ProductPage() {
                 loop
                 muted
                 playsInline
+                controls
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{ objectPosition: "center center", transform: "translateY(6%) scale(1.18)" }}
               />
@@ -126,7 +129,7 @@ function ProductPage() {
               <img
                 src={media[activeImg].src}
                 alt={PRODUCT.name}
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-contain"
                 style={{ objectPosition: "center center" }}
               />
             )}
