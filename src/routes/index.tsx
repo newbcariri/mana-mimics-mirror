@@ -11,6 +11,7 @@ import { fbqTrack } from "@/lib/fbq";
 import { sendWebhookEvent } from "@/lib/webhook";
 import antesDepois from "@/assets/antes-depois.jpg";
 import seladoraVideo from "@/assets/seladora-demo.mp4";
+import seladoraVideo2 from "@/assets/seladora-demo-2.mp4";
 import dispenserVideo from "@/assets/dispenser-demo.mp4";
 
 export const Route = createFileRoute("/")({
@@ -45,6 +46,7 @@ function ProductPage() {
 
   const media: Array<{ type: "video" | "image"; src: string }> = [
     { type: "video", src: seladoraVideo },
+    { type: "video", src: seladoraVideo2 },
     ...PRODUCT.images.map(src => ({ type: "image" as const, src })),
   ];
 
