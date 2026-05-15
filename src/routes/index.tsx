@@ -420,17 +420,37 @@ function ProductPage() {
         </div>
       </section>
 
+      {/* GARANTIA */}
+      <section className="max-w-3xl mx-auto px-4 mt-16">
+        <div className="rounded-2xl border-2 border-primary/40 bg-primary/5 p-6 sm:p-8 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground mb-3">
+            <ShieldCheck className="w-8 h-8" />
+          </div>
+          <h3 className="text-xl sm:text-2xl font-extrabold">Garantia incondicional de 7 dias</h3>
+          <p className="text-sm sm:text-base text-foreground/80 mt-2 max-w-lg mx-auto">
+            Se você não amar a Mini Seladora, devolvemos <strong>100% do seu dinheiro</strong>. Sem perguntas, sem burocracia. O risco é todo nosso.
+          </p>
+        </div>
+      </section>
+
       {/* Final CTA */}
-      <section className="max-w-3xl mx-auto px-4 mt-16 text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold">Comece a economizar hoje</h2>
+      <section className="max-w-3xl mx-auto px-4 mt-12 text-center">
+        <h2 className="text-2xl sm:text-3xl font-extrabold">Garanta a sua antes que acabe</h2>
         <p className="text-muted-foreground mt-2">Mais de 1.000 lares já resolveram o problema do desperdício.</p>
+        <div className="mt-3 inline-flex items-center gap-2 text-xs font-bold bg-red-50 text-red-600 border border-red-200 rounded-full px-3 py-1.5">
+          🔥 Restam poucas unidades em estoque
+        </div>
+        <div className="mt-4 text-sm">
+          <span className="text-muted-foreground line-through">De {formatBRL(PRODUCT.priceOriginal)}</span>{" "}
+          <span className="font-extrabold text-primary text-2xl align-middle">por {formatBRL(total)}</span>
+        </div>
         <button
           onClick={handleBuy}
-          className="mt-6 inline-flex items-center justify-center h-12 px-8 bg-background text-primary border-2 border-primary rounded-xl text-sm font-bold uppercase tracking-wide hover:bg-primary/5"
+          className="mt-4 inline-flex items-center justify-center h-14 px-8 bg-primary text-primary-foreground rounded-xl text-base font-extrabold uppercase tracking-wide shadow-lg ring-2 ring-primary/30 hover:brightness-105"
         >
-          Adicionar ao carrinho — {formatBRL(total)}
+          🛒 COMPRAR AGORA
         </button>
-        <div className="text-xs text-muted-foreground mt-3">🚚 Frete grátis · 🔒 Compra 100% segura</div>
+        <div className="text-xs text-muted-foreground mt-3">🚚 Frete grátis · 🔒 Compra 100% segura · ✅ Garantia de 7 dias</div>
       </section>
 
       <SiteFooter />
