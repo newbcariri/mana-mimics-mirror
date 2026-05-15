@@ -283,6 +283,31 @@ function ProductPage() {
         </div>
       </section>
 
+      {/* DOR DO CLIENTE */}
+      <section className="max-w-3xl mx-auto px-4 mt-16">
+        <div className="rounded-2xl border-2 border-red-200 bg-red-50/50 p-6 sm:p-8">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-red-700">
+            Você se identifica com isso?
+          </h2>
+          <ul className="mt-5 space-y-3 text-sm sm:text-base text-foreground/90">
+            {[
+              "Abre um pacote de café, biscoito ou salgadinho e em 2 dias está velho",
+              "Joga comida fora toda semana porque a embalagem ficou aberta",
+              "Tenta fechar com nó, prendedor ou elástico — e nunca funciona direito",
+              "Gasta dinheiro repondo alimentos que poderiam ter durado muito mais",
+            ].map(t => (
+              <li key={t} className="flex items-start gap-3">
+                <span className="text-red-500 font-bold mt-0.5">✗</span>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-center mt-6 font-bold text-foreground">
+            A <span className="text-primary">Mini Seladora Portátil</span> resolve isso de uma vez por todas.
+          </p>
+        </div>
+      </section>
+
       {/* ANTES x DEPOIS */}
       <section className="max-w-5xl mx-auto px-2 sm:px-4 mt-16">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center px-2">
@@ -300,22 +325,34 @@ function ProductPage() {
         </p>
       </section>
 
-      {/* BENEFÍCIOS */}
-      <section className="max-w-6xl mx-auto px-4 mt-16">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center">Por que todo mundo está comprando</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+      {/* BENEFÍCIOS — bullet points */}
+      <section className="max-w-3xl mx-auto px-4 mt-16">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center">
+          O que você ganha com a Mini Seladora
+        </h2>
+        <ul className="mt-6 space-y-3 bg-card border border-border rounded-2xl p-5 sm:p-6">
           {[
-            { icon: "💰", title: "Evita desperdício", desc: "Conserva alimentos por muito mais tempo" },
-            { icon: "⚡", title: "Sela em segundos", desc: "Rápida, prática, sem complicação" },
-            { icon: "🤏", title: "Portátil", desc: "Cabe na palma da mão e na gaveta" },
-            { icon: "✅", title: "Versátil", desc: "Funciona em vários tipos de plástico" },
+            "Conserva alimentos frescos por até 5x mais tempo",
+            "Sela qualquer embalagem plástica em 2 segundos",
+            "Economiza dinheiro evitando desperdício de comida",
+            "Cabe na palma da mão — leva pra qualquer lugar",
+            "Funciona com pilhas AA ou cabo USB-C",
+            "Fácil de usar — qualquer pessoa consegue",
           ].map(b => (
-            <div key={b.title} className="rounded-2xl border border-border p-5 bg-card">
-              <div className="text-3xl">{b.icon}</div>
-              <div className="font-bold mt-2">{b.title}</div>
-              <p className="text-sm text-muted-foreground mt-1">{b.desc}</p>
-            </div>
+            <li key={b} className="flex items-start gap-3 text-sm sm:text-base">
+              <span className="shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center mt-0.5">✓</span>
+              <span className="font-medium">{b}</span>
+            </li>
           ))}
+        </ul>
+        <div className="mt-6 text-center">
+          <button
+            onClick={handleBuy}
+            className="inline-flex items-center justify-center h-14 px-8 bg-primary text-primary-foreground rounded-xl text-base font-extrabold uppercase tracking-wide shadow-lg ring-2 ring-primary/30"
+          >
+            🛒 COMPRAR AGORA — {formatBRL(PRODUCT.pricePix)}
+          </button>
+          <div className="text-xs text-muted-foreground mt-2">🚚 Frete grátis · 🔥 Restam poucas unidades</div>
         </div>
       </section>
 
