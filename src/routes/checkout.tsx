@@ -157,34 +157,27 @@ function CheckoutPage() {
     e.preventDefault();
     setAuthLoading(true);
     try {
-      if (authMode === "signup") {
-        const data = signupSchema.parse(form);
-        const { data: auth, error } = await supabase.auth.signUp({
-          email: data.email,
-          password: data.password,
-          options: { emailRedirectTo: window.location.origin },
-        });
-        if (error) throw error;
-        if (auth.user) {
-          const { error: pErr } = await supabase.from("profiles").insert({
-            id: auth.user.id,
-            full_name: data.full_name,
-            email: data.email,
-            cpf: "",
-            phone: onlyDigits(data.phone),
-            cep: onlyDigits(data.cep),
-          });
-          if (pErr) throw pErr;
-        }
-        toast.success("Conta criada! Continue sua compra.");
-        await loadSession();
-      } else {
-        const data = loginSchema.parse(form);
-        const { error } = await supabase.auth.signInWithPassword({ email: data.email, password: data.password });
-        if (error) throw error;
-        toast.success("Bem-vinda de volta!");
-        await loadSession();
-      }
+      const data = guestSchema.parse(form);
+      // Guest checkout — sign in anonymously to get a user_id for the order
+      const { data: auth, error } = await supabase.auth.signInAnonymously();
+      if (error) throw error;
+      const uid = auth.user?.id;
+      if (!uid) throw new Error("Falha ao iniciar sessão de compra");
+
+      const { error: pErr } = await supabase.from("profiles").insert({
+        id: uid,
+        full_name: data.full_name,
+        email: data.email,
+        cpf: onlyDigits(data.cpf),
+        phone: onlyDigits(data.phone),
+        cep: onlyDigits(data.cep),
+        number: data.number,
+        complement: form.complement || null,
+      });
+      if (pErr) throw pErr;
+      if (data.number) setNumber(data.number);
+      if (form.complement) setComplement(form.complement);
+      await loadSession();
     } catch (err: any) {
       const msg = err?.errors?.[0]?.message || err?.message || "Erro ao processar";
       toast.error(msg);
