@@ -1,7 +1,7 @@
-import seladoraHero from "@/assets/seladora-hero.jpg";
-import seladoraUso from "@/assets/seladora-uso.jpg";
+import seladoraDisplay from "@/assets/seladora-display.png";
+import seladoraCores from "@/assets/seladora-cores.jpeg";
+import seladoraInstrucoes from "@/assets/seladora-instrucoes.png";
 import dispenserHero from "@/assets/dispenser-hero.jpg";
-import comboKit from "@/assets/combo-kit.jpg";
 
 export const PRODUCT = {
   name: "Mini Seladora Portátil",
