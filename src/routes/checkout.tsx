@@ -90,10 +90,9 @@ function CheckoutPage() {
   const pixDiscount = 0;
   const total = Math.max(0, subtotal - couponDiscount + shipping);
 
-  // auth form
-  const [authMode, setAuthMode] = useState<"login" | "signup">("signup");
+  // guest checkout form
   const [authLoading, setAuthLoading] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "", phone: "", cep: "", password: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", phone: "", cpf: "", cep: "", number: "", complement: "" });
   const [cpfFinal, setCpfFinal] = useState("");
 
   const loadSession = async () => {
