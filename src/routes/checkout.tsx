@@ -21,9 +21,8 @@ const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", curren
 
 const guestSchema = z.object({
   full_name: z.string().trim().min(3, "Informe seu nome completo").max(100),
-  email: z.string().trim().email("E-mail inválido").max(255),
+  email: z.string().trim().max(255).optional().or(z.literal("")).refine(v => !v || /.+@.+\..+/.test(v), "E-mail inválido"),
   phone: z.string().refine(v => onlyDigits(v).length >= 10, "Telefone inválido"),
-  cpf: z.string().refine(v => onlyDigits(v).length === 11, "CPF inválido"),
   cep: z.string().refine(v => onlyDigits(v).length === 8, "CEP deve ter 8 dígitos"),
   number: z.string().trim().min(1, "Informe o número"),
 });
