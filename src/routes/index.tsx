@@ -159,12 +159,15 @@ function ProductPage() {
             <span className="text-muted-foreground">· +1.000 clientes satisfeitos</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
-            Feche qualquer embalagem em segundos e evite desperdício
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight">
+            Nunca mais jogue comida fora por causa de embalagem aberta
           </h1>
           <p className="text-base text-muted-foreground -mt-1">
-            Mantenha seus alimentos frescos por muito mais tempo com a <strong className="text-foreground">{PRODUCT.name}</strong>.
+            Com a <strong className="text-foreground">{PRODUCT.name}</strong> você sela qualquer embalagem em segundos e mantém seus alimentos frescos por <strong className="text-foreground">até 5x mais tempo</strong> — sem desperdício e sem gastar mais.
           </p>
+          <div className="inline-flex items-center gap-2 text-xs font-bold bg-red-50 text-red-600 border border-red-200 rounded-full px-3 py-1.5 w-fit">
+            ⏳ Restam poucas unidades em estoque
+          </div>
 
           {/* Price */}
           <div className="bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/30 rounded-2xl p-4 sm:p-5 space-y-2">
@@ -257,10 +260,13 @@ function ProductPage() {
           {/* Buy button (secondary — main CTA is the sticky bar on mobile) */}
           <button
             onClick={handleBuy}
-            className="w-full h-12 bg-background text-primary border-2 border-primary rounded-xl text-sm sm:text-base font-bold uppercase tracking-wide hover:bg-primary/5 active:scale-[0.99] transition-all"
+            className="w-full h-14 bg-primary text-primary-foreground rounded-xl text-base sm:text-lg font-extrabold uppercase tracking-wide shadow-lg ring-2 ring-primary/30 hover:brightness-105 active:scale-[0.99] transition-all"
           >
-            Adicionar ao carrinho
+            🛒 COMPRAR AGORA
           </button>
+          <div className="text-center text-xs text-muted-foreground -mt-2">
+            🔒 Pagamento 100% seguro · 🚚 Frete grátis · ✅ Garantia de 7 dias
+          </div>
 
           {/* Trust */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
@@ -274,6 +280,31 @@ function ProductPage() {
               <CreditCard className="w-4 h-4 text-primary shrink-0" /> Pix e cartão
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* DOR DO CLIENTE */}
+      <section className="max-w-3xl mx-auto px-4 mt-16">
+        <div className="rounded-2xl border-2 border-red-200 bg-red-50/50 p-6 sm:p-8">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-red-700">
+            Você se identifica com isso?
+          </h2>
+          <ul className="mt-5 space-y-3 text-sm sm:text-base text-foreground/90">
+            {[
+              "Abre um pacote de café, biscoito ou salgadinho e em 2 dias está velho",
+              "Joga comida fora toda semana porque a embalagem ficou aberta",
+              "Tenta fechar com nó, prendedor ou elástico — e nunca funciona direito",
+              "Gasta dinheiro repondo alimentos que poderiam ter durado muito mais",
+            ].map(t => (
+              <li key={t} className="flex items-start gap-3">
+                <span className="text-red-500 font-bold mt-0.5">✗</span>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-center mt-6 font-bold text-foreground">
+            A <span className="text-primary">Mini Seladora Portátil</span> resolve isso de uma vez por todas.
+          </p>
         </div>
       </section>
 
@@ -294,22 +325,34 @@ function ProductPage() {
         </p>
       </section>
 
-      {/* BENEFÍCIOS */}
-      <section className="max-w-6xl mx-auto px-4 mt-16">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center">Por que todo mundo está comprando</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+      {/* BENEFÍCIOS — bullet points */}
+      <section className="max-w-3xl mx-auto px-4 mt-16">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center">
+          O que você ganha com a Mini Seladora
+        </h2>
+        <ul className="mt-6 space-y-3 bg-card border border-border rounded-2xl p-5 sm:p-6">
           {[
-            { icon: "💰", title: "Evita desperdício", desc: "Conserva alimentos por muito mais tempo" },
-            { icon: "⚡", title: "Sela em segundos", desc: "Rápida, prática, sem complicação" },
-            { icon: "🤏", title: "Portátil", desc: "Cabe na palma da mão e na gaveta" },
-            { icon: "✅", title: "Versátil", desc: "Funciona em vários tipos de plástico" },
+            "Conserva alimentos frescos por até 5x mais tempo",
+            "Sela qualquer embalagem plástica em 2 segundos",
+            "Economiza dinheiro evitando desperdício de comida",
+            "Cabe na palma da mão — leva pra qualquer lugar",
+            "Funciona com pilhas AA ou cabo USB-C",
+            "Fácil de usar — qualquer pessoa consegue",
           ].map(b => (
-            <div key={b.title} className="rounded-2xl border border-border p-5 bg-card">
-              <div className="text-3xl">{b.icon}</div>
-              <div className="font-bold mt-2">{b.title}</div>
-              <p className="text-sm text-muted-foreground mt-1">{b.desc}</p>
-            </div>
+            <li key={b} className="flex items-start gap-3 text-sm sm:text-base">
+              <span className="shrink-0 w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center mt-0.5">✓</span>
+              <span className="font-medium">{b}</span>
+            </li>
           ))}
+        </ul>
+        <div className="mt-6 text-center">
+          <button
+            onClick={handleBuy}
+            className="inline-flex items-center justify-center h-14 px-8 bg-primary text-primary-foreground rounded-xl text-base font-extrabold uppercase tracking-wide shadow-lg ring-2 ring-primary/30"
+          >
+            🛒 COMPRAR AGORA — {formatBRL(PRODUCT.pricePix)}
+          </button>
+          <div className="text-xs text-muted-foreground mt-2">🚚 Frete grátis · 🔥 Restam poucas unidades</div>
         </div>
       </section>
 
@@ -377,17 +420,37 @@ function ProductPage() {
         </div>
       </section>
 
+      {/* GARANTIA */}
+      <section className="max-w-3xl mx-auto px-4 mt-16">
+        <div className="rounded-2xl border-2 border-primary/40 bg-primary/5 p-6 sm:p-8 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground mb-3">
+            <ShieldCheck className="w-8 h-8" />
+          </div>
+          <h3 className="text-xl sm:text-2xl font-extrabold">Garantia incondicional de 7 dias</h3>
+          <p className="text-sm sm:text-base text-foreground/80 mt-2 max-w-lg mx-auto">
+            Se você não amar a Mini Seladora, devolvemos <strong>100% do seu dinheiro</strong>. Sem perguntas, sem burocracia. O risco é todo nosso.
+          </p>
+        </div>
+      </section>
+
       {/* Final CTA */}
-      <section className="max-w-3xl mx-auto px-4 mt-16 text-center">
-        <h2 className="text-2xl sm:text-3xl font-bold">Comece a economizar hoje</h2>
+      <section className="max-w-3xl mx-auto px-4 mt-12 text-center">
+        <h2 className="text-2xl sm:text-3xl font-extrabold">Garanta a sua antes que acabe</h2>
         <p className="text-muted-foreground mt-2">Mais de 1.000 lares já resolveram o problema do desperdício.</p>
+        <div className="mt-3 inline-flex items-center gap-2 text-xs font-bold bg-red-50 text-red-600 border border-red-200 rounded-full px-3 py-1.5">
+          🔥 Restam poucas unidades em estoque
+        </div>
+        <div className="mt-4 text-sm">
+          <span className="text-muted-foreground line-through">De {formatBRL(PRODUCT.priceOriginal)}</span>{" "}
+          <span className="font-extrabold text-primary text-2xl align-middle">por {formatBRL(total)}</span>
+        </div>
         <button
           onClick={handleBuy}
-          className="mt-6 inline-flex items-center justify-center h-12 px-8 bg-background text-primary border-2 border-primary rounded-xl text-sm font-bold uppercase tracking-wide hover:bg-primary/5"
+          className="mt-4 inline-flex items-center justify-center h-14 px-8 bg-primary text-primary-foreground rounded-xl text-base font-extrabold uppercase tracking-wide shadow-lg ring-2 ring-primary/30 hover:brightness-105"
         >
-          Adicionar ao carrinho — {formatBRL(total)}
+          🛒 COMPRAR AGORA
         </button>
-        <div className="text-xs text-muted-foreground mt-3">🚚 Frete grátis · 🔒 Compra 100% segura</div>
+        <div className="text-xs text-muted-foreground mt-3">🚚 Frete grátis · 🔒 Compra 100% segura · ✅ Garantia de 7 dias</div>
       </section>
 
       <SiteFooter />
@@ -403,7 +466,7 @@ function ProductPage() {
             onClick={handleBuy}
             className="flex-1 h-12 bg-primary text-primary-foreground rounded-xl font-extrabold text-sm uppercase tracking-wide shadow-lg ring-2 ring-primary/30"
           >
-            🛒 Comprar agora
+            🛒 COMPRAR AGORA
           </button>
         </div>
       </div>
