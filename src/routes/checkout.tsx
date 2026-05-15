@@ -402,21 +402,6 @@ function CheckoutPage() {
                     <input value={number} onChange={e => setNumber(e.target.value)} placeholder="Número" className="w-full min-w-0 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                     <input value={complement} onChange={e => setComplement(e.target.value)} placeholder="Complemento (opcional)" className="w-full min-w-0 sm:col-span-2 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                   </div>
-                  {(!profile?.cpf || onlyDigits(profile.cpf).length !== 11) && (
-                    <div className="mt-3">
-                      <label className="text-xs font-semibold text-muted-foreground">CPF (necessário para emissão da nota fiscal)</label>
-                      <div className="relative mt-1">
-                        <input
-                          value={cpfFinal}
-                          onChange={e => setCpfFinal(maskCPF(e.target.value))}
-                          placeholder="000.000.000-00"
-                          inputMode="numeric"
-                          className={`w-full h-12 px-4 pr-10 border rounded-md text-sm outline-none focus:ring-2 focus:ring-primary/20 transition ${onlyDigits(cpfFinal).length === 11 ? "border-success" : "border-border focus:border-primary"}`}
-                        />
-                        {onlyDigits(cpfFinal).length === 11 && <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-success" />}
-                      </div>
-                    </div>
-                  )}
                 </section>
 
                 <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
