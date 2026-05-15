@@ -8,7 +8,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { supabase } from "@/integrations/supabase/client";
 import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, BadgeCheck, CreditCard, Star, Truck, Package } from "lucide-react";
-import { maskCPF, maskPhone, maskCEP, onlyDigits } from "@/lib/checkout-utils";
+import { maskPhone, maskCEP, onlyDigits } from "@/lib/checkout-utils";
 import { fbqTrack } from "@/lib/fbq";
 import { sendWebhookEvent } from "@/lib/webhook";
 
@@ -21,9 +21,8 @@ const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", curren
 
 const guestSchema = z.object({
   full_name: z.string().trim().min(3, "Informe seu nome completo").max(100),
-  email: z.string().trim().email("E-mail inválido").max(255),
+  email: z.string().trim().max(255).optional().or(z.literal("")).refine(v => !v || /.+@.+\..+/.test(v), "E-mail inválido"),
   phone: z.string().refine(v => onlyDigits(v).length >= 10, "Telefone inválido"),
-  cpf: z.string().refine(v => onlyDigits(v).length === 11, "CPF inválido"),
   cep: z.string().refine(v => onlyDigits(v).length === 8, "CEP deve ter 8 dígitos"),
   number: z.string().trim().min(1, "Informe o número"),
 });
@@ -92,8 +91,7 @@ function CheckoutPage() {
 
   // guest checkout form
   const [authLoading, setAuthLoading] = useState(false);
-  const [form, setForm] = useState({ full_name: "", email: "", phone: "", cpf: "", cep: "", number: "", complement: "" });
-  const [cpfFinal, setCpfFinal] = useState("");
+  const [form, setForm] = useState({ full_name: "", email: "", phone: "", cep: "", number: "", complement: "" });
 
   const loadSession = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -130,8 +128,7 @@ function CheckoutPage() {
 
   const update = (k: string, v: string) => {
     let val = v;
-    if (k === "cpf") val = maskCPF(v);
-    else if (k === "phone") val = maskPhone(v);
+    if (k === "phone") val = maskPhone(v);
     else if (k === "cep") val = maskCEP(v);
     setForm(f => ({ ...f, [k]: val }));
   };
@@ -167,13 +164,12 @@ function CheckoutPage() {
       const { error: pErr } = await supabase.from("profiles").insert({
         id: uid,
         full_name: data.full_name,
-        email: data.email,
-        cpf: onlyDigits(data.cpf),
+        email: data.email || null,
         phone: onlyDigits(data.phone),
         cep: onlyDigits(data.cep),
         number: data.number,
         complement: form.complement || null,
-      });
+      } as any);
       if (pErr) throw pErr;
       if (data.number) setNumber(data.number);
       if (form.complement) setComplement(form.complement);
@@ -199,16 +195,10 @@ function CheckoutPage() {
     if (items.length === 0) { toast.error("Carrinho vazio"); return; }
     if (!userId || !profile) return;
     if (!number.trim()) { toast.error("Informe o número do endereço"); return; }
-    const needsCpf = !profile.cpf || onlyDigits(profile.cpf).length !== 11;
-    if (needsCpf && onlyDigits(cpfFinal).length !== 11) {
-      toast.error("Informe seu CPF para finalizar (necessário para nota fiscal)");
-      return;
-    }
     setPlacing(true);
     try {
-      // Atualiza perfil com CPF / endereço se necessário
+      // Atualiza perfil com endereço se necessário
       const profileUpdate: any = {};
-      if (needsCpf) profileUpdate.cpf = onlyDigits(cpfFinal);
       if (number && profile.number !== number) profileUpdate.number = number;
       if (complement !== (profile.complement || "")) profileUpdate.complement = complement || null;
       if (cepData) {
@@ -352,9 +342,8 @@ function CheckoutPage() {
                 <p className="text-xs text-muted-foreground mb-4">Preencha e finalize — sem cadastro, sem senha.</p>
                 <form onSubmit={handleAuth} className="space-y-3">
                   <Field icon={UserIcon} placeholder="Nome completo" value={form.full_name} onChange={v => update("full_name", v)} valid={form.full_name.trim().length >= 3} />
-                  <Field icon={Mail} type="email" placeholder="E-mail" value={form.email} onChange={v => update("email", v)} valid={/.+@.+\..+/.test(form.email)} />
+                  <Field icon={Mail} type="email" placeholder="E-mail (opcional)" value={form.email} onChange={v => update("email", v)} valid={form.email.length === 0 || /.+@.+\..+/.test(form.email)} />
                   <Field placeholder="Telefone (com DDD)" value={form.phone} onChange={v => update("phone", v)} valid={onlyDigits(form.phone).length >= 10} />
-                  <Field placeholder="CPF" value={form.cpf} onChange={v => update("cpf", v)} valid={onlyDigits(form.cpf).length === 11} />
                   <Field placeholder="CEP de entrega" value={form.cep} onChange={v => update("cep", v)} valid={onlyDigits(form.cep).length === 8} />
                   {cepLoading && <p className="text-xs text-muted-foreground">Buscando endereço...</p>}
                   {cepData && (
@@ -412,21 +401,6 @@ function CheckoutPage() {
                     <input value={number} onChange={e => setNumber(e.target.value)} placeholder="Número" className="w-full min-w-0 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                     <input value={complement} onChange={e => setComplement(e.target.value)} placeholder="Complemento (opcional)" className="w-full min-w-0 sm:col-span-2 h-12 px-4 border border-border rounded-md text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
                   </div>
-                  {(!profile?.cpf || onlyDigits(profile.cpf).length !== 11) && (
-                    <div className="mt-3">
-                      <label className="text-xs font-semibold text-muted-foreground">CPF (necessário para emissão da nota fiscal)</label>
-                      <div className="relative mt-1">
-                        <input
-                          value={cpfFinal}
-                          onChange={e => setCpfFinal(maskCPF(e.target.value))}
-                          placeholder="000.000.000-00"
-                          inputMode="numeric"
-                          className={`w-full h-12 px-4 pr-10 border rounded-md text-sm outline-none focus:ring-2 focus:ring-primary/20 transition ${onlyDigits(cpfFinal).length === 11 ? "border-success" : "border-border focus:border-primary"}`}
-                        />
-                        {onlyDigits(cpfFinal).length === 11 && <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-success" />}
-                      </div>
-                    </div>
-                  )}
                 </section>
 
                 <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">

@@ -182,9 +182,9 @@ export type Database = {
           cep: string
           city: string | null
           complement: string | null
-          cpf: string
+          cpf: string | null
           created_at: string
-          email: string
+          email: string | null
           full_name: string
           id: string
           neighborhood: string | null
@@ -198,9 +198,9 @@ export type Database = {
           cep: string
           city?: string | null
           complement?: string | null
-          cpf: string
+          cpf?: string | null
           created_at?: string
-          email: string
+          email?: string | null
           full_name: string
           id: string
           neighborhood?: string | null
@@ -214,9 +214,9 @@ export type Database = {
           cep?: string
           city?: string | null
           complement?: string | null
-          cpf?: string
+          cpf?: string | null
           created_at?: string
-          email?: string
+          email?: string | null
           full_name?: string
           id?: string
           neighborhood?: string | null
