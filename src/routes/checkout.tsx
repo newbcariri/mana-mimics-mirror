@@ -19,17 +19,13 @@ export const Route = createFileRoute("/checkout")({
 
 const brl = (v: number) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-const signupSchema = z.object({
+const guestSchema = z.object({
   full_name: z.string().trim().min(3, "Informe seu nome completo").max(100),
   email: z.string().trim().email("E-mail inválido").max(255),
   phone: z.string().refine(v => onlyDigits(v).length >= 10, "Telefone inválido"),
+  cpf: z.string().refine(v => onlyDigits(v).length === 11, "CPF inválido"),
   cep: z.string().refine(v => onlyDigits(v).length === 8, "CEP deve ter 8 dígitos"),
-  password: z.string().min(6, "A senha deve ter ao menos 6 caracteres").max(72),
-});
-
-const loginSchema = z.object({
-  email: z.string().trim().email(),
-  password: z.string().min(1),
+  number: z.string().trim().min(1, "Informe o número"),
 });
 
 // Promo countdown — 30 min from first visit (per session)
