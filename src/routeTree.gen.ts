@@ -19,15 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PixOrderIdRouteImport } from './routes/pix.$orderId'
 import { Route as PedidoOrderIdRouteImport } from './routes/pedido.$orderId'
 import { Route as PagamentoConfirmadoOrderIdRouteImport } from './routes/pagamento-confirmado.$orderId'
-import { Route as CartaoOrderIdRouteImport } from './routes/cartao.$orderId'
-import { Route as BoletoOrderIdRouteImport } from './routes/boleto.$orderId'
-import { Route as ApiSplatRouteImport } from './routes/api/$'
 import { Route as ApiPublicRevealKeyRouteImport } from './routes/api/public/reveal-key'
-import { Route as ApiPublicPixRouteImport } from './routes/api/public/pix'
-import { Route as ApiPublicOrderSummaryRouteImport } from './routes/api/public/order-summary'
-import { Route as ApiPublicCardRouteImport } from './routes/api/public/card'
-import { Route as ApiPublicBoletoRouteImport } from './routes/api/public/boleto'
-import { Route as ApiPublicAsaasWebhookRouteImport } from './routes/api/public/asaas-webhook'
 
 const PedidosRoute = PedidosRouteImport.update({
   id: '/pedidos',
@@ -80,49 +72,9 @@ const PagamentoConfirmadoOrderIdRoute =
     path: '/pagamento-confirmado/$orderId',
     getParentRoute: () => rootRouteImport,
   } as any)
-const CartaoOrderIdRoute = CartaoOrderIdRouteImport.update({
-  id: '/cartao/$orderId',
-  path: '/cartao/$orderId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BoletoOrderIdRoute = BoletoOrderIdRouteImport.update({
-  id: '/boleto/$orderId',
-  path: '/boleto/$orderId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiSplatRoute = ApiSplatRouteImport.update({
-  id: '/api/$',
-  path: '/api/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiPublicRevealKeyRoute = ApiPublicRevealKeyRouteImport.update({
   id: '/api/public/reveal-key',
   path: '/api/public/reveal-key',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicPixRoute = ApiPublicPixRouteImport.update({
-  id: '/api/public/pix',
-  path: '/api/public/pix',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicOrderSummaryRoute = ApiPublicOrderSummaryRouteImport.update({
-  id: '/api/public/order-summary',
-  path: '/api/public/order-summary',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicCardRoute = ApiPublicCardRouteImport.update({
-  id: '/api/public/card',
-  path: '/api/public/card',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicBoletoRoute = ApiPublicBoletoRouteImport.update({
-  id: '/api/public/boleto',
-  path: '/api/public/boleto',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiPublicAsaasWebhookRoute = ApiPublicAsaasWebhookRouteImport.update({
-  id: '/api/public/asaas-webhook',
-  path: '/api/public/asaas-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -134,17 +86,9 @@ export interface FileRoutesByFullPath {
   '/conta': typeof ContaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/pedidos': typeof PedidosRoute
-  '/api/$': typeof ApiSplatRoute
-  '/boleto/$orderId': typeof BoletoOrderIdRoute
-  '/cartao/$orderId': typeof CartaoOrderIdRoute
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pedido/$orderId': typeof PedidoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
-  '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
-  '/api/public/boleto': typeof ApiPublicBoletoRoute
-  '/api/public/card': typeof ApiPublicCardRoute
-  '/api/public/order-summary': typeof ApiPublicOrderSummaryRoute
-  '/api/public/pix': typeof ApiPublicPixRoute
   '/api/public/reveal-key': typeof ApiPublicRevealKeyRoute
 }
 export interface FileRoutesByTo {
@@ -155,17 +99,9 @@ export interface FileRoutesByTo {
   '/conta': typeof ContaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/pedidos': typeof PedidosRoute
-  '/api/$': typeof ApiSplatRoute
-  '/boleto/$orderId': typeof BoletoOrderIdRoute
-  '/cartao/$orderId': typeof CartaoOrderIdRoute
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pedido/$orderId': typeof PedidoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
-  '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
-  '/api/public/boleto': typeof ApiPublicBoletoRoute
-  '/api/public/card': typeof ApiPublicCardRoute
-  '/api/public/order-summary': typeof ApiPublicOrderSummaryRoute
-  '/api/public/pix': typeof ApiPublicPixRoute
   '/api/public/reveal-key': typeof ApiPublicRevealKeyRoute
 }
 export interface FileRoutesById {
@@ -177,17 +113,9 @@ export interface FileRoutesById {
   '/conta': typeof ContaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/pedidos': typeof PedidosRoute
-  '/api/$': typeof ApiSplatRoute
-  '/boleto/$orderId': typeof BoletoOrderIdRoute
-  '/cartao/$orderId': typeof CartaoOrderIdRoute
   '/pagamento-confirmado/$orderId': typeof PagamentoConfirmadoOrderIdRoute
   '/pedido/$orderId': typeof PedidoOrderIdRoute
   '/pix/$orderId': typeof PixOrderIdRoute
-  '/api/public/asaas-webhook': typeof ApiPublicAsaasWebhookRoute
-  '/api/public/boleto': typeof ApiPublicBoletoRoute
-  '/api/public/card': typeof ApiPublicCardRoute
-  '/api/public/order-summary': typeof ApiPublicOrderSummaryRoute
-  '/api/public/pix': typeof ApiPublicPixRoute
   '/api/public/reveal-key': typeof ApiPublicRevealKeyRoute
 }
 export interface FileRouteTypes {
@@ -200,17 +128,9 @@ export interface FileRouteTypes {
     | '/conta'
     | '/minha-conta'
     | '/pedidos'
-    | '/api/$'
-    | '/boleto/$orderId'
-    | '/cartao/$orderId'
     | '/pagamento-confirmado/$orderId'
     | '/pedido/$orderId'
     | '/pix/$orderId'
-    | '/api/public/asaas-webhook'
-    | '/api/public/boleto'
-    | '/api/public/card'
-    | '/api/public/order-summary'
-    | '/api/public/pix'
     | '/api/public/reveal-key'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -221,17 +141,9 @@ export interface FileRouteTypes {
     | '/conta'
     | '/minha-conta'
     | '/pedidos'
-    | '/api/$'
-    | '/boleto/$orderId'
-    | '/cartao/$orderId'
     | '/pagamento-confirmado/$orderId'
     | '/pedido/$orderId'
     | '/pix/$orderId'
-    | '/api/public/asaas-webhook'
-    | '/api/public/boleto'
-    | '/api/public/card'
-    | '/api/public/order-summary'
-    | '/api/public/pix'
     | '/api/public/reveal-key'
   id:
     | '__root__'
@@ -242,17 +154,9 @@ export interface FileRouteTypes {
     | '/conta'
     | '/minha-conta'
     | '/pedidos'
-    | '/api/$'
-    | '/boleto/$orderId'
-    | '/cartao/$orderId'
     | '/pagamento-confirmado/$orderId'
     | '/pedido/$orderId'
     | '/pix/$orderId'
-    | '/api/public/asaas-webhook'
-    | '/api/public/boleto'
-    | '/api/public/card'
-    | '/api/public/order-summary'
-    | '/api/public/pix'
     | '/api/public/reveal-key'
   fileRoutesById: FileRoutesById
 }
@@ -264,17 +168,9 @@ export interface RootRouteChildren {
   ContaRoute: typeof ContaRoute
   MinhaContaRoute: typeof MinhaContaRoute
   PedidosRoute: typeof PedidosRoute
-  ApiSplatRoute: typeof ApiSplatRoute
-  BoletoOrderIdRoute: typeof BoletoOrderIdRoute
-  CartaoOrderIdRoute: typeof CartaoOrderIdRoute
   PagamentoConfirmadoOrderIdRoute: typeof PagamentoConfirmadoOrderIdRoute
   PedidoOrderIdRoute: typeof PedidoOrderIdRoute
   PixOrderIdRoute: typeof PixOrderIdRoute
-  ApiPublicAsaasWebhookRoute: typeof ApiPublicAsaasWebhookRoute
-  ApiPublicBoletoRoute: typeof ApiPublicBoletoRoute
-  ApiPublicCardRoute: typeof ApiPublicCardRoute
-  ApiPublicOrderSummaryRoute: typeof ApiPublicOrderSummaryRoute
-  ApiPublicPixRoute: typeof ApiPublicPixRoute
   ApiPublicRevealKeyRoute: typeof ApiPublicRevealKeyRoute
 }
 
@@ -350,67 +246,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PagamentoConfirmadoOrderIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cartao/$orderId': {
-      id: '/cartao/$orderId'
-      path: '/cartao/$orderId'
-      fullPath: '/cartao/$orderId'
-      preLoaderRoute: typeof CartaoOrderIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/boleto/$orderId': {
-      id: '/boleto/$orderId'
-      path: '/boleto/$orderId'
-      fullPath: '/boleto/$orderId'
-      preLoaderRoute: typeof BoletoOrderIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/$': {
-      id: '/api/$'
-      path: '/api/$'
-      fullPath: '/api/$'
-      preLoaderRoute: typeof ApiSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/public/reveal-key': {
       id: '/api/public/reveal-key'
       path: '/api/public/reveal-key'
       fullPath: '/api/public/reveal-key'
       preLoaderRoute: typeof ApiPublicRevealKeyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/pix': {
-      id: '/api/public/pix'
-      path: '/api/public/pix'
-      fullPath: '/api/public/pix'
-      preLoaderRoute: typeof ApiPublicPixRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/order-summary': {
-      id: '/api/public/order-summary'
-      path: '/api/public/order-summary'
-      fullPath: '/api/public/order-summary'
-      preLoaderRoute: typeof ApiPublicOrderSummaryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/card': {
-      id: '/api/public/card'
-      path: '/api/public/card'
-      fullPath: '/api/public/card'
-      preLoaderRoute: typeof ApiPublicCardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/boleto': {
-      id: '/api/public/boleto'
-      path: '/api/public/boleto'
-      fullPath: '/api/public/boleto'
-      preLoaderRoute: typeof ApiPublicBoletoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/asaas-webhook': {
-      id: '/api/public/asaas-webhook'
-      path: '/api/public/asaas-webhook'
-      fullPath: '/api/public/asaas-webhook'
-      preLoaderRoute: typeof ApiPublicAsaasWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -424,17 +264,9 @@ const rootRouteChildren: RootRouteChildren = {
   ContaRoute: ContaRoute,
   MinhaContaRoute: MinhaContaRoute,
   PedidosRoute: PedidosRoute,
-  ApiSplatRoute: ApiSplatRoute,
-  BoletoOrderIdRoute: BoletoOrderIdRoute,
-  CartaoOrderIdRoute: CartaoOrderIdRoute,
   PagamentoConfirmadoOrderIdRoute: PagamentoConfirmadoOrderIdRoute,
   PedidoOrderIdRoute: PedidoOrderIdRoute,
   PixOrderIdRoute: PixOrderIdRoute,
-  ApiPublicAsaasWebhookRoute: ApiPublicAsaasWebhookRoute,
-  ApiPublicBoletoRoute: ApiPublicBoletoRoute,
-  ApiPublicCardRoute: ApiPublicCardRoute,
-  ApiPublicOrderSummaryRoute: ApiPublicOrderSummaryRoute,
-  ApiPublicPixRoute: ApiPublicPixRoute,
   ApiPublicRevealKeyRoute: ApiPublicRevealKeyRoute,
 }
 export const routeTree = rootRouteImport

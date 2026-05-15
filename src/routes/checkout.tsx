@@ -7,7 +7,7 @@ import { PixBanksTrust } from "@/components/pix-banks-trust";
 import { SiteFooter } from "@/components/site-footer";
 import { cart, useCart, cartTotal } from "@/lib/cart-store";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, Clock, BadgeCheck, CreditCard, Star, Truck, Package, Barcode } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Lock, Mail, User as UserIcon, Tag, BadgeCheck, CreditCard, Star, Truck, Package } from "lucide-react";
 import { maskCPF, maskPhone, maskCEP, onlyDigits } from "@/lib/checkout-utils";
 import { fbqTrack } from "@/lib/fbq";
 import { sendWebhookEvent } from "@/lib/webhook";
@@ -82,7 +82,7 @@ function CheckoutPage() {
   const [cepLoading, setCepLoading] = useState(false);
   const [number, setNumber] = useState("");
   const [complement, setComplement] = useState("");
-  const [payment, setPayment] = useState<"pix" | "cartao" | "boleto">("pix");
+  const payment = "pix" as const;
   const [checking, setChecking] = useState(true);
   const [placing, setPlacing] = useState(false);
 
@@ -295,9 +295,7 @@ function CheckoutPage() {
         },
         { dedupeKey: `pedido_criado:${orderId}` },
       );
-      if (payment === "pix") navigate({ to: "/pix/$orderId", params: { orderId } });
-      else if (payment === "boleto") navigate({ to: "/boleto/$orderId", params: { orderId } });
-      else navigate({ to: "/cartao/$orderId", params: { orderId } });
+      navigate({ to: "/pix/$orderId", params: { orderId } });
     } catch (err: any) {
       toast.error(err.message || "Erro ao finalizar pedido");
     } finally { setPlacing(false); }
@@ -434,88 +432,24 @@ function CheckoutPage() {
                 <section className="w-full max-w-full border border-border rounded-xl p-4 lg:p-6 bg-card">
                   <h2 className="font-bold mb-4 flex items-center gap-2"><CreditCard className="w-5 h-5 text-primary" />Forma de pagamento</h2>
 
-                  {/* Method selector — card style */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-                    <button
-                      type="button"
-                      onClick={() => setPayment("pix")}
-                      className={`relative p-4 rounded-lg border-2 text-left transition ${payment === "pix" ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:border-primary/40"}`}
-                    >
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="inline-flex items-center justify-center w-10 h-6 rounded bg-pix text-white text-[10px] font-bold">PIX</span>
-                        <span className="font-bold text-sm">PIX</span>
-                        {payment === "pix" && <CheckCircle2 className="w-4 h-4 text-primary ml-auto" />}
-                      </div>
-                      <p className="text-[11px] text-muted-foreground">Aprovação imediata</p>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPayment("cartao")}
-                      className={`relative p-4 rounded-lg border-2 text-left transition ${payment === "cartao" ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:border-primary/40"}`}
-                    >
-                      <div className="flex items-center gap-2 mb-1 min-w-0">
-                        <CreditCard className="w-5 h-5 text-primary" />
-                        <span className="font-bold text-sm min-w-0">Cartão</span>
-                        {payment === "cartao" && <CheckCircle2 className="w-4 h-4 text-primary ml-auto" />}
-                      </div>
-                      <p className="text-[11px] text-muted-foreground">À vista em 1x</p>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPayment("boleto")}
-                      className={`relative p-4 rounded-lg border-2 text-left transition ${payment === "boleto" ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "border-border hover:border-primary/40"}`}
-                    >
-                      <div className="flex items-center gap-2 mb-1 min-w-0">
-                        <Barcode className="w-5 h-5 text-primary" />
-                        <span className="font-bold text-sm min-w-0">Boleto</span>
-                        {payment === "boleto" && <CheckCircle2 className="w-4 h-4 text-primary ml-auto" />}
-                      </div>
-                      <p className="text-[11px] text-muted-foreground">Compensa em até 2 dias úteis</p>
-                    </button>
+                  <div className="flex items-center gap-3 p-4 rounded-lg border-2 border-primary bg-primary/5 mb-4">
+                    <span className="inline-flex items-center justify-center w-12 h-7 rounded bg-pix text-white text-[11px] font-bold">PIX</span>
+                    <div className="flex-1">
+                      <div className="font-bold text-sm">Pagamento via PIX</div>
+                      <div className="text-[11px] text-muted-foreground">QR Code gerado na próxima etapa · Aprovação imediata</div>
+                    </div>
+                    <CheckCircle2 className="w-5 h-5 text-primary" />
                   </div>
 
-                  {payment === "pix" ? (
-                    <div className="space-y-3">
-                      <div className="bg-pix/5 border border-pix/20 rounded-lg p-4 text-sm">
-                        <div className="font-semibold mb-1 text-foreground flex items-center gap-2">
-                          <ShieldCheck className="w-4 h-4 text-success" /> Pagamento instantâneo e seguro
-                        </div>
-                        <p className="text-muted-foreground text-xs">Aprovação imediata. O QR Code será gerado na próxima etapa.</p>
+                  <div className="space-y-3">
+                    <div className="bg-pix/5 border border-pix/20 rounded-lg p-4 text-sm">
+                      <div className="font-semibold mb-1 text-foreground flex items-center gap-2">
+                        <ShieldCheck className="w-4 h-4 text-success" /> Pagamento instantâneo e seguro
                       </div>
-                      <PixBanksTrust compact />
+                      <p className="text-muted-foreground text-xs">Após finalizar o pedido você verá o QR Code e o código copia-e-cola para pagar pelo seu banco.</p>
                     </div>
-                  ) : payment === "cartao" ? (
-                    <div className="space-y-3">
-                      <div className="bg-muted/40 rounded-lg p-4">
-                        <div className="text-xs font-semibold text-muted-foreground mb-2">Aceitamos as principais bandeiras</div>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="px-2.5 py-1.5 rounded-md bg-[#1A1F71] text-white text-[11px] font-bold tracking-wide shadow-sm">VISA</span>
-                          <span className="px-2.5 py-1.5 rounded-md bg-white border border-border text-[11px] font-bold shadow-sm">
-                            <span className="text-[#EB001B]">●</span><span className="text-[#F79E1B] -ml-1">●</span> <span className="text-foreground">Mastercard</span>
-                          </span>
-                          <span className="px-2.5 py-1.5 rounded-md bg-foreground text-background text-[11px] font-bold shadow-sm">ELO</span>
-                          <span className="px-2.5 py-1.5 rounded-md bg-[#2E77BC] text-white text-[11px] font-bold shadow-sm">AMEX</span>
-                          <span className="px-2.5 py-1.5 rounded-md bg-[#B3131B] text-white text-[11px] font-bold shadow-sm">Hipercard</span>
-                        </div>
-                      </div>
-                      <p className="text-xs text-muted-foreground flex items-start gap-2">
-                        <Lock className="w-3.5 h-3.5 text-success mt-0.5 shrink-0" />
-                        <span><span className="font-semibold text-foreground">Pagamento à vista em 1x</span>, com criptografia e aprovação imediata. A bandeira é detectada automaticamente ao digitar o número do cartão na próxima etapa.</span>
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="bg-muted/40 border border-border rounded-lg p-4 text-sm">
-                        <div className="font-semibold mb-1 text-foreground flex items-center gap-2">
-                          <Barcode className="w-4 h-4 text-primary" /> Boleto bancário
-                        </div>
-                        <p className="text-muted-foreground text-xs">Após finalizar, o boleto será gerado para pagamento.</p>
-                        <p className="text-muted-foreground text-xs mt-1 flex items-center gap-1">
-                          <Clock className="w-3 h-3" /> Confirmação do pagamento pode levar até 2 dias úteis.
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                    <PixBanksTrust compact />
+                  </div>
                 </section>
 
                 {/* Trust badges */}
@@ -588,7 +522,6 @@ function CheckoutPage() {
               <span className="font-semibold">Total</span>
               <div className="text-right">
                 <div className="text-2xl font-bold text-primary">{brl(total)}</div>
-                {payment === "cartao" && <div className="text-[11px] text-muted-foreground">à vista em 1x no cartão</div>}
               </div>
             </div>
 
