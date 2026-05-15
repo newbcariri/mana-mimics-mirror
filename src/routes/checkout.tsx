@@ -165,13 +165,12 @@ function CheckoutPage() {
       const { error: pErr } = await supabase.from("profiles").insert({
         id: uid,
         full_name: data.full_name,
-        email: data.email,
-        cpf: onlyDigits(data.cpf),
+        email: data.email || null,
         phone: onlyDigits(data.phone),
         cep: onlyDigits(data.cep),
         number: data.number,
         complement: form.complement || null,
-      });
+      } as any);
       if (pErr) throw pErr;
       if (data.number) setNumber(data.number);
       if (form.complement) setComplement(form.complement);
