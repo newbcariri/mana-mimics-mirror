@@ -196,16 +196,10 @@ function CheckoutPage() {
     if (items.length === 0) { toast.error("Carrinho vazio"); return; }
     if (!userId || !profile) return;
     if (!number.trim()) { toast.error("Informe o número do endereço"); return; }
-    const needsCpf = !profile.cpf || onlyDigits(profile.cpf).length !== 11;
-    if (needsCpf && onlyDigits(cpfFinal).length !== 11) {
-      toast.error("Informe seu CPF para finalizar (necessário para nota fiscal)");
-      return;
-    }
     setPlacing(true);
     try {
-      // Atualiza perfil com CPF / endereço se necessário
+      // Atualiza perfil com endereço se necessário
       const profileUpdate: any = {};
-      if (needsCpf) profileUpdate.cpf = onlyDigits(cpfFinal);
       if (number && profile.number !== number) profileUpdate.number = number;
       if (complement !== (profile.complement || "")) profileUpdate.complement = complement || null;
       if (cepData) {
