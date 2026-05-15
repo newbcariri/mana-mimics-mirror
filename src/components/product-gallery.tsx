@@ -75,8 +75,8 @@ export function ProductGallery({ items, alt = "", badge }: Props) {
 
         <div
           ref={trackRef}
-          className="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
-          style={{ scrollbarWidth: "none" }}
+          className="absolute inset-0 flex overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {items.map((m, i) => (
             <div
