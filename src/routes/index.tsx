@@ -47,6 +47,7 @@ function ProductPage() {
   const [showDispenserVideo, setShowDispenserVideo] = useState(false);
 
   const media: GalleryItem[] = [
+    { type: "image", src: seladoraPrincipal },
     { type: "video", src: seladoraVideo },
     { type: "video", src: seladoraVideo2 },
     ...PRODUCT.images.map(src => ({ type: "image" as const, src })),
