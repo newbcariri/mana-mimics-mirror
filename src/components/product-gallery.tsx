@@ -86,13 +86,14 @@ export function ProductGallery({ items, alt = "", badge }: Props) {
               {m.type === "video" ? (
                 <video
                   src={m.src}
-                  autoPlay={i === active}
+                  autoPlay
                   loop
                   muted
                   playsInline
-                  controls
-                  preload={i === active ? "auto" : "metadata"}
-                  className="w-full h-full object-contain bg-black"
+                  preload="auto"
+                  disablePictureInPicture
+                  controlsList="nodownload noplaybackrate nofullscreen"
+                  className="w-full h-full object-contain bg-black pointer-events-none"
                 />
               ) : (
                 <button
