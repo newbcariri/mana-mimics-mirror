@@ -1,7 +1,7 @@
-import seladoraHero from "@/assets/seladora-hero.jpg";
-import seladoraUso from "@/assets/seladora-uso.jpg";
+import seladoraDisplay from "@/assets/seladora-display.png";
+import seladoraCores from "@/assets/seladora-cores.jpeg";
+import seladoraInstrucoes from "@/assets/seladora-instrucoes.png";
 import dispenserHero from "@/assets/dispenser-hero.jpg";
-import comboKit from "@/assets/combo-kit.jpg";
 
 export const PRODUCT = {
   name: "Mini Seladora Portátil",
@@ -14,15 +14,15 @@ export const PRODUCT = {
   installments: { count: 3, value: 16.63 },
   pixDiscount: 44,
   freeShipping: true,
-  images: [seladoraHero, seladoraUso, comboKit],
+  images: [seladoraDisplay, seladoraCores, seladoraInstrucoes],
   // Mantido para compatibilidade do carrinho/checkout (1 variante)
   colors: [
     {
       name: "Padrão",
       hex: "#8FCB3A",
-      img: seladoraHero,
+      img: seladoraDisplay,
       current: true,
-      gallery: [seladoraHero, seladoraUso, comboKit],
+      gallery: [seladoraDisplay, seladoraCores, seladoraInstrucoes],
     },
   ],
   sizes: ["Único"],
@@ -35,7 +35,7 @@ export const UPSELL = {
   description: "Use junto com a seladora e conserve seus alimentos por muito mais tempo.",
 };
 
-export const COMBO_IMAGE = comboKit;
+export const COMBO_IMAGE = seladoraDisplay;
 export const ANTES_DEPOIS = "/src/assets/antes-depois.jpg";
 
 export const REVIEWS = [
