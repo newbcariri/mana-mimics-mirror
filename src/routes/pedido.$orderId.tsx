@@ -195,22 +195,13 @@ function OrderDetailPage() {
             <div className="text-xs text-muted-foreground">
               Pagamento: <strong className="text-foreground">{order.payment_method?.toUpperCase?.() || "PIX"}</strong>
             </div>
-            {order.status === "aguardando_pagamento" && order.payment_method === "pix" && (
+            {order.status === "aguardando_pagamento" && (
               <Link
                 to="/pix/$orderId"
                 params={{ orderId: order.id }}
                 className="block w-full text-center bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-bold hover:bg-primary/90"
               >
                 Pagar com PIX
-              </Link>
-            )}
-            {order.status === "aguardando_pagamento" && order.payment_method === "cartao" && (
-              <Link
-                to="/cartao/$orderId"
-                params={{ orderId: order.id }}
-                className="block w-full text-center bg-primary text-primary-foreground py-2.5 rounded-md text-sm font-bold hover:bg-primary/90"
-              >
-                Pagar com cartão
               </Link>
             )}
           </aside>
