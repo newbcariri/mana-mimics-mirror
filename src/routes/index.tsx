@@ -466,7 +466,7 @@ function ProductPage() {
             onClick={handleBuy}
             className="flex-1 h-12 bg-primary text-primary-foreground rounded-xl font-extrabold text-sm uppercase tracking-wide shadow-lg ring-2 ring-primary/30"
           >
-            🛒 Comprar agora
+            🛒 COMPRAR AGORA
           </button>
         </div>
       </div>
