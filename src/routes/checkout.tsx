@@ -350,9 +350,8 @@ function CheckoutPage() {
                 <p className="text-xs text-muted-foreground mb-4">Preencha e finalize — sem cadastro, sem senha.</p>
                 <form onSubmit={handleAuth} className="space-y-3">
                   <Field icon={UserIcon} placeholder="Nome completo" value={form.full_name} onChange={v => update("full_name", v)} valid={form.full_name.trim().length >= 3} />
-                  <Field icon={Mail} type="email" placeholder="E-mail" value={form.email} onChange={v => update("email", v)} valid={/.+@.+\..+/.test(form.email)} />
+                  <Field icon={Mail} type="email" placeholder="E-mail (opcional)" value={form.email} onChange={v => update("email", v)} valid={form.email.length === 0 || /.+@.+\..+/.test(form.email)} />
                   <Field placeholder="Telefone (com DDD)" value={form.phone} onChange={v => update("phone", v)} valid={onlyDigits(form.phone).length >= 10} />
-                  <Field placeholder="CPF" value={form.cpf} onChange={v => update("cpf", v)} valid={onlyDigits(form.cpf).length === 11} />
                   <Field placeholder="CEP de entrega" value={form.cep} onChange={v => update("cep", v)} valid={onlyDigits(form.cep).length === 8} />
                   {cepLoading && <p className="text-xs text-muted-foreground">Buscando endereço...</p>}
                   {cepData && (
