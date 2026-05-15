@@ -1,18 +1,23 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Copy, CheckCircle2, Clock, ShieldCheck, Lock, Zap } from "lucide-react";
+import QRCode from "qrcode";
+import { Copy, CheckCircle2, ShieldCheck, Lock, Zap } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { PixBanksTrust } from "@/components/pix-banks-trust";
 import { supabase } from "@/integrations/supabase/client";
-import { postPaymentApi } from "@/lib/payment-api";
+import { generatePixPayload } from "@/lib/pix";
 import { sendWebhookEvent } from "@/lib/webhook";
 
 export const Route = createFileRoute("/pix/$orderId")({
   component: PixPage,
-  head: () => ({ meta: [{ title: "Pagamento PIX — FlexFit Brasil" }] }),
+  head: () => ({ meta: [{ title: "Pagamento PIX — Casa Resolve" }] }),
 });
+
+const PIX_KEY = "97464ea9-e6c0-43de-9a18-786a4e9a1ed8";
+const PIX_NAME = "CASA RESOLVE";
+const PIX_CITY = "SAO PAULO";
 
 const brl = (v: number) => Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -25,40 +30,32 @@ function PixPage() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [expiresAt, setExpiresAt] = useState<number | null>(null);
-  const [remaining, setRemaining] = useState<string>("30:00");
-  const [expired, setExpired] = useState(false);
-  const [regenerating, setRegenerating] = useState(false);
 
   useEffect(() => {
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { navigate({ to: "/conta" }); return; }
       try {
-        const res = await postPaymentApi<{
-          qrCodeBase64: string;
-          payload: string;
-          value: number;
-          expirationDate?: string;
-          paymentId: string;
-        }>("pix", { orderId });
-        setTotal(res.value);
-        setPayload(res.payload);
-        setQrUrl(`data:image/png;base64,${res.qrCodeBase64}`);
-        const FALLBACK_MS = 30 * 60 * 1000;
-        const MAX_MS = 24 * 60 * 60 * 1000; // cap em 24h
-        let exp = Date.now() + FALLBACK_MS;
-        if (res.expirationDate) {
-          // Aceita "YYYY-MM-DD HH:mm:ss" (Asaas) e ISO. Normaliza para ISO.
-          const raw = String(res.expirationDate).trim();
-          const iso = raw.includes("T") ? raw : raw.replace(" ", "T");
-          const parsed = new Date(iso).getTime();
-          if (Number.isFinite(parsed)) {
-            const diff = parsed - Date.now();
-            if (diff > 0 && diff <= MAX_MS) exp = parsed;
-          }
-        }
-        setExpiresAt(exp);
+        const { data: order, error: orderErr } = await supabase
+          .from("orders")
+          .select("total")
+          .eq("id", orderId)
+          .single();
+        if (orderErr || !order) throw orderErr || new Error("Pedido não encontrado");
+        const value = Number(order.total);
+        setTotal(value);
+
+        const txid = orderId.replace(/-/g, "").slice(0, 25);
+        const pix = generatePixPayload({
+          key: PIX_KEY,
+          name: PIX_NAME,
+          city: PIX_CITY,
+          amount: value,
+          txid,
+        });
+        setPayload(pix);
+        const dataUrl = await QRCode.toDataURL(pix, { width: 320, margin: 1 });
+        setQrUrl(dataUrl);
       } catch (e: any) {
         setError(e.message || "Erro ao gerar cobrança PIX");
         toast.error(e.message || "Erro ao gerar cobrança PIX");
@@ -68,83 +65,22 @@ function PixPage() {
     })();
   }, [orderId, navigate]);
 
-  // Countdown
-  useEffect(() => {
-    if (!expiresAt) return;
-    const tick = () => {
-      const diff = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
-      if (diff <= 0) {
-        setExpired(true);
-        setRemaining("00:00");
-        return;
-      }
-      setExpired(false);
-      const h = Math.floor(diff / 3600);
-      const m = Math.floor((diff % 3600) / 60);
-      const s = diff % 60;
-      const pad = (n: number) => String(n).padStart(2, "0");
-      setRemaining(h > 0 ? `${pad(h)}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`);
-    };
-    tick();
-    const t = setInterval(tick, 1000);
-    return () => clearInterval(t);
-  }, [expiresAt]);
-
-  // Poll status
-  useEffect(() => {
-    const t = setInterval(async () => {
-      try {
-        const res = await postPaymentApi<{ status: string }>("order-summary", { orderId });
-        if (res.status && res.status !== "aguardando_pagamento") {
-          toast.success("Pagamento confirmado!");
-          navigate({ to: "/pagamento-confirmado/$orderId", params: { orderId } });
-        }
-      } catch {}
-    }, 5000);
-    return () => clearInterval(t);
-  }, [orderId, navigate]);
-
   const copy = async () => {
-    if (expired) return;
     await navigator.clipboard.writeText(payload);
     setCopied(true);
     toast.success("Código PIX copiado");
     sendWebhookEvent(
-      { tipo_evento: "copiar_pix", produto: "Mini Seladora Portátil", valor: total || 49.9 },
+      { tipo_evento: "copiar_pix", produto: "Pedido", valor: total },
       { dedupeKey: `copiar_pix:${orderId}` },
     );
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const regenerate = async () => {
-    setRegenerating(true);
-    try {
-      const res = await postPaymentApi<{
-        qrCodeBase64: string;
-        payload: string;
-        value: number;
-        expirationDate?: string;
-        paymentId: string;
-      }>("pix", { orderId, regenerate: true });
-      setPayload(res.payload);
-      setQrUrl(`data:image/png;base64,${res.qrCodeBase64}`);
-      const parsed = res.expirationDate ? new Date(String(res.expirationDate).replace(" ", "T")).getTime() : NaN;
-      const exp = Number.isFinite(parsed) && parsed - Date.now() > 0 ? parsed : Date.now() + 30 * 60 * 1000;
-      setExpiresAt(exp);
-      setExpired(false);
-      toast.success("Novo código PIX gerado");
-    } catch (e: any) {
-      toast.error(e.message || "Erro ao gerar novo PIX");
-    } finally {
-      setRegenerating(false);
-    }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
         <SiteHeader />
-        <div className="text-center py-20 text-muted-foreground">Gerando cobrança PIX...</div>
+        <div className="text-center py-20 text-muted-foreground">Gerando QR Code PIX...</div>
       </div>
     );
   }
@@ -171,21 +107,12 @@ function PixPage() {
           </div>
           <h1 className="text-3xl font-bold">Pague com PIX</h1>
           <p className="text-sm text-muted-foreground mt-2 flex items-center justify-center gap-2">
-            <Zap className="w-4 h-4 text-pix" /> Pagamento instantâneo e seguro
+            <Zap className="w-4 h-4 text-pix" /> Status: <strong className="text-foreground">Aguardando pagamento</strong>
           </p>
         </div>
 
-        {/* Timer */}
-        <div className={`${expired ? "bg-destructive/10 border-destructive/30" : "bg-primary/5 border-primary/20"} border rounded-lg px-4 py-3 mb-5 flex items-center justify-center gap-2 text-sm`}>
-          <Clock className={`w-4 h-4 ${expired ? "text-destructive" : "text-primary"}`} />
-          {expired ? (
-            <span className="font-bold text-destructive">Código PIX expirado</span>
-          ) : (
-            <>
-              <span className="text-muted-foreground">Este código expira em</span>
-              <span className="font-mono font-bold tabular-nums text-primary text-base">{remaining}</span>
-            </>
-          )}
+        <div className="bg-primary/5 border border-primary/20 rounded-lg px-4 py-3 mb-5 text-sm text-center text-muted-foreground">
+          Realize o pagamento via PIX para concluir seu pedido. Assim que o pagamento for identificado, seu pedido será processado automaticamente.
         </div>
 
         <div className="border border-border rounded-xl p-6 bg-card shadow-sm">
@@ -194,30 +121,19 @@ function PixPage() {
             <div className="text-4xl font-bold text-primary mt-1">{brl(total)}</div>
           </div>
 
-          <div className={`flex justify-center my-6 ${expired ? "opacity-40" : ""}`}>
+          <div className="flex justify-center my-6">
             <div className="p-5 bg-white rounded-xl border-2 border-pix/30 shadow-md">
               {qrUrl && <img src={qrUrl} alt="QR Code PIX" className="w-72 h-72" />}
             </div>
           </div>
 
-          {expired ? (
-            <button
-              onClick={regenerate}
-              disabled={regenerating}
-              className="w-full h-13 py-3.5 bg-primary text-primary-foreground rounded-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition text-base shadow-md disabled:opacity-60"
-            >
-              {regenerating ? "Gerando novo PIX..." : "Gerar novo PIX"}
-            </button>
-          ) : (
-            <button
-              onClick={copy}
-              disabled={expired}
-              className="w-full h-13 py-3.5 bg-pix text-white rounded-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition text-base shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-              {copied ? "Código copiado!" : "Copiar código PIX"}
-            </button>
-          )}
+          <button
+            onClick={copy}
+            className="w-full h-13 py-3.5 bg-pix text-white rounded-md font-bold flex items-center justify-center gap-2 hover:opacity-90 transition text-base shadow-md"
+          >
+            {copied ? <CheckCircle2 className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+            {copied ? "Código copiado!" : "Copiar código PIX"}
+          </button>
 
           <details className="mt-3">
             <summary className="text-xs text-muted-foreground cursor-pointer text-center hover:text-foreground">Ver código copia-e-cola</summary>
@@ -228,13 +144,13 @@ function PixPage() {
             <p className="text-foreground font-semibold mb-1">Como pagar em 4 passos:</p>
             <p><strong className="text-foreground">1.</strong> Abra o app do seu banco</p>
             <p><strong className="text-foreground">2.</strong> Escolha pagar com PIX (QR Code ou copia-e-cola)</p>
-            <p><strong className="text-foreground">3.</strong> Escaneie ou cole o código acima</p>
-            <p><strong className="text-foreground">4.</strong> Confirme — esta página atualiza automaticamente ✓</p>
-        </div>
+            <p><strong className="text-foreground">3.</strong> Escaneie o QR Code ou cole o código acima</p>
+            <p><strong className="text-foreground">4.</strong> Confirme o pagamento ✓</p>
+          </div>
 
-        <div className="mt-5">
-          <PixBanksTrust />
-        </div>
+          <div className="mt-5">
+            <PixBanksTrust />
+          </div>
 
           <div className="mt-5 grid grid-cols-3 gap-2 text-center">
             <div className="flex flex-col items-center gap-1 text-[11px] text-muted-foreground">
@@ -244,7 +160,7 @@ function PixPage() {
               <Lock className="w-4 h-4 text-success" /> SSL criptografado
             </div>
             <div className="flex flex-col items-center gap-1 text-[11px] text-muted-foreground">
-              <Zap className="w-4 h-4 text-success" /> Aprovação imediata
+              <Zap className="w-4 h-4 text-success" /> Pagamento via PIX
             </div>
           </div>
         </div>
